@@ -1,7 +1,7 @@
 'user strict';
 var sql = require('../../sql.js');
 
-//Restaurant object constructor
+//Restaurant object constructor, probably needs more fields (name etc)
 var Restaurant = function(restaurant){
     this.restaurant = restaurant.restaurant;
 };
