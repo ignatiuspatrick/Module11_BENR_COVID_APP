@@ -7,7 +7,7 @@ var Checkin = require('../model/checkinModel');
 // .put(checkins.update_checkin)
 // .delete(checkins.delete_checkin);
 
-exports.create_restaurant = function(req, res) {
+exports.create_checkin = function(req, res) {
   var newCheckin = new Checkin(req.body);
 
   //handles null error

@@ -52,7 +52,7 @@ Restaurant.updateRestaurant = function(restaurantId){
 //// TODO: fill in
 };
 Restaurant.deleteRestaurant = function(restaurantId, result){
-     sql.query("DELETE FROM my_table WHERE id = ?", [id], function (err, res) {
+     sql.query("DELETE FROM restaurants WHERE id = ?", [id], function (err, res) {
 
                 if(err) {
                     console.log("error: ", err);

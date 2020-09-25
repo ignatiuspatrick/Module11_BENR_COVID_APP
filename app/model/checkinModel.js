@@ -7,13 +7,13 @@ var sql = require('../../sql.js');
   // .put(checkins.update_checkin)
   // .delete(checkins.delete_checkin);
 
-  
+
 //Checkin object constructor (needs more fields, e.g. created_at)
 var Checkin = function(checkin){
     this.checkin = checkin.checkin;
-    this.user = checkin.user;
-    this.restaurant = checkin.restaurant;
-    this.created_at = Date();
+    this.userid = checkin.userid;
+    this.restid = checkin.restid;
+    this.time_stamp = Date();
 };
 
 

@@ -3,7 +3,7 @@ const path = require('path');
 const app = express();
 const bodyParser = require('body-parser');
 
-//DATABASE: for now it breaks (atleast on my device).
+//MYSQL
 const mysql = require('mysql');
 const config = require('./config');
 var connection = mysql.createConnection(
@@ -19,6 +19,8 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started on port  ${PORT}`));
 console.log('Started on: ' + PORT);
 
+
+//ROUTES & BODYPARSER FOR MIDDLEWARE
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
