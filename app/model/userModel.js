@@ -10,7 +10,7 @@ var sql = require('../../sql.js');
 
 //User object constructor, needs more fields
 var User = function(user){
-    this.user = user.user;
+    this.token = user.token;
 };
 
 User.createUser = function (newUser, result) {

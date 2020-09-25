@@ -3,7 +3,9 @@ var sql = require('../../sql.js');
 
 //Restaurant object constructor, probably needs more fields (name etc)
 var Restaurant = function(restaurant){
-    this.restaurant = restaurant.restaurant;
+    this.name = restaurant.name;
+    this.location = restaurant.location;
+    this.contact = restaurant.contact;
 };
 
 //Restaurant SQL queries

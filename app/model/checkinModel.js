@@ -10,9 +10,9 @@ var sql = require('../../sql.js');
 
 //Checkin object constructor (needs more fields, e.g. created_at)
 var Checkin = function(checkin){
-    this.checkin = checkin.checkin;
     this.userid = checkin.userid;
     this.restid = checkin.restid;
+    this.at_risk = checkin.at_risk;
     this.time_stamp = Date();
 };
 
