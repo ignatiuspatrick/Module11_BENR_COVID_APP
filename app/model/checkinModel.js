@@ -1,5 +1,5 @@
 'user strict';
-var sql = require('../../sql.js');
+var sql = require('../../db.js');
 
 
 //  .post(checkins.create_checkin)
@@ -10,16 +10,16 @@ var sql = require('../../sql.js');
 
 //Checkin object constructor (needs more fields, e.g. created_at)
 var Checkin = function(checkin){
-    this.userid = checkin.userid;
-    this.restid = checkin.restid;
-    this.at_risk = checkin.at_risk;
-    this.time_stamp = Date();
+    this.userid = parseInt(checkin.userid, 10);
+    this.restid = parseInt(checkin.restid, 10);
+    this.at_risk = parseInt(checkin.at_risk, 10);
+    // this.created_at = Date();
 };
 
 
 //SQL Queries for checkin in
 Checkin.createCheckin = function (newCheckin, result) {
-        sql.query("INSERT INTO checkins set ?", newCheckin, function (err, res) {
+        sql.query("INSERT INTO checkin set ?", newCheckin, function (err, res) {
 
                 if(err) {
                     console.log("error: ", err);
@@ -31,3 +31,5 @@ Checkin.createCheckin = function (newCheckin, result) {
                 }
             });
 };
+
+module.exports = Checkin;

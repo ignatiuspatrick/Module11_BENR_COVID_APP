@@ -21,6 +21,6 @@ module.exports = function(app){
 
   //CHECK-INS
   var checkins = require('../controller/checkinController');
-  app.route('/checkin/:userId')
+  app.route('/checkin')
   .post(checkins.create_checkin);
 };
