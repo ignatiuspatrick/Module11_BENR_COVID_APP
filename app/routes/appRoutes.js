@@ -15,9 +15,9 @@ module.exports = function(app){
   var users = require('../controller/userController');
   app.route('users/:userId')
   .post(users.create_user);
-  /*  .get(users.get_user)
-    .put(users.update_user)
-    .delete(users.delete_user);*/
+  // .get(users.get_user);
+  // .put(users.update_user);
+  // .delete(users.delete_user);
 
   //CHECK-INS
   var checkins = require('../controller/checkinController');

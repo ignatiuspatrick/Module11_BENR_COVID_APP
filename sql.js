@@ -10,18 +10,16 @@ const pool = mysql.createPool({
 });
 
 function addUser(data){
-    let inserttoDB = 'INSERT INTO users (userid) VALUES ?'; // user, id,token
+    let inserttoDB = 'INSERT INTO users (userid) VALUES ?';
     let query = mysql.format(inserttoDB,[data]);
     pool.query(query, (error, result) =>{
         if (error) {
             console.log(error);
             return;
         };
-        console.log("Added a user with a token" + data);
+        console.log("Added a user with a user id: " + data);
     });
 }
-// function userCheckIn()
-
 function getResults(table){
     let get = 'SELECT * FROM ??';
     let query = mysql.format(get,[table]);
@@ -30,23 +28,23 @@ function getResults(table){
         console.log(result);
       });
 }
-app.get("/",(req,res) => {
-    pool.getConnection((err,connection) => {
-        if(err) throw err;
-        let data = [["123123123"],["333444555"]];
-        addUser(data);
-        setTimeout(() => {
-            getResults("users");
-        },500);
+// app.get("/",(req,res) => {
+//     pool.getConnection((err,connection) => {
+//         if(err) throw err;
+//         let data = [["123123123"],["333444555"]];
+//         // addUser(data);
+//         setTimeout(() => {
+//             getResults("users");
+//         },500);
 
 
 
-    });
+//     });
 
-    // getResults("restaurants")
-    // getResults("checkin")
-});
+//     // getResults("restaurants")
+//     // getResults("checkin")
+// });
 
-app.listen(3000, () => {
-    console.log('Server is running at port 3000');
-});
+// app.listen(3000, () => {
+//     console.log('Server is running at port 3000');
+// });

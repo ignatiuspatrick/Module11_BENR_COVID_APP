@@ -5,12 +5,9 @@ const isNull = (value) => typeof value === "object" && !value
 
 exports.get_all_restaurants = function(req, res) {
   Restaurant.getAllRestaurants(function(err, restaurant) {
-
-    console.log('controller')
     if (err){
       res.send(err);
     }
-      console.log('res', restaurant);
     res.send(restaurant);
   });
 };
@@ -18,10 +15,18 @@ exports.get_all_restaurants = function(req, res) {
 exports.create_restaurant = function(req, res) {
   var newRestaurant = new Restaurant(req.body);
   //handles null error
+<<<<<<< HEAD
    if(isNull(newRestaurant.name) || isNull(newRestaurant.location) || isNull(newRestaurant.contacts)){
      res.status(400).send({ error:true, message: 'Please provide more information.'});
    } else {
     Restaurant.createRestaurant(newRestaurant, function(err, restaurant) {
+=======
+  if(false){
+     res.status(400).send({ error:true, message: 'Please provide more information.'});
+  } else {
+
+  Restaurant.createRestaurant(newRestaurant, function(err, restaurant) {
+>>>>>>> 17db31d845704bc5ae90e9b8b75f890279fbfba6
     if (err){
       res.send(err);
     }

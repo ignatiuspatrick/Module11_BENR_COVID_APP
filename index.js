@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 
 //MYSQL
 const mysql = require('mysql');
-const config = require('./config');
+const config = require('./db.js');
 var connection = mysql.createConnection(
   config
 );
