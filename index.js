@@ -7,6 +7,9 @@ const bodyParser = require('body-parser');
 const app = express();
 
 //https
+//Certs generated using:
+//openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./selfsigned.key -out selfsigned.crt
+
 // var key = fs.readFileSync('certs/selfsigned.key');
 // var cert = fs.readFileSync('certs/selfsigned.crt');
 // var options = {
