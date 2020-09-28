@@ -33,8 +33,8 @@ Checkin.createCheckin = function (newCheckin, result) {
 
 Checkin.checkout = function (checkinId, result){
   console.log("brrrrrr post");
-  var time = Date();
-  sql.query("UPDATE checkin SET checkout = ? WHERE id = ?", [time, checkinId], function(err, res){
+  var time = new Date().toISOString().slice(0, 19).replace('T', ' ');
+  sql.query("UPDATE checkin SET checkout_time = ? WHERE id = ?", [time, checkinId], function(err, res){
 
     if(err){
       console.log("error: ", err);

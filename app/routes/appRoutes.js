@@ -24,7 +24,6 @@ module.exports = function(app){
   app.route('/checkin').post(checkins.create_checkin);
 
     //checkout
-  app.route('/checkout/:checkinId').post(function (res,req){
-    console.log("brrrrrr 1.0");
-  });
+    //to test, send post request as such: localhost:5000/checkout/1/
+  app.route('/checkout/:checkinId').post(checkins.checkout_checkin);
 };

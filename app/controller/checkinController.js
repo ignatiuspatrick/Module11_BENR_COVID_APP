@@ -26,17 +26,18 @@ exports.create_checkin = function(req, res) {
 };
 
 exports.checkout_checkin = function(req, res) {
-  console.log("brrrrr post less far");
-  Checkin.checkout(req.params.checkinId, function(err, checkin){
+  if (!req.params.checkinId){
+    res.status(400).send({error:true, message: "No checkinId provided to server. Cannot checkout."});
+  }else {
+    Checkin.checkout(req.params.checkinId, function(err, checkin){
+      if (err){
+        res.send(err);
+      }
+      res.status(200).send({message: "Succesfully checked out!"});
 
-    Checkin.createCheckin(newCheckin, function(err, checkin) {
-    if (err){
-      res.send(err);
-    }
-    res.json(checkin);
-  });
+    });
+  }
 
-  });
 }
 
 //TODO rest

@@ -6,10 +6,10 @@ const bodyParser = require('body-parser');
 //MYSQL
 const mysql = require('mysql');
 const config = require('./db.js');
-var connection = mysql.createConnection(
-  config
-);
-connection.connect();
+// var connection = mysql.createConnection(
+//   config
+// );
+// connection.connect();
 
 //ROUTES & BODYPARSER FOR MIDDLEWARE
 app.use(bodyParser.urlencoded({ extended: true }));
