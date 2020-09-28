@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 
 //MYSQL
 const mysql = require('mysql');
-const config = require('./config');
+const config = require('./db.js');
 var connection = mysql.createConnection(
   config
 );
@@ -17,7 +17,6 @@ connection.connect();
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Server started on port  ${PORT}`));
-console.log('Started on: ' + PORT);
 
 
 //ROUTES & BODYPARSER FOR MIDDLEWARE

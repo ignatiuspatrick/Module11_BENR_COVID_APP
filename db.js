@@ -3,16 +3,15 @@
 var mysql = require('mysql');
 
 //local mysql db connection
-var connection = mysql.createConnection({
+var pool = mysql.createPool({
     host     : 'localhost',
     user     : 'root',
     password : '',
     database : 'appdb',
-    port: 3307
 });
 
-connection.connect(function(err) {
+pool.getConnection((err,connection) => {
     if (err) throw err;
 });
 
-module.exports = connection;
+module.exports = pool;

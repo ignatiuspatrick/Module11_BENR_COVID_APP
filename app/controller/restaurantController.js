@@ -3,23 +3,18 @@ var Restaurant = require('../model/restaurantModel');
 
 exports.get_all_restaurants = function(req, res) {
   Restaurant.getAllRestaurants(function(err, restaurant) {
-
-    console.log('controller')
     if (err){
       res.send(err);
     }
-      console.log('res', restaurant);
     res.send(restaurant);
   });
 };
 
 exports.create_restaurant = function(req, res) {
   var newRestaurant = new Restaurant(req.body);
-
   //handles null error
-   if(false){
+  if(false){
      res.status(400).send({ error:true, message: 'Please provide more information.'});
-
   } else {
 
   Restaurant.createRestaurant(newRestaurant, function(err, restaurant) {
