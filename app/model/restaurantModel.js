@@ -1,11 +1,6 @@
 'user strict';
-<<<<<<< HEAD
 var sql = require('../../db.js');
 
-=======
-var pool = require('../../db.js'); // use pool to handle concurrent requests.
-const mysql = require('mysql');
->>>>>>> 17db31d845704bc5ae90e9b8b75f890279fbfba6
 //Restaurant object constructor, probably needs more fields (name etc)
 var Restaurant = function(restaurant){
     this.name = restaurant.name;
@@ -18,7 +13,6 @@ var Restaurant = function(restaurant){
 //// TODO: THESE QUERIES ARE NOT UP-TO-DATE YET. MAKE SURE THEY ALIGN WITH THE DATABASE.
 
 Restaurant.createRestaurant = function (newRestaurant, result) {
-<<<<<<< HEAD
         sql.query("INSERT INTO restaurants set ?", newRestaurant, function (err, res) {
 
                 if(err) {
@@ -30,46 +24,22 @@ Restaurant.createRestaurant = function (newRestaurant, result) {
                     result(null, res.insertId);
                 }
             });
-=======
-    console.log("new restaurant inserted! " + [newRestaurant]);
-    // currently inserts a restaurant with a unique name
-    let insert = 'INSERT INTO restaurants (name,location,contact) SELECT * FROM (SELECT ?,?,?) AS tmp WHERE NOT EXISTS (SELECT name FROM restaurants WHERE name = ?) LIMIT 1;'
-    let query = mysql.format(insert,[newRestaurant.name,newRestaurant.location,newRestaurant.contact,newRestaurant.name]);   
-    pool.query(query, (err, res) => {
-        if(err) {
-            console.log("error: ", err);
-            result(err, null);
-        }
-        else{
-            console.log(res.insertId);
-            if(res.insertId!=0){
-                result(null, res.insertId);
-            }else{
-                result(null,"restaurant already exists");
-            }
-        }
-    });
->>>>>>> 17db31d845704bc5ae90e9b8b75f890279fbfba6
 };
 
 Restaurant.getRestaurant = function (restaurantId, result) {
     let select = 'SELECT name,location,contact FROM restaurants WHERE id = ?';
-    let query = mysql.format(select,[restaurantId]);   
+    let query = mysql.format(select,[restaurantId]);
         pool.query(query, (err, res) => {
                 if(err) {
                     console.log("error: ", err);
                     result(err, null);
                 }
                 else{
-<<<<<<< HEAD
-                    result(null, res);
-=======
                     if(res.length > 0){
                         result(null, res);
                     }else{
                         result(null,"User does not exist");
                     }
->>>>>>> 17db31d845704bc5ae90e9b8b75f890279fbfba6
                 }
             });
 };
