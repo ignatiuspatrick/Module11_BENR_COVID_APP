@@ -11,7 +11,6 @@ const isNull = (value) => typeof value === "object" && !value
 
 exports.create_checkin = function(req, res) {
   var newCheckin = new Checkin(req.body);
-  console.log(!newCheckin.at_risk);
 
   //handles null error
    if(isNull(newCheckin.userid) || isNull(newCheckin.restid) || isNull(newCheckin.at_risk)){
@@ -25,5 +24,19 @@ exports.create_checkin = function(req, res) {
   });
 }
 };
+
+exports.checkout_checkin = function(req, res) {
+  console.log("brrrrr post less far");
+  Checkin.checkout(req.params.checkinId, function(err, checkin){
+
+    Checkin.createCheckin(newCheckin, function(err, checkin) {
+    if (err){
+      res.send(err);
+    }
+    res.json(checkin);
+  });
+
+  });
+}
 
 //TODO rest

@@ -11,18 +11,17 @@ var connection = mysql.createConnection(
 );
 connection.connect();
 
-
+//ROUTES & BODYPARSER FOR MIDDLEWARE
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 //RUN SERVER
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Server started on port  ${PORT}`));
-console.log('Started on: ' + PORT);
 
 
-//ROUTES & BODYPARSER FOR MIDDLEWARE
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+
 
 var routes = require('./app/routes/appRoutes');
 routes(app);
