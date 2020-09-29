@@ -16,11 +16,11 @@ exports.create_user = function(req, res){
 
   } else {
 
-  User.createUser(newUser, function(err, restaurant) {
+  User.createUser(newUser, function(err, user) {
     if (err){
       res.send(err);
     }
-    res.json(restaurant);
+    res.json(user);
   });
 }
 };

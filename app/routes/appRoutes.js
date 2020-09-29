@@ -12,12 +12,20 @@ module.exports = function(app){
   .delete(restaurants.delete_restaurant);
 
   //USERS
+  //(Customer/Restaurant personnel)
   var users = require('../controller/userController');
   app.route('users/:userId')
   .post(users.create_user);
   // .get(users.get_user);
   // .put(users.update_user);
   // .delete(users.delete_user);
+
+  //SUPER USER
+  //(Sanitary services & Restaurant owners)
+
+  var superusers = require('../controller/superuserController');
+  app.route('superusers/create').post(superusers.create_superuser);
+  app.route('superusers/login').post(superusers.login_superuser);
 
   //CHECK-INS
   var checkins = require('../controller/checkinController');

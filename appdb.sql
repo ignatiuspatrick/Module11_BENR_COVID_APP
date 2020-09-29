@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 28, 2020 at 03:23 PM
+-- Generation Time: Sep 29, 2020 at 04:35 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.10
 
@@ -33,8 +33,8 @@ CREATE TABLE `checkin` (
   `restid` int(11) NOT NULL,
   `at_risk` tinyint(1) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `checkin_time` date NOT NULL DEFAULT current_timestamp(),
-  `checkout_time` date DEFAULT NULL
+  `checkin_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `checkout_time` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -42,9 +42,12 @@ CREATE TABLE `checkin` (
 --
 
 INSERT INTO `checkin` (`id`, `userid`, `restid`, `at_risk`, `created_at`, `checkin_time`, `checkout_time`) VALUES
-(1, 4, 1, 0, '2020-09-26 14:35:40', '2020-09-26', NULL),
-(2, 4, 2, 0, '2020-09-26 14:44:24', '2020-09-26', NULL),
-(3, 5, 3, 0, '2020-09-26 15:13:37', '2020-09-26', NULL);
+(1, 4, 1, 0, '2020-09-28 15:13:43', '2020-09-26 00:00:00', '2020-09-28 00:00:00'),
+(2, 4, 2, 0, '2020-09-28 15:15:30', '2020-09-26 00:00:00', '2020-09-28 15:15:30'),
+(3, 5, 3, 0, '2020-09-26 15:13:37', '2020-09-26 00:00:00', NULL),
+(4, 4, 2, 0, '2020-09-28 14:19:43', '2020-09-28 00:00:00', NULL),
+(5, 4, 3, 0, '2020-09-28 22:01:55', '2020-09-29 00:01:55', NULL),
+(6, 3, 3, 1, '2020-09-28 22:02:08', '2020-09-29 00:02:08', NULL);
 
 -- --------------------------------------------------------
 
@@ -186,7 +189,28 @@ INSERT INTO `restaurants` (`id`, `name`, `location`, `contact`) VALUES
 (120, 'Shivani\'s Surinaams Eethuis', 'Lipperkerkstraat 33, 7511 CT Enschede', 'shivanis.nl'),
 (121, 'The Bombay Spice', 'Wemenstraat 59, 7551 EW Hengelo', 'bombayspice.nl'),
 (122, 'La Place', 'Raadhuisstraat 12, 7511 HK Enschede', 'laplace.com'),
-(123, 'Restaurant name', 'Enschede Centrum', 'Mail@gmail.com');
+(123, 'Restaurant name', 'Enschede Centrum', 'Mail@gmail.com'),
+(124, 'Restaurant name', 'Enschede Centrum', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `superusers`
+--
+
+CREATE TABLE `superusers` (
+  `id` int(11) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `password` text NOT NULL,
+  `email` text NOT NULL,
+  `phonenumber` varchar(255) NOT NULL,
+  `city` varchar(255) NOT NULL,
+  `streetname` text NOT NULL,
+  `housenumber` smallint(6) NOT NULL,
+  `postalcode` varchar(6) NOT NULL,
+  `type` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -245,6 +269,12 @@ ALTER TABLE `restaurants`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `superusers`
+--
+ALTER TABLE `superusers`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -258,13 +288,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `checkin`
 --
 ALTER TABLE `checkin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `restaurants`
 --
 ALTER TABLE `restaurants`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
+
+--
+-- AUTO_INCREMENT for table `superusers`
+--
+ALTER TABLE `superusers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
