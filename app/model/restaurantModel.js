@@ -1,5 +1,6 @@
 'user strict';
 var sql = require('../../db.js');
+var mysql = require('mysql');
 
 //Restaurant object constructor, probably needs more fields (name etc)
 var Restaurant = function(restaurant){
@@ -27,9 +28,7 @@ Restaurant.createRestaurant = function (newRestaurant, result) {
 };
 
 Restaurant.getRestaurant = function (restaurantId, result) {
-    let select = 'SELECT name,location,contact FROM restaurants WHERE id = ?';
-    let query = mysql.format(select,[restaurantId]);
-        pool.query(query, (err, res) => {
+        sql.query("SELECT name,location,contact FROM restaurants WHERE id = ?",restaurantId, (err, res) => {
                 if(err) {
                     console.log("error: ", err);
                     result(err, null);
@@ -38,14 +37,14 @@ Restaurant.getRestaurant = function (restaurantId, result) {
                     if(res.length > 0){
                         result(null, res);
                     }else{
-                        result(null,"User does not exist");
+                        result(null,"restaurant does not exist");
                     }
                 }
             });
 };
 
 Restaurant.getAllRestaurants = function (result) {
-        pool.query("SELECT * FROM restaurants", function (err, res) {
+        sql.query("SELECT * FROM restaurants", function (err, res) {
                 if(err) {
                     console.log("error: ", err);
                     result(null, err);
@@ -59,7 +58,7 @@ Restaurant.getAllRestaurants = function (result) {
 Restaurant.updateRestaurant = function(restaurantId, newRestaurant, result){
     let update = "UPDATE restaurants SET name = ?,location = ?,contact = ? WHERE id = ?";
     let query = mysql.format(update,[newRestaurant.name,newRestaurant.location,newRestaurant.contact,restaurantId]);
-    pool.query(query, (err,res)=>{
+    sql.query(query, (err,res)=>{
         if(err) {
             console.log("error: ", err);
             result(err, null);
@@ -69,7 +68,7 @@ Restaurant.updateRestaurant = function(restaurantId, newRestaurant, result){
     })
 };
 Restaurant.deleteRestaurant = function(restaurantId, result){
-     pool.query("DELETE FROM restaurants WHERE id = ?", [id], function (err, res) {
+     sql.query("DELETE FROM restaurants WHERE id = ?", [restaurantId], function (err, res) {
                 if(err) {
                     console.log("error: ", err);
                     result(null, err);

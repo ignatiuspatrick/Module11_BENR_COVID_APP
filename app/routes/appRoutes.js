@@ -14,11 +14,12 @@ module.exports = function(app){
   //USERS
   //(Customer/Restaurant personnel)
   var users = require('../controller/userController');
-  app.route('users/:userId')
+  app.route('/users')
   .post(users.create_user);
-  // .get(users.get_user);
-  // .put(users.update_user);
-  // .delete(users.delete_user);
+  app.route('/users/:userId')
+  .get(users.get_user)
+  .put(users.update_user)
+  .delete(users.delete_user);
 
   //SUPER USER
   //(Sanitary services & Restaurant owners)
