@@ -25,8 +25,8 @@ module.exports = function(app){
   //(Sanitary services & Restaurant owners)
 
   var superusers = require('../controller/superuserController');
-  app.route('superusers/create').post(superusers.create_superuser);
-  app.route('superusers/login').post(superusers.login_superuser);
+  app.route('/superusers/create').post(superusers.create_superuser);
+  app.route('/superusers/login').post(superusers.login_superuser);
 
   //CHECK-INS
   var checkins = require('../controller/checkinController');

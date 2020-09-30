@@ -208,7 +208,7 @@ CREATE TABLE `superusers` (
   `streetname` text NOT NULL,
   `housenumber` smallint(6) NOT NULL,
   `postalcode` varchar(6) NOT NULL,
-  `type` int(11) NOT NULL,
+  `type` varchar(64) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

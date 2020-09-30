@@ -21,7 +21,9 @@ exports.create_superuser = function(req, res){
     if (err){
       res.send(err);
     }
-    res.json(superuser);
+    console.log('Created superuser with id ' + superuser);
+    res.status(200).send({message: 'Registration succesful! Redirect.'});
+    // TODO: Redirect user to login/success page
   });
 }
 

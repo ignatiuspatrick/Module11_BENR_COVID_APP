@@ -24,20 +24,20 @@ var Superuser = function(superuser){
 };
 
 Superuser.createSuperuser = function (newSuperuser, result) {
-  bcrypt.hash(this.password, saltRounds, function(err, hash) {
-    // Store hash in your password DB.
-    this.password = hash; //replace with hash before storing
+
+  //Asynchronous approach so that it is faster.
+  bcrypt.hash(newSuperuser.password, saltRounds).then(function(hash){
+    newSuperuser.password = hash; //replace with hash before storing
     sql.query("INSERT INTO superusers SET ?", newSuperuser, function (err, res) {
       if(err) {
           console.log("error: ", err);
           result(err, null);
       }
       else{
-          console.log(res.insertId);
           result(null, res.insertId);
       }
     });
-  });  //USERS
+  });
 
 };
 
@@ -60,3 +60,5 @@ Superuser.loginSuperuser = function(username, password, type, result){
 
 
 };
+
+module.exports = Superuser;
