@@ -42,17 +42,23 @@ Superuser.createSuperuser = function (newSuperuser, result) {
 };
 
 Superuser.loginSuperuser = function(username, password, type, result){
-  sql.query('SELECT password FROM superusers WHERE username = ?', username, function(err, res) {
+  sql.query('SELECT password FROM superusers WHERE username = ?', username, function(err, queryresult, fields) {
       if(err){
 
         console.log("error: ", err);
         result(err, null);
 
       } else {
+        let hash = queryresult[0].password;
 
-        let hash = res.password;
+        if(!hash){
+          result("No results", null);
+        }
+
         bcrypt.compare(password, hash).then(function(success) {
           result(null, success);
+        }).catch((error) => {
+          result(error,'Promise error');
         });
       }
   });
