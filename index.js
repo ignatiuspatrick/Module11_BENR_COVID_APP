@@ -18,7 +18,23 @@ const app = express();
 // };
 // var server = https.createServer(options, app);
 
+//JWT
+const jwt = require('jsonwebtoken');
+const SECRET_KEY = require('./secret');
 
+// verify token
+function verify(req, res, next){
+  console.log("verifying.");
+  jwt.verify(token, SECRET_KEY, function (err, payload) {
+    if (!token) return res.status(401).send('Access denied. No token provided.')
+    if (err) {
+      return res.status(403).send(err);
+    }
+
+    console.log('JWT is valid and payload is\n', payload);
+    next();
+  });
+}
 
 //MYSQL
 const mysql = require('mysql');
@@ -38,7 +54,7 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started on port  ${PORT}`));
 
 
-
-
+//// TODO: Make secured routes use verify().
 var routes = require('./app/routes/appRoutes');
+var securedRoutes = require('./app/routes/securedAppRoutes');
 routes(app);

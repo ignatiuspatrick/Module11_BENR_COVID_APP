@@ -23,6 +23,8 @@ var Superuser = function(superuser){
     this.type = superuser.type;
 };
 
+
+//create a superuser. Does not log them in yet.
 Superuser.createSuperuser = function (newSuperuser, result) {
 
   //Asynchronous approach so that it is faster.
@@ -41,21 +43,23 @@ Superuser.createSuperuser = function (newSuperuser, result) {
 
 };
 
-Superuser.loginSuperuser = function(username, password, type, result){
-  sql.query('SELECT password FROM superusers WHERE username = ?', username, function(err, queryresult, fields) {
+
+//login a superuser
+Superuser.loginSuperuser = function(username, password, reqtype, result){
+  sql.query('SELECT password, type FROM superusers WHERE username = ?', username, function(err, queryresult, fields) {
       if(err){
 
         console.log("error: ", err);
         result(err, null);
 
-      } else {
-        let hash = queryresult[0].password;
+      } else if(queryresult.length != 1){ //make sure it returns just 1 row
+        result("Database error: query returned too many results.", false);
+      } else if(reqtype != queryresult[0].type){ //verify the type is the same
+        result("Invalid type, please try selecting a different one", false);
+      }else{
 
-        if(!hash){
-          result("No results", null);
-        }
-
-        bcrypt.compare(password, hash).then(function(success) {
+        let hash = queryresult[0].password; //simply gets pwd from db query
+        bcrypt.compare(password, hash).then(function(success) { //safely compares the hash and request pwd
           result(null, success);
         }).catch((error) => {
           result(error,'Promise error');
