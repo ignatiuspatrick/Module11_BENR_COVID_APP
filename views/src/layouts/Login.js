@@ -74,6 +74,10 @@ export default function SignInSide() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  const onFormSubmit = e => {
+    e.preventDefault();
+    validityCheck();
+  }
 
   
   function validityCheck() {
@@ -153,7 +157,7 @@ export default function SignInSide() {
               <Tab icon={<LocalHospitalIcon />} label="Sanitary Services" />
             </Tabs>
           </Paper>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} onSubmit={onFormSubmit}>
             <Typography color='error'>{getErrorMessage()}</Typography>
             <TextField
               variant="outlined"
@@ -184,12 +188,11 @@ export default function SignInSide() {
               label="Remember me"
             />
             <Button
-              type="button"
+              type="submit"
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={() => validityCheck()}
             >
               Sign In
             </Button>
