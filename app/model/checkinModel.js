@@ -1,13 +1,6 @@
 'user strict';
 var sql = require('../../db.js');
 
-
-//  .post(checkins.create_checkin)
-  // .get(checkins.get_checkin)
-  // .put(checkins.update_checkin)
-  // .delete(checkins.delete_checkin);
-
-
 //Checkin object constructor (needs more fields later on.
 var Checkin = function(checkin){
     this.userid = parseInt(checkin.userid, 10);
@@ -31,6 +24,7 @@ Checkin.createCheckin = function (newCheckin, result) {
             });
 };
 
+//Checking out through checkinId
 Checkin.checkout = function (checkinId, result){
   console.log("brrrrrr post");
   var time = new Date().toISOString().slice(0, 19).replace('T', ' ');

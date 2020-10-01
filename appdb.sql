@@ -2,10 +2,10 @@
 -- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Oct 01, 2020 at 12:56 PM
--- Server version: 10.1.32-MariaDB
--- PHP Version: 7.2.5
+-- Host: localhost
+-- Generation Time: Oct 01, 2020 at 10:29 PM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.4.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -31,9 +31,39 @@ CREATE TABLE `checkin` (
   `id` int(11) NOT NULL,
   `userid` int(11) NOT NULL,
   `restid` int(11) NOT NULL,
-  `at_risk` tinyint(1) DEFAULT '0',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `at_risk` tinyint(1) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `checkin_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `checkout_time` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `checkin`
+--
+
+INSERT INTO `checkin` (`id`, `userid`, `restid`, `at_risk`, `created_at`, `checkin_time`, `checkout_time`) VALUES
+(1, 4, 1, 0, '2020-09-28 15:13:43', '2020-09-26 00:00:00', '2020-09-28 00:00:00'),
+(2, 4, 2, 0, '2020-09-28 15:15:30', '2020-09-26 00:00:00', '2020-09-28 15:15:30'),
+(3, 5, 3, 0, '2020-09-26 15:13:37', '2020-09-26 00:00:00', NULL),
+(4, 4, 2, 0, '2020-10-01 19:51:16', '2020-09-28 00:00:00', '2020-10-01 19:51:16'),
+(5, 4, 3, 0, '2020-09-28 22:01:55', '2020-09-29 00:01:55', NULL),
+(6, 3, 3, 1, '2020-09-28 22:02:08', '2020-09-29 00:02:08', NULL),
+(7, 3, 3, 1, '2020-10-01 11:48:29', '2020-10-01 13:48:29', NULL),
+(8, 3, 3, 1, '2020-10-01 11:48:41', '2020-10-01 13:48:41', NULL),
+(9, 3, 3, 1, '2020-10-01 19:53:12', '2020-10-01 13:50:00', '2020-10-01 19:53:12'),
+(10, 4, 9, 0, '2020-10-01 12:16:44', '2020-10-01 14:16:44', NULL),
+(11, 4, 10, 0, '2020-10-01 13:00:41', '2020-10-01 15:00:41', NULL),
+(12, 4, 10, 0, '2020-10-01 13:00:47', '2020-10-01 15:00:47', NULL),
+(13, 4, 10, 0, '2020-10-01 13:02:58', '2020-10-01 15:02:58', NULL),
+(14, 4, 10, 0, '2020-10-01 13:04:57', '2020-10-01 15:04:57', NULL),
+(15, 4, 10, 0, '2020-10-01 13:06:55', '2020-10-01 15:06:55', NULL),
+(16, 4, 10, 0, '2020-10-01 13:13:17', '2020-10-01 15:13:17', NULL),
+(17, 4, 10, 0, '2020-10-01 13:27:57', '2020-10-01 15:27:57', NULL),
+(18, 4, 10, 0, '2020-10-01 13:28:06', '2020-10-01 15:28:06', NULL),
+(19, 4, 10, 0, '2020-10-01 19:50:02', '2020-10-01 21:50:02', NULL),
+(20, 9, 23, 0, '2020-10-01 19:54:06', '2020-10-01 21:54:06', NULL),
+(21, 9, 23, 0, '2020-10-01 19:54:36', '2020-10-01 21:54:36', NULL),
+(22, 9, 23, 0, '2020-10-01 20:25:10', '2020-10-01 22:25:10', NULL);
 
 -- --------------------------------------------------------
 
@@ -55,7 +85,7 @@ CREATE TABLE `restaurants` (
 INSERT INTO `restaurants` (`id`, `name`, `location`, `contact`) VALUES
 (1, 'Restaurant LaRoche', 'Hengelosestraat 200, 7521 AL Enschede', 'restaurantlaroche.nl'),
 (2, 'De Ouwe Compagnie', 'Walstraat 39, 7511 GG Enschede', 'deouwecompagnie.nl'),
-(3, 'Big Belly\s Tavern', 'Van Lochemstraat 230, 7511 PM Enschede', 'big-bellys.nl'),
+(3, 'Big Belly\'s Tavern', 'Van Lochemstraat 230, 7511 PM Enschede', 'big-bellys.nl'),
 (4, 'burgerme Enschede', 'Willem Wilminkplein 27, 7511 PP Enschede', 'burgerme.nl'),
 (5, 'Blue Sakura', 'Oude Markt 21, 7511 GB Enschede', 'bluesakura.nl'),
 (6, 'Asaka', 'Zuiderhagen 53, 7511 GK Enschede', 'asaka.nl'),
@@ -70,7 +100,7 @@ INSERT INTO `restaurants` (`id`, `name`, `location`, `contact`) VALUES
 (15, 'Lunchroom Het Rigtpunt', 'Rigtersbleek-Aalten 4, 7521 RB Enschede', 'lunchroomrigtpunt.nl'),
 (16, 'Heel Bijzonder Enschede', 'De Heurne 47, 7511 GZ Enschede', 'heelbijzonder.com'),
 (17, 'Goodys', 'Marktstraat 2, 7511 GD Enschede', 'goodys.nl'),
-(18, 'Joop\s Broodjes', 'Deurningerstraat 57, 7514 BD Enschede', 'joopsbroodjes.nl'),
+(18, 'Joop\'s Broodjes', 'Deurningerstraat 57, 7514 BD Enschede', 'joopsbroodjes.nl'),
 (19, 'Oh my grill', 'Hengelosestraat 170, 7521 AK Enschede', 'ohmygrill.nl'),
 (20, 'Ana Doner V.O.F.', 'G.J. van Heekstraat 245, 7521 EE Enschede', 'anadoner.ultimatumapp.com'),
 (21, 'Spaans Restaurant Los Sueños \"mas que tapas\" in Enschede', 'Walstraat 41, 7511 GG Enschede', 'lossuenos.nl'),
@@ -81,7 +111,7 @@ INSERT INTO `restaurants` (`id`, `name`, `location`, `contact`) VALUES
 (26, 'Mazza Libanees Restaurant', 'Walstraat 1, 7511 GE Enschede', 'restaurantmazza.nl'),
 (27, 'Restaurant De Tropen', 'Bolwerkstraat 9, 7511 GP Enschede', 'restaurantdetropen.nl'),
 (28, 'Le Mans EET-DRINK & GENIET', 'Brouwerijplein 18, 7523 MB Enschede', 'lemansenschede.nl'),
-(29, 'Verso Cucina Italiana \d Intenzo', 'Deurningerstraat 11, 7514 BC Enschede', 'restaurantverso.nl'),
+(29, 'Verso Cucina Italiana \'d Intenzo', 'Deurningerstraat 11, 7514 BC Enschede', 'restaurantverso.nl'),
 (30, 'Restaurant Turquoise', 'Korte Haaksbergerstraat 3, 7511 JV Enschede', 'turquoise-enschede.nl'),
 (31, 'CopaCabana Steakhouse & Tapasrestaurant', 'Oude Markt 31, 7511 GB Enschede', 'copacabana-cafe.nl'),
 (32, 'Restaurant Het Middelpunt', 'Rembrandtlaan 56, 7545 ZL Enschede', 'middelpunt-enschede.nl'),
@@ -108,19 +138,19 @@ INSERT INTO `restaurants` (`id`, `name`, `location`, `contact`) VALUES
 (53, 'KFC', 'Kalanderstraat 2, 7511 HX Enschede', 'kfc.nl'),
 (54, 'Het Paradijs', 'Nicolaas Beetsstraat 48, 7514 CW Enschede', 'hetparadijs.com'),
 (55, 'Japans Restaurant TAO', 'Deurningerstraat 17, 7514 BC Enschede', 'restauranttao.nl'),
-(56, '\t Lansink (Hotel - Restaurant)', 'C.T. Storkstraat 18, 7553 AR Hengelo', 'hotellansink.nl'),
-(57, 'Carlina\s Latin Cuisine', 'Walstraat 69, 7511 GG Enschede', 'carlinas.nl'),
+(56, '\'t Lansink (Hotel - Restaurant)', 'C.T. Storkstraat 18, 7553 AR Hengelo', 'hotellansink.nl'),
+(57, 'Carlina\'s Latin Cuisine', 'Walstraat 69, 7511 GG Enschede', 'carlinas.nl'),
 (58, 'The Saloon', 'Walstraat 63, 7511 GG Enschede', 'the-saloon.nl'),
 (59, 'Restaurant de Basis', 'Walstraat 15-17, 7511 GE Enschede', 'terugnaardebasis.nu'),
 (60, 'Eethuis Toros', 'Brouwerijplein 28, 7523 MB Enschede', 'eethuistoros.nl'),
 (61, 'De Eetkamer', 'De Bleek 19, 7622 LJ Borne', 'eetkamer-borne.nl'),
 (62, 'Foodbar BLUFF', 'Oude Markt 6, 7511 GA Enschede', 'bluff.nl'),
 (63, 'Thais Restaurant Aroy-D', 'Noorderhagen 20, 7511 EL Enschede', 'aroy-d.nl'),
-(64, 'Hu\s Garden', 'Oldenzaalsestraat 266, 7523 AG Enschede', 'husgarden.nl'),
+(64, 'Hu\'s Garden', 'Oldenzaalsestraat 266, 7523 AG Enschede', 'husgarden.nl'),
 (65, 'Spice King India Enschede', 'Stadsgravenstraat 55, 7511 ER Enschede', 'spicekingindia.com'),
 (66, 'Grieks Restaurant Rhodos', 'Korte Haaksbergerstraat 13, 7511 JV Enschede', 'makro.rest'),
 (67, 'Argentijns restaurant poco mucho', 'Korte Haaksbergerstraat, 7511 JV Enschede', 'pocomucho-enschede.nl'),
-(68, 'Paddy\s', 'Oude Markt 12, 7511 GA Enschede', 'paddys.nl'),
+(68, 'Paddy\'s', 'Oude Markt 12, 7511 GA Enschede', 'paddys.nl'),
 (69, 'Saray Ocakbasi', 'Deurningerstraat 91C, 7514 BE Enschede', ''),
 (70, 'Balkan Restaurant', 'Drienerstraat 29, 7551 HK Hengelo', 'restaurantbalkan.nl'),
 (71, 'Brasserie Kachel', 'Bentrotstraat 45, 7531 AA Enschede', 'brasseriekachel.nl'),
@@ -133,13 +163,13 @@ INSERT INTO `restaurants` (`id`, `name`, `location`, `contact`) VALUES
 (78, 'Nyonya Meneer Indonesisch Eethuis', 'Walstraat 9, 7511 GE Enschede', 'nyonyameneer.nl'),
 (79, 'Snackkar aan huis \"Tukker food\" betrouwbaar en betaalbaar', 'Waalstraat 50, 7523 RK Enschede', 'tukker-food.nl'),
 (80, 'Restaurant de Oude Apotheek', 'Teylersstraat 4, 7581 AH Losser', 'oude-apotheek.nl'),
-(81, 'Humphrey\s Restaurant Enschede', 'Oude Markt 3A, 7511 GA Enschede', 'humphreys.nl'),
+(81, 'Humphrey\'s Restaurant Enschede', 'Oude Markt 3A, 7511 GA Enschede', 'humphreys.nl'),
 (82, 'Los Ponchos', 'Korte Haaksbergerstraat 2, 7511 JS Enschede', 'losponchos.nl'),
 (83, 'Yuzu Enschede', 'Van Loenshof 35, 7511 HE Enschede', 'yuzuenschede.nl'),
 (84, 'Masada', 'Wethouder Gerbertstraat 61, 7543 AW Enschede', 'masada.nl'),
 (85, 'Steakhouse El Gaucho', 'Zuiderhagen 16, 7511 GL Enschede', 'el-gaucho-enschede.nl'),
 (86, 'Eetcafé Bij Flip', 'Langestraat 58-60, 7511 HC Enschede', 'eetcafebijflip.nl'),
-(87, 'Vaperansa\s Soul Food', 'Hoge Bothofstraat 39A, 7514 ZA Enschede', 'vaperansa.nl'),
+(87, 'Vaperansa\'s Soul Food', 'Hoge Bothofstraat 39A, 7514 ZA Enschede', 'vaperansa.nl'),
 (88, 'Moeke Enschede', 'Oude Markt 8, 7511 GA Enschede', 'moekeenschede.nl'),
 (89, 'Restaurant & Grand Café The Gallery Enschede', 'Hengelosestraat 500, 7521 AN Enschede', 'gallerycatering.nl'),
 (90, 'Cafetaria Sylvia', 'Rijnstraat 74, 7523 GH Enschede', 'sylvia-enschede.nl'),
@@ -148,8 +178,8 @@ INSERT INTO `restaurants` (`id`, `name`, `location`, `contact`) VALUES
 (93, 'Light of India', 'Emmastraat 189, 7513 BC Enschede', 'ecocentrumemma.nl'),
 (94, 'Happy Italy', 'Willem Wilminkplein 31, 7511 PP Enschede', 'happyitaly.nl'),
 (95, 'De Pauw', 'Deurningerstraat 217, 7522 CB Enschede', ''),
-(96, 'Bistro C\est Si Bon', 'Noorderhagen 54A, 7511 EM Enschede', 'cestsibon.nl'),
-(97, 'Mario\s en Mario\s Sweets', 'Hengelosestraat 184B, 7521 AK Enschede', 'marios-burgers.nl'),
+(96, 'Bistro C\'est Si Bon', 'Noorderhagen 54A, 7511 EM Enschede', 'cestsibon.nl'),
+(97, 'Mario\'s en Mario\'s Sweets', 'Hengelosestraat 184B, 7521 AK Enschede', 'marios-burgers.nl'),
 (98, 'Eetcafe ’t Raedthuys', 'Sint Maartenstraat 57, 7581 AK Losser', 'eetcaferaedthuys.nl'),
 (99, 'Restaurant De Stadsgracht', 'Stadsgravenstraat 57, 7511 ER Enschede', 'destadsgracht.nl'),
 (100, 'Restaurant ZIN', 'Noord Esmarkerrondweg 421-2, 7533 BL Enschede', 'restaurantzin.nl'),
@@ -158,7 +188,7 @@ INSERT INTO `restaurants` (`id`, `name`, `location`, `contact`) VALUES
 (103, 'Olympic', 'Korte Haaksbergerstraat 4, 7511 JS Enschede', 'grieksrestaurantenschede.nl'),
 (104, 'Bagels & Beans', 'Korte Hengelosestraat 33, 7511 JA Enschede', 'bagelsbeans.nl'),
 (105, 'Pulcinella B.V.', 'Deurningerstraat 91, 7514 BE Enschede', 'pizzeria-pulcinella.nl'),
-(106, 'Rosy\s', 'Van Loenshof 86, 7511 NK Enschede', 'rosysfood.nl'),
+(106, 'Rosy\'s', 'Van Loenshof 86, 7511 NK Enschede', 'rosysfood.nl'),
 (107, 'Twentse Bierbrouwerij', 'Haaksbergerstraat 51, 7554 PA Hengelo', 'twentsebierbrouwerijproeflokaal.nl'),
 (108, 'De Lunchkamer', 'Roomweg 75, 7523 BL Enschede', 'lunchkamer.com'),
 (109, 'Kleinsman Eten en Drinken', 'Weerseloseweg 356, 7522 PT Enschede', ''),
@@ -172,7 +202,7 @@ INSERT INTO `restaurants` (`id`, `name`, `location`, `contact`) VALUES
 (117, 'Restaurant De Broeierd', 'Hengelosestraat 725, 7521 PA Enschede', 'bistrodebroeierd.nl'),
 (118, 'JAMe Food Enschede', 'Willem Wilminkplein 27a, 7511 PP Enschede', 'jamefood.com'),
 (119, 'Restaurant Fleur De Sel', 'Beckumerstraat 20, 7548 BG Enschede', 'restaurantfleurdesel.nl'),
-(120, 'Shivani\s Surinaams Eethuis', 'Lipperkerkstraat 33, 7511 CT Enschede', 'shivanis.nl'),
+(120, 'Shivani\'s Surinaams Eethuis', 'Lipperkerkstraat 33, 7511 CT Enschede', 'shivanis.nl'),
 (121, 'The Bombay Spice', 'Wemenstraat 59, 7551 EW Hengelo', 'bombayspice.nl'),
 (122, 'La Place', 'Raadhuisstraat 12, 7511 HK Enschede', 'laplace.com'),
 (123, 'Restaurant name', 'Enschede Centrum', 'Mail@gmail.com'),
@@ -194,8 +224,8 @@ CREATE TABLE `superusers` (
   `streetname` text NOT NULL,
   `housenumber` smallint(6) NOT NULL,
   `postalcode` varchar(6) NOT NULL,
-  `type` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `type` varchar(64) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -203,7 +233,7 @@ CREATE TABLE `superusers` (
 --
 
 INSERT INTO `superusers` (`id`, `username`, `password`, `email`, `phonenumber`, `city`, `streetname`, `housenumber`, `postalcode`, `type`, `created_at`) VALUES
-(1, 'admin', '$2b$12$qb5yieQuDXEgh3LTswyn.e5QujXrFYBaQdqoV5twzU8yZF5S6dsyu', 'admin@admin.com', '+31600000000', 'Enschede', 'street', 5, '7555AA', 'restaurant_owner', '2020-09-30 19:36:23');
+(5, 'admin1', '$2b$12$Yg8DYoJ3ANJQ3NNgWxCwsO3UiuJ/MGWPEiMau7p9eFsfedc1RRG8u', 'admin@admin.com', '+31 06 11111111', 'Enschede', 'stationsplein', 5, '7555AA', 'restaurant_owner', '2020-09-30 13:39:38');
 
 -- --------------------------------------------------------
 
@@ -212,17 +242,43 @@ INSERT INTO `superusers` (`id`, `username`, `password`, `email`, `phonenumber`, 
 --
 
 CREATE TABLE `users` (
-  `userid` int(25) NOT NULL,
-  `token` varchar(255) DEFAULT NULL
+  `id` int(11) NOT NULL,
+  `token` varchar(255) DEFAULT NULL,
+  `userId` varchar(255) NOT NULL,
+  `type` varchar(16) NOT NULL DEFAULT 'customer' COMMENT 'Can either be customer or personnel'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`userid`, `token`) VALUES
-(1, '12345677890'),
-(2, 'test');
+INSERT INTO `users` (`id`, `token`, `userId`, `type`) VALUES
+(4, '1234567890', '1uig2n2g9n20tg8n', 'customer'),
+(5, '1234567890', '1uig2n2g9nberb20tg8n', 'customer'),
+(6, '1234567890', '1uig2n2g9n20tg18n', 'customer'),
+(7, '1234567890', '1uig2n2g9n20tg82n', 'customer'),
+(8, '1234567890', '1uig2n2g9n20tg8n3', 'customer'),
+(9, '1234567890', '1uig2n2g9n20tg48n', 'customer'),
+(10, '1234567890', '1uig2n2g9n20tg58n', 'customer'),
+(11, '0987654321', '21uig2n2g9n20tg8n', 'customer'),
+(12, '1234567890abcdef', '1u3ig2n2g9n20tg8n', 'customer'),
+(13, '1234567890abcdef', '1ui3g2n2g9n20tg8naf', 'customer'),
+(14, '1234567890abcdef', '1uig42n2g9n20tg8n', 'customer'),
+(15, '1234567890abcdef', '1uig25n2g9n20tg8n', 'customer'),
+(16, '1234567890abcdef', '1uig2n22g9n20tg8n', 'customer'),
+(17, 'someverylongrandomtoken', '1uig2n25g9n20tg8n', 'customer'),
+(18, 'randomrandomrandom', '1uig2n2gg9n20tg8n', 'customer'),
+(19, 'someverylongrandomtoken', '1uig2n2g9sn20tg8n', 'customer'),
+(20, 'randomrandomrandom', '1uig2n2g9nb20tg8n', 'customer'),
+(21, 'someverylongrandomtoken', '1uig2nb2g9nb20tg8n', 'customer'),
+(22, 'randomrandomrandom', '1uig2n2xg9nb20tg8n', 'customer'),
+(23, 'someverylongrandomtoken', '1uig2n2ga9nnb20tg8n', 'customer'),
+(24, 'randomrandomrandom', '1uig2n2g9nbw20tg8n', 'customer'),
+(25, 'someverylongrandomtoken', '1uig2n2g9nb22twnb0tg8n', 'customer'),
+(26, 'randomrandomrandom', '1uig2n2g9nb20tg8n3', 'customer'),
+(12345679, NULL, '13y234bwe535en6en789678', 'customer'),
+(12345680, NULL, '13y234bwe5351en6en789678', 'customer'),
+(12345681, NULL, '13jhv5351en6en789678', 'customer');
 
 --
 -- Indexes for dumped tables
@@ -238,20 +294,21 @@ ALTER TABLE `checkin`
 -- Indexes for table `restaurants`
 --
 ALTER TABLE `restaurants`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNIQUE` (`id`,`name`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `superusers`
 --
 ALTER TABLE `superusers`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`);
 
 --
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`userid`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `userId` (`userId`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -261,7 +318,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `checkin`
 --
 ALTER TABLE `checkin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `restaurants`
@@ -273,19 +330,14 @@ ALTER TABLE `restaurants`
 -- AUTO_INCREMENT for table `superusers`
 --
 ALTER TABLE `superusers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12345682;
 COMMIT;
-
---
--- UNIQUE for table `superusers` column username
---
-ALTER TABLE `superusers` ADD UNIQUE( `username`); 
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

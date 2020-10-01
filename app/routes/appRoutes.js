@@ -36,9 +36,9 @@ module.exports = function(app){
 
   // CHECK-INS, now needs general verification
   var checkins = require('../controller/checkinController');
-  app.post('/checkin', verify.verifyGeneral, checkins.create_checkin); //// TODO: use a verification for customers (id & type)
+  app.post('/checkin', verify.verifyCustomer, checkins.create_checkin); //// TODO: use a verification for customers (id & type)
 
     //checkout
     //to test, send post request as such: localhost:5000/checkout/1/
-  app.post('/checkout/:checkinId', verify.verifyGeneral, checkins.checkout_checkin);
+  app.post('/checkout/:checkinId', verify.verifyCustomer, checkins.checkout_checkin);
 };

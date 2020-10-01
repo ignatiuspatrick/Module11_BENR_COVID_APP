@@ -21,7 +21,7 @@ module.exports = {
 
   //verification for restaurant owners
   verifyRestaurantOwner: function (req, res, next){
-    console.log("verifying.");
+    console.log("verifying restaurant owner.");
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     jwt.verify(token, SECRET_KEY, function (err, payload) {
@@ -40,7 +40,7 @@ module.exports = {
 
   //verification for sanitary_services
   verifySanitaryService: function (req, res, next){
-    console.log("verifying.");
+    console.log("verifying sanitary service.");
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     jwt.verify(token, SECRET_KEY, function (err, payload) {
@@ -55,5 +55,45 @@ module.exports = {
       console.log('JWT is valid and payload is\n', payload);
       next();
     });
+  },
+
+
+  //verify that it is restaurant personnel
+  verifyPersonnel: function (req, res, next){
+    console.log("verifying personnel.");
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    jwt.verify(token, SECRET_KEY, function (err, payload) {
+      if (!token) return res.status(401).send('Access denied. No token provided.')
+      if (err) {
+        return res.status(403).send(err);
+      }
+      if(payload.type != 'personnel'){
+        return res.status(403).send({error: 'Acces denied. Wrong user type.'})
+      }
+
+      console.log('JWT is valid and payload is\n', payload);
+      next();
+    });
+  },
+
+  //verify that is a customer
+   verifyCustomer: function (req, res, next){
+    console.log("verifying customer.");
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    jwt.verify(token, SECRET_KEY, function (err, payload) {
+      if (!token) return res.status(401).send('Access denied. No token provided.')
+      if (err) {
+        return res.status(403).send(err);
+      }
+      if(payload.type != 'customer'){
+        return res.status(403).send({error: 'Acces denied. Wrong user type.'})
+      }
+
+      console.log('JWT is valid and payload is\n', payload);
+      next();
+    });
   }
+
 };

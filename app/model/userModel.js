@@ -3,7 +3,8 @@ var sql = require('../../db.js');
 
 //User object constructor, needs more fields
 var User = function(user){
-    this.token = user.token;
+  this.userId = user.userId;
+  this.type = user.type;
 };
 
 User.createUser = function (newUser, result) {
@@ -11,15 +12,15 @@ User.createUser = function (newUser, result) {
                 if(err) {
                     console.log("error: ", err);
                     result(err, null);
-                }
-                else{
+                } else{
                     console.log(res.insertId);
                     result(null, res.insertId);
                 }
             });
 };
+
 User.getUser = function (userId, result) {
-    sql.query("SELECT userid,token FROM users WHERE userid = ?", userId, function (err, res) {
+    sql.query("SELECT id,token,type FROM users WHERE id = ?", userId, function (err, res) {
             if(err) {
                 console.log("error: ", err);
                 result(err, null);
@@ -34,7 +35,7 @@ User.getUser = function (userId, result) {
         });
 };
 User.updateUser = function (userId, user, result) {
-    sql.query("UPDATE users SET token = ? WHERE userid = ?", [user.token,userId], function (err, res) {
+    sql.query("UPDATE users SET token = ? WHERE id = ?", [user.token,userId], function (err, res) {
             if(err) {
                 console.log("error: ", err);
                 result(err, null);
@@ -45,7 +46,7 @@ User.updateUser = function (userId, user, result) {
         });
 };
 User.deleteUser = function (userId, result) {
-    sql.query("DELETE FROM users WHERE userid = ?", userId, function (err, res) {
+    sql.query("DELETE FROM users WHERE id = ?", userId, function (err, res) {
             if(err) {
                 console.log("error: ", err);
                 result(err, null);

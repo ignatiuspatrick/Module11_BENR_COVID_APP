@@ -20,7 +20,7 @@ exports.create_checkin = function(req, res) {
     if (err){
       res.send(err);
     }
-    res.json(checkin);
+    res.json({checkin: checkin});
   });
 }
 };
