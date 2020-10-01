@@ -11,6 +11,8 @@ import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from "react-router-dom";
 
@@ -29,7 +31,7 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: '100vh',
+    height: '150vh',
     backgroundColor: '#fe7d55'
   },
   tabs: {
@@ -62,8 +64,19 @@ export default function SignUpSide() {
   const [firstname, setFirstname] = React.useState('');
   const [lastname, setLastname] = React.useState('');
   const [email, setEmail] = React.useState('');
-  const [restaurantname, setRestaurantName] = React.useState('');
+  const [phonenumber, setPhoneNumber] = React.useState('');
+  const [city, setCity] = React.useState('');
+  const [streetname, setStreetName] = React.useState('');
+  const [housenumber, setHouseNumber] = React.useState('');
+  const [postalcode, setPostalCode] = React.useState('');
+  const [registertype, setRegisterType] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [tnc, setTnc] = React.useState(false)
+
+  //backend integration
+  function submitRegistration() {
+    
+  }
 
   return (
     <Grid container component="main" direction="row" justify="center" alignItems="center" className={classes.root}>
@@ -79,52 +92,122 @@ export default function SignUpSide() {
           <form className={classes.form} noValidate>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
-                    <TextField
-                        autoComplete="fname"
-                        name="firstName"
-                        variant="outlined"
-                        required
-                        fullWidth
-                        id="firstName"
-                        label="First Name"
-                        onChange={(e) => setFirstname(e.target.value)}
-                        autoFocus
-                    />
+                  <TextField
+                      autoComplete="fname"
+                      name="firstName"
+                      variant="outlined"
+                      required
+                      fullWidth
+                      id="firstName"
+                      label="First Name"
+                      onChange={(e) => setFirstname(e.target.value)}
+                      error={firstname.length < 1}
+                      helperText="Enter first name"
+                      autoFocus
+                  />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <TextField
-                        variant="outlined"
-                        required
-                        fullWidth
-                        id="lastName"
-                        label="Last Name"
-                        name="lastName"
-                        autoComplete="lname"
-                        onChange={(e) => setLastname(e.target.value)}
-                    />
+                  <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      id="lastName"
+                      label="Last Name"
+                      name="lastName"
+                      autoComplete="lname"
+                      helperText="Enter last name"
+                      error={lastname.length < 1}
+                      onChange={(e) => setLastname(e.target.value)}
+                  />
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField
-                        variant="outlined"
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
+                  <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      id="email"
+                      label="Email Address"
+                      name="email"
+                      autoComplete="email"
+                      helperText="Enter valid email"
+                      error={email.length < 1}
+                      onChange={(e) => setEmail(e.target.value)}
+                  />
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField
-                        variant="outlined"
-                        required
-                        fullWidth
-                        id="restaurantname"
-                        label="Restaurant Name"
-                        name="restaurantName"
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
+                  <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      id="phonenumber"
+                      label="Phone Number"
+                      name="phoneNumber"
+                      helperText="Enter valid phone number"
+                      error={phonenumber.length < 1}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      id="city"
+                      label="City"
+                      name="city"
+                      helperText="Enter valid city"
+                      error={city.length < 1}
+                      onChange={(e) => setCity(e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      id="streetname"
+                      label="Street Name"
+                      name="streetName"
+                      helperText="Enter valid street name"
+                      error={streetname.length < 1}
+                      onChange={(e) => setStreetName(e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      id="housenumber"
+                      label="House Number"
+                      name="houseNumber"
+                      helperText="Enter valid house number"
+                      error={housenumber.length < 1}
+                      onChange={(e) => setHouseNumber(e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      id="postalcode"
+                      label="Postal Code"
+                      name="postalCode"
+                      helperText="Enter valid postal code"
+                      error={postalcode.length < 1}
+                      onChange={(e) => setPostalCode(e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <RadioGroup 
+                    aria-label="gender" 
+                    name="gender1"
+                    onChange={(e) => setRegisterType} 
+                    row>
+                    <FormControlLabel value="restaurant_owner" control={<Radio />} label="Restaurant Owner" />
+                    <FormControlLabel value="sanitary_service" control={<Radio />} label="Sanitary Service" />
+                  </RadioGroup>
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
@@ -136,14 +219,18 @@ export default function SignUpSide() {
                         type="password"
                         id="password"
                         autoComplete="current-password"
+                        helperText="Enter valid password"
+                        error={password.length < 1}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </Grid>
+                {/* confirm password */}
                 <Grid item xs={12}>
                     <FormControlLabel
-                        control={<Checkbox value="allowExtraEmails" color="primary" />}
-                        label="I want to receive blowjobs and titty fucks."
+                        control={<Checkbox value="tnc" color="primary" onChange={ (e) => setTnc(e.target.checked)}/>}
+                        label="I agree to the terms and conditions."
                     />
+                    {tnc ? "" : <Typography color='error'>Please read our terms and conditions before proceeding with the registration.</Typography>}
                 </Grid>
             </Grid>
             <Button
@@ -152,6 +239,7 @@ export default function SignUpSide() {
                 variant="contained"
                 color="primary"
                 className={classes.submit}
+                onClick={submitRegistration()}
             >
                 Register
             </Button>
