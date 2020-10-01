@@ -2,10 +2,10 @@
 -- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Sep 29, 2020 at 04:35 PM
--- Server version: 10.4.14-MariaDB
--- PHP Version: 7.4.10
+-- Host: 127.0.0.1
+-- Generation Time: Oct 01, 2020 at 12:56 PM
+-- Server version: 10.1.32-MariaDB
+-- PHP Version: 7.2.5
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -31,23 +31,9 @@ CREATE TABLE `checkin` (
   `id` int(11) NOT NULL,
   `userid` int(11) NOT NULL,
   `restid` int(11) NOT NULL,
-  `at_risk` tinyint(1) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `checkin_time` datetime NOT NULL DEFAULT current_timestamp(),
-  `checkout_time` datetime DEFAULT NULL
+  `at_risk` tinyint(1) DEFAULT '0',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `checkin`
---
-
-INSERT INTO `checkin` (`id`, `userid`, `restid`, `at_risk`, `created_at`, `checkin_time`, `checkout_time`) VALUES
-(1, 4, 1, 0, '2020-09-28 15:13:43', '2020-09-26 00:00:00', '2020-09-28 00:00:00'),
-(2, 4, 2, 0, '2020-09-28 15:15:30', '2020-09-26 00:00:00', '2020-09-28 15:15:30'),
-(3, 5, 3, 0, '2020-09-26 15:13:37', '2020-09-26 00:00:00', NULL),
-(4, 4, 2, 0, '2020-09-28 14:19:43', '2020-09-28 00:00:00', NULL),
-(5, 4, 3, 0, '2020-09-28 22:01:55', '2020-09-29 00:01:55', NULL),
-(6, 3, 3, 1, '2020-09-28 22:02:08', '2020-09-29 00:02:08', NULL);
 
 -- --------------------------------------------------------
 
@@ -208,9 +194,16 @@ CREATE TABLE `superusers` (
   `streetname` text NOT NULL,
   `housenumber` smallint(6) NOT NULL,
   `postalcode` varchar(6) NOT NULL,
-  `type` varchar(64) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `type` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `superusers`
+--
+
+INSERT INTO `superusers` (`id`, `username`, `password`, `email`, `phonenumber`, `city`, `streetname`, `housenumber`, `postalcode`, `type`, `created_at`) VALUES
+(1, 'admin', '$2b$12$qb5yieQuDXEgh3LTswyn.e5QujXrFYBaQdqoV5twzU8yZF5S6dsyu', 'admin@admin.com', '+31600000000', 'Enschede', 'street', 5, '7555AA', 'restaurant_owner', '2020-09-30 19:36:23');
 
 -- --------------------------------------------------------
 
@@ -219,7 +212,7 @@ CREATE TABLE `superusers` (
 --
 
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+  `userid` int(25) NOT NULL,
   `token` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -227,30 +220,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `token`) VALUES
-(4, '1234567890'),
-(5, '1234567890'),
-(6, '1234567890'),
-(7, '1234567890'),
-(8, '1234567890'),
-(9, '1234567890'),
-(10, '1234567890'),
-(11, '0987654321'),
-(12, '1234567890abcdef'),
-(13, '1234567890abcdef'),
-(14, '1234567890abcdef'),
-(15, '1234567890abcdef'),
-(16, '1234567890abcdef'),
-(17, 'someverylongrandomtoken'),
-(18, 'randomrandomrandom'),
-(19, 'someverylongrandomtoken'),
-(20, 'randomrandomrandom'),
-(21, 'someverylongrandomtoken'),
-(22, 'randomrandomrandom'),
-(23, 'someverylongrandomtoken'),
-(24, 'randomrandomrandom'),
-(25, 'someverylongrandomtoken'),
-(26, 'randomrandomrandom');
+INSERT INTO `users` (`userid`, `token`) VALUES
+(1, '12345677890'),
+(2, 'test');
 
 --
 -- Indexes for dumped tables
@@ -266,7 +238,8 @@ ALTER TABLE `checkin`
 -- Indexes for table `restaurants`
 --
 ALTER TABLE `restaurants`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQUE` (`id`,`name`);
 
 --
 -- Indexes for table `superusers`
@@ -278,7 +251,7 @@ ALTER TABLE `superusers`
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`userid`);
 
 --
 -- AUTO_INCREMENT for dumped tables

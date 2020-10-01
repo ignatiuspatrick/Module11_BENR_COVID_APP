@@ -67,7 +67,8 @@ export default function SignInSide() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorflag, setErrorflag] = useState(0);
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+
 
 
   const handleChange = (event, newValue) => {
@@ -77,20 +78,32 @@ export default function SignInSide() {
   
   function validityCheck() {
     const request = require('request');
-    const options = {
-      url: 'http://localhost:5000/superusers/login',
-      form: {
-          username: username,
-          password: password,
-          type: 'restaurant_owner'
-      }
-  };
+    let options = {};
+    console.log(value);
+    if(value === 0){
+      options = {
+        url: 'http://localhost:5000/superusers/login',
+        form: {
+            username: username,
+            password: password,
+            type: 'restaurant_owner'
+        }
+    };
+    }else if(value === 1){
+      options = {
+        url: 'http://localhost:5000/superusers/login',
+        form: {
+            username: username,
+            password: password,
+            type: 'sanitary_service'
+        }
+    };
+    }
   
   request.post(options, (err, res, body) => {
     if (err) {
         return console.log(err);
     }
-    console.log(JSON.parse(body));
     if (res.statusCode === 200) {
       setErrorflag(0);
       history.push('/admin/dashboard');
@@ -111,7 +124,7 @@ export default function SignInSide() {
       return 'Please fill in both username and password.';
     } else if (errorflag === 2) {
       return 'Either username or password is incorrect';
-    } else{
+    } else if (errorflag === 3){
       return 'Unknown error';
     }
   }
@@ -136,8 +149,8 @@ export default function SignInSide() {
               textColor="primary"
               aria-label="icon label tabs example"
             >
-              <Tab icon={<RestaurantIcon />} />
-              <Tab icon={<LocalHospitalIcon />} />
+              <Tab icon={<RestaurantIcon />} label="Restaurant Owner"/>
+              <Tab icon={<LocalHospitalIcon />} label="Sanitary Services" />
             </Tabs>
           </Paper>
           <form className={classes.form} noValidate>

@@ -43,7 +43,7 @@ exports.login_superuser = function(req, res){
       if (err){
         res.send(err);
       }
-
+      console.log(success);
       if(success){
         res.status(200).send({message:'Welcome!'});
       } else {
