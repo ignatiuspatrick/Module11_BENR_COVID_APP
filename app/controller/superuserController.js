@@ -1,5 +1,7 @@
 'user strict';
 var Superuser = require('../model/superuserModel');
+const jwt = require('jsonwebtoken');
+const SECRET_KEY = require('../../secret');
 
 
 //Register a superuser
@@ -41,11 +43,18 @@ exports.login_superuser = function(req, res){
   } else {
     Superuser.loginSuperuser(username, password, type, function(err, success) {
       if (err){
-        res.send(err);
+        res.status(400).send({error: true, message: err});
       }
 
+      //SEND TOKEN
+      console.log(success);
       if(success){
-        res.status(200).send({message:'Welcome!'});
+        var token = jwt.sign({
+          username: username,
+          type: type,
+        }, SECRET_KEY, {expiresIn: "9h"});
+        console.log(token);
+        res.status(200).json(token);
       } else {
         res.status(401).send({message:'Login has failed. Please try again.'});
       }

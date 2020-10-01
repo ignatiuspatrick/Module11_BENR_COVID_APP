@@ -23,6 +23,8 @@ var Superuser = function(superuser){
     this.type = superuser.type;
 };
 
+
+//create a superuser. Does not log them in yet.
 Superuser.createSuperuser = function (newSuperuser, result) {
 
   //Asynchronous approach so that it is faster.
@@ -42,24 +44,21 @@ Superuser.createSuperuser = function (newSuperuser, result) {
 };
 
 Superuser.loginSuperuser = function(username, password, type, result){
-  sql.query('SELECT password FROM superusers WHERE username = ?', username, function(err, queryresult, fields) {
+  sql.query('SELECT password FROM superusers WHERE username = ? AND type = ?', [username,type], function(err, queryresult, fields) {
       if(err){
-
         console.log("error: ", err);
         result(err, null);
-
       } else {
-        let hash = queryresult[0].password;
-
-        if(!hash){
-          result("No results", null);
+        if(queryresult.length>0){
+          let hash = queryresult[0].password;
+          bcrypt.compare(password, hash).then(function(success) {
+            result(null, success);
+          }).catch((error) => {
+            result(error,'Promise error');
+          });
+        }else{
+          result(null, null);
         }
-
-        bcrypt.compare(password, hash).then(function(success) {
-          result(null, success);
-        }).catch((error) => {
-          result(error,'Promise error');
-        });
       }
   });
 
