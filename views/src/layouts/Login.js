@@ -60,41 +60,75 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignInSide() {
+  
   const classes = useStyles();
   let history = useHistory();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorflag, setErrorflag] = useState(0);
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+
+
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  
   function validityCheck() {
-    if (username === 'haha' && password === 'haha') {
+    const request = require('request');
+    let options = {};
+    console.log(value);
+    if(value === 0){
+      options = {
+        url: 'http://localhost:5000/superusers/login',
+        form: {
+            username: username,
+            password: password,
+            type: 'restaurant_owner'
+        }
+    };
+    }else if(value === 1){
+      options = {
+        url: 'http://localhost:5000/superusers/login',
+        form: {
+            username: username,
+            password: password,
+            type: 'sanitary_service'
+        }
+    };
+    }
+  
+  request.post(options, (err, res, body) => {
+    if (err) {
+        return console.log(err);
+    }
+    if (res.statusCode === 200) {
       setErrorflag(0);
       history.push('/admin/dashboard');
     }
-    else if (username === '' && password === '') {
+    else if (username === '' || password === '') {
       setErrorflag(1);
-    }
-    else {
+    }else if (res.statusCode === 401){
       setErrorflag(2);
     }
+    else {
+      setErrorflag(3);
+    }
+  });
   }
 
   function getErrorMessage(){
     if (errorflag === 1) {
       return 'Please fill in both username and password.';
     } else if (errorflag === 2) {
-      return 'Either username or password is incorrect or empty.';
-    } 
+      return 'Either username or password is incorrect';
+    } else if (errorflag === 3){
+      return 'Unknown error';
+    }
   }
   
-  // const validityCheck = username === 'haha' && password === 'haha' ? <Redirect to='/admin/dashboard' /> : <Redirect to='/login'/>;
-
   return (
     <Grid container component="main" direction="row" justify="center" alignItems="center" className={classes.root}>
       <CssBaseline />
@@ -104,7 +138,7 @@ export default function SignInSide() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign In
           </Typography>
           <Paper square className={classes.tabs}>
             <Tabs
@@ -115,8 +149,8 @@ export default function SignInSide() {
               textColor="primary"
               aria-label="icon label tabs example"
             >
-              <Tab icon={<RestaurantIcon />} />
-              <Tab icon={<LocalHospitalIcon />} />
+              <Tab icon={<RestaurantIcon />} label="Restaurant Owner"/>
+              <Tab icon={<LocalHospitalIcon />} label="Sanitary Services" />
             </Tabs>
           </Paper>
           <form className={classes.form} noValidate>
@@ -166,8 +200,8 @@ export default function SignInSide() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link href="/register" variant="body2">
+                  {"Register your restaurant? Sign Up"}
                 </Link>
               </Grid>
             </Grid>

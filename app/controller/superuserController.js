@@ -45,8 +45,12 @@ exports.login_superuser = function(req, res){
       if (err){
         res.status(400).send({error: true, message: err});
       }
+<<<<<<< HEAD
 
       //SEND TOKEN
+=======
+      console.log(success);
+>>>>>>> dd24fefd0fd88a4b63d08689b13a09f9ddddda81
       if(success){
         var token = jwt.sign({
           username: username,
