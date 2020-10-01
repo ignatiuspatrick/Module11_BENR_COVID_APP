@@ -57,6 +57,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+
+
 export default function SignUpSide() {
   const classes = useStyles();
   let history = useHistory();
@@ -69,15 +71,59 @@ export default function SignUpSide() {
   const [streetname, setStreetName] = React.useState('');
   const [housenumber, setHouseNumber] = React.useState('');
   const [postalcode, setPostalCode] = React.useState('');
-  const [registertype, setRegisterType] = React.useState('');
+  const [registertype, setValue] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [tnc, setTnc] = React.useState(false)
+  const [errorflag, setErrorflag] = React.useState(0);
 
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+  const onFormSubmit = e => {
+    e.preventDefault();
+    submitRegistration();
+  }
   //backend integration
   function submitRegistration() {
+    const request = require('request');
+    let options = {};
+    console.log(registertype);
     
+    options = {
+      url: 'http://localhost:5000/superusers/create',
+      form: {
+          username: firstname,
+          password: password,
+          email, email,
+          phonenumber: phonenumber,
+          city: city,
+          streetname: streetname,
+          housenumber: housenumber,
+          postalcode: postalcode,
+          type: registertype
+      }
+  };
+
+  request.post(options, (err, res, body) => {
+    if (err) {
+        return console.log(err);
+    }
+    if (res.statusCode === 200) {
+      setErrorflag(0);
+      history.push('/login');
+    }
+    else if (res.statusCode === 401){
+      setErrorflag(1);
+    }
+  });
   }
 
+  function getErrorMessage(){
+    if (errorflag === 1) {
+      return 'Error 401';
+    }
+  }
   return (
     <Grid container component="main" direction="row" justify="center" alignItems="center" className={classes.root}>
       <CssBaseline />
@@ -89,35 +135,21 @@ export default function SignUpSide() {
           <Typography component="h1" variant="h5">
             Sign Up
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} onSubmit={onFormSubmit}>
+          <Typography color='error'>{getErrorMessage()}</Typography>
             <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
                   <TextField
                       autoComplete="fname"
-                      name="firstName"
+                      name="username"
                       variant="outlined"
                       required
                       fullWidth
-                      id="firstName"
-                      label="First Name"
+                      id="username"
+                      label="Username"
                       onChange={(e) => setFirstname(e.target.value)}
-                      error={firstname.length < 1}
-                      helperText="Enter first name"
+                      helperText="Enter your username"
                       autoFocus
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                      variant="outlined"
-                      required
-                      fullWidth
-                      id="lastName"
-                      label="Last Name"
-                      name="lastName"
-                      autoComplete="lname"
-                      helperText="Enter last name"
-                      error={lastname.length < 1}
-                      onChange={(e) => setLastname(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -130,7 +162,6 @@ export default function SignUpSide() {
                       name="email"
                       autoComplete="email"
                       helperText="Enter valid email"
-                      error={email.length < 1}
                       onChange={(e) => setEmail(e.target.value)}
                   />
                 </Grid>
@@ -143,7 +174,6 @@ export default function SignUpSide() {
                       label="Phone Number"
                       name="phoneNumber"
                       helperText="Enter valid phone number"
-                      error={phonenumber.length < 1}
                       onChange={(e) => setPhoneNumber(e.target.value)}
                   />
                 </Grid>
@@ -156,7 +186,6 @@ export default function SignUpSide() {
                       label="City"
                       name="city"
                       helperText="Enter valid city"
-                      error={city.length < 1}
                       onChange={(e) => setCity(e.target.value)}
                   />
                 </Grid>
@@ -169,7 +198,6 @@ export default function SignUpSide() {
                       label="Street Name"
                       name="streetName"
                       helperText="Enter valid street name"
-                      error={streetname.length < 1}
                       onChange={(e) => setStreetName(e.target.value)}
                   />
                 </Grid>
@@ -182,7 +210,6 @@ export default function SignUpSide() {
                       label="House Number"
                       name="houseNumber"
                       helperText="Enter valid house number"
-                      error={housenumber.length < 1}
                       onChange={(e) => setHouseNumber(e.target.value)}
                   />
                 </Grid>
@@ -195,15 +222,14 @@ export default function SignUpSide() {
                       label="Postal Code"
                       name="postalCode"
                       helperText="Enter valid postal code"
-                      error={postalcode.length < 1}
                       onChange={(e) => setPostalCode(e.target.value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <RadioGroup 
-                    aria-label="gender" 
-                    name="gender1"
-                    onChange={(e) => setRegisterType} 
+                    aria-label="type" 
+                    name="type"
+                    onChange={handleChange} 
                     row>
                     <FormControlLabel value="restaurant_owner" control={<Radio />} label="Restaurant Owner" />
                     <FormControlLabel value="sanitary_service" control={<Radio />} label="Sanitary Service" />
@@ -220,7 +246,6 @@ export default function SignUpSide() {
                         id="password"
                         autoComplete="current-password"
                         helperText="Enter valid password"
-                        error={password.length < 1}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </Grid>
@@ -239,7 +264,6 @@ export default function SignUpSide() {
                 variant="contained"
                 color="primary"
                 className={classes.submit}
-                onClick={submitRegistration()}
             >
                 Register
             </Button>
