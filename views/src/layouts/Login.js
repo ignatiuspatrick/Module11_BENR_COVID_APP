@@ -60,6 +60,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignInSide() {
+  
   const classes = useStyles();
   let history = useHistory();
 
@@ -68,29 +69,51 @@ export default function SignInSide() {
   const [errorflag, setErrorflag] = useState(0);
   const [value, setValue] = React.useState(0);
 
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  
   function validityCheck() {
-    if (username === 'haha' && password === 'haha') {
+    const request = require('request');
+    const options = {
+      url: 'http://localhost:5000/superusers/login',
+      form: {
+          username: username,
+          password: password,
+          type: 'restaurant_owner'
+      }
+  };
+  
+  request.post(options, (err, res, body) => {
+    if (err) {
+        return console.log(err);
+    }
+    console.log(JSON.parse(body));
+    if (res.statusCode === 200) {
       setErrorflag(0);
       history.push('/admin/dashboard');
     }
-    else if (username === '' && password === '') {
+    else if (username === '' || password === '') {
       setErrorflag(1);
-    }
-    else {
+    }else if (res.statusCode === 401){
       setErrorflag(2);
     }
+    else {
+      setErrorflag(3);
+    }
+  });
   }
 
   function getErrorMessage(){
     if (errorflag === 1) {
       return 'Please fill in both username and password.';
     } else if (errorflag === 2) {
-      return 'Either username or password is incorrect or empty.';
-    } 
+      return 'Either username or password is incorrect';
+    } else{
+      return 'Unknown error';
+    }
   }
   
   // const validityCheck = username === 'haha' && password === 'haha' ? <Redirect to='/admin/dashboard' /> : <Redirect to='/login'/>;

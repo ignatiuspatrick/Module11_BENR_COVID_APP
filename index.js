@@ -31,6 +31,12 @@ const config = require('./db.js');
 //ROUTES & BODYPARSER FOR MIDDLEWARE
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+// enable CORS without external module
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
 
 //RUN SERVER
 const PORT = process.env.PORT || 5000;
