@@ -116,8 +116,6 @@ export default function SignInSide() {
     }
   }
   
-  // const validityCheck = username === 'haha' && password === 'haha' ? <Redirect to='/admin/dashboard' /> : <Redirect to='/login'/>;
-
   return (
     <Grid container component="main" direction="row" justify="center" alignItems="center" className={classes.root}>
       <CssBaseline />
@@ -127,7 +125,7 @@ export default function SignInSide() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign In
           </Typography>
           <Paper square className={classes.tabs}>
             <Tabs
@@ -189,8 +187,8 @@ export default function SignInSide() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link href="/register" variant="body2">
+                  {"Register your restaurant? Sign Up"}
                 </Link>
               </Grid>
             </Grid>
