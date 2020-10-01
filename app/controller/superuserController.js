@@ -21,11 +21,12 @@ exports.create_superuser = function(req, res){
   }else{
   Superuser.createSuperuser(newSuperuser, function(err, superuser) {
     if (err){
-      res.send(err);
-    }
-    console.log('Created superuser with id ' + superuser);
-    res.status(200).send({message: 'Registration succesful! Redirect.'});
-    // TODO: Redirect user to login/success page
+      res.send({ error:true, message: err});
+    } else {
+      console.log('Created superuser with id ' + superuser);
+      res.status(200).send({message: 'Registration succesful! Redirect.'});
+      // TODO: Redirect user to login/success page
+  }
   });
 }
 

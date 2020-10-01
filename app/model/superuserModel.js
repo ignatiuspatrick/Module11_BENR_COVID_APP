@@ -33,7 +33,8 @@ Superuser.createSuperuser = function (newSuperuser, result) {
     sql.query("INSERT INTO superusers SET ?", newSuperuser, function (err, res) {
       if(err) {
           console.log("error: ", err);
-          result(err, null);
+          result("SQL error, check logs.", null);
+          return;
       }
       else{
           result(null, res.insertId);

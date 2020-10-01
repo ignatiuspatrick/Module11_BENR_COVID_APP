@@ -1,7 +1,11 @@
 'use strict';
+const verify = require('./verify');
+
+
 
 module.exports = function(app){
 
+  //old
   //RESTAURANTS
   var restaurants = require('../controller/restaurantController');
   app.route('/restaurants')
@@ -28,12 +32,13 @@ module.exports = function(app){
   var superusers = require('../controller/superuserController');
   app.route('/superusers/create').post(superusers.create_superuser);
   app.route('/superusers/login').post(superusers.login_superuser);
+  //// TODO: Add the front-end pages here?
 
-  //CHECK-INS
+  // CHECK-INS, now needs general verification
   var checkins = require('../controller/checkinController');
-  app.route('/checkin').post(checkins.create_checkin);
+  app.post('/checkin', verify.verifyGeneral, checkins.create_checkin); //// TODO: use a verification for customers (id & type)
 
     //checkout
     //to test, send post request as such: localhost:5000/checkout/1/
-  app.route('/checkout/:checkinId').post(checkins.checkout_checkin);
+  app.post('/checkout/:checkinId', verify.verifyGeneral, checkins.checkout_checkin);
 };
