@@ -63,8 +63,7 @@ export default function SignUpSide() {
   const classes = useStyles();
   let history = useHistory();
 
-  const [firstname, setFirstname] = React.useState('');
-  const [lastname, setLastname] = React.useState('');
+  const [username, setUsername] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [phonenumber, setPhoneNumber] = React.useState('');
   const [city, setCity] = React.useState('');
@@ -93,9 +92,9 @@ export default function SignUpSide() {
     options = {
       url: 'http://localhost:5000/superusers/create',
       form: {
-          username: firstname,
+          username: username,
           password: password,
-          email, email,
+          email: email,
           phonenumber: phonenumber,
           city: city,
           streetname: streetname,
@@ -124,6 +123,7 @@ export default function SignUpSide() {
       return 'Error 401';
     }
   }
+
   return (
     <Grid container component="main" direction="row" justify="center" alignItems="center" className={classes.root}>
       <CssBaseline />
@@ -147,7 +147,7 @@ export default function SignUpSide() {
                       fullWidth
                       id="username"
                       label="Username"
-                      onChange={(e) => setFirstname(e.target.value)}
+                      onChange={(e) => setUsername(e.target.value)}
                       helperText="Enter your username"
                       autoFocus
                   />

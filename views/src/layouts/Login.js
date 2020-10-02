@@ -69,8 +69,6 @@ export default function SignInSide() {
   const [errorflag, setErrorflag] = useState(0);
   const [value, setValue] = useState(0);
 
-
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -92,8 +90,8 @@ export default function SignInSide() {
             password: password,
             type: 'restaurant_owner'
         }
-    };
-    }else if(value === 1){
+      };
+    } else if(value === 1){
       options = {
         url: 'http://localhost:5000/superusers/login',
         form: {
@@ -101,7 +99,7 @@ export default function SignInSide() {
             password: password,
             type: 'sanitary_service'
         }
-    };
+      };
     }
   
   request.post(options, (err, res, body) => {
@@ -154,7 +152,7 @@ export default function SignInSide() {
               aria-label="icon label tabs example"
             >
               <Tab icon={<RestaurantIcon />} label="Restaurant Owner"/>
-              <Tab icon={<LocalHospitalIcon />} label="Sanitary Services" />
+              <Tab icon={<LocalHospitalIcon />} label="Sanitary Service" />
             </Tabs>
           </Paper>
           <form className={classes.form} onSubmit={onFormSubmit}>
