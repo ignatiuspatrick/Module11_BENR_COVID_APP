@@ -109,18 +109,18 @@ export default function SignUpSide() {
         return console.log(err);
     }
     if (res.statusCode === 200) {
-      setErrorflag(0);
       history.push('/login');
-    }
-    else if (res.statusCode === 401){
-      setErrorflag(1);
+    }else if(res.statusCode === 400 || res.statusCode === 401){
+      var obj=JSON.parse(body)
+      console.log(obj.message)
+      setErrorflag(obj.message);
     }
   });
   }
 
   function getErrorMessage(){
-    if (errorflag === 1) {
-      return 'Error 401';
+    if(errorflag!="0"){
+      return errorflag;
     }
   }
 

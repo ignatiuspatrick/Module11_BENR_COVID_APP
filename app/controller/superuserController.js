@@ -17,7 +17,7 @@ exports.create_superuser = function(req, res){
   } else if (!newSuperuser.password || !newSuperuser.username){
     res.status(400).send({ error:true, message: 'Please provide login information of user.'});
   } else if (!passwordcheck.test(newSuperuser.password)){
-    res.status(400).send({ error:true, message: 'Please provide a 8 character long password with at least one Uppercase letter, special character and number.'});
+    res.status(400).send({ error:true, message: 'Please provide a at least 8 character long password with at least one uppercase letter, special character and number.'});
   } else if (!phonenumbercheck.test(newSuperuser.phonenumber)){
     res.status(400).send({ error:true, message: 'Please provide a phone number without letters or special characters.'});
   } else if (!newSuperuser.email || !newSuperuser.phonenumber){
