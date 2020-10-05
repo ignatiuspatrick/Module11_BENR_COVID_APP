@@ -31,21 +31,21 @@ const dashboardRoutes = [
 
     icon: Dashboard,
     component: DashboardPage,
-    layout: "/admin"
+    layout: "/rodash"
   },
   {
     path: "/notifications",
     name: "Notifications",
     icon: Notifications,
     component: NotificationsPage,
-    layout: "/admin"
+    layout: "/rodash"
   },
   {
     path: "/user",
     name: "User Profile",
     icon: Person,
     component: UserProfile,
-    layout: "/admin"
+    layout: "/rodash"
   }
 ];
 

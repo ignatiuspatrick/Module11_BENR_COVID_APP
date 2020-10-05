@@ -108,7 +108,7 @@ export default function SignInSide() {
     }
     if (res.statusCode === 200) {
       setErrorflag(0);
-      history.push('/admin/dashboard');
+      history.push('/rodash/dashboard');
     }
     else if (username === '' || password === '') {
       setErrorflag(1);
