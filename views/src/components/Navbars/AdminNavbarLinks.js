@@ -47,9 +47,11 @@ export default function AdminNavbarLinks() {
     }
   };
   const handleCloseProfile = () => {
-    // setOpenProfile(null);
-    history.push('/login');
+    setOpenProfile(null);
   };
+  const handleLogOut = () => {
+    history.push('/login');
+  }
   return (
     <div>
       <div className={classes.searchWrapper}>
@@ -197,7 +199,7 @@ export default function AdminNavbarLinks() {
                     </MenuItem>
                     <Divider light />
                     <MenuItem
-                      onClick={handleCloseProfile}
+                      onClick={handleLogOut}
                       className={classes.dropdownItem}
                     >
                       Logout
