@@ -102,13 +102,21 @@ export default function SignInSide() {
       };
     }
   
+  function redirect() {
+    if (value == 0) {
+      history.push('/rodash/dashboard');
+    } else if (value == 1) {
+      history.push('/ssdash/dashboard');
+    }
+  }
+
   request.post(options, (err, res, body) => {
     if (err) {
         return console.log(err);
     }
     if (res.statusCode === 200) {
       setErrorflag(0);
-      history.push('/rodash/dashboard');
+      redirect();
     }
     else if (username === '' || password === '') {
       setErrorflag(1);
@@ -151,7 +159,7 @@ export default function SignInSide() {
               textColor="primary"
               aria-label="icon label tabs example"
             >
-              <Tab icon={<RestaurantIcon />} label="Restaurant Owner"/>
+              <Tab icon={<RestaurantIcon />} label="Restaurant Owner" />
               <Tab icon={<LocalHospitalIcon />} label="Sanitary Service" />
             </Tabs>
           </Paper>

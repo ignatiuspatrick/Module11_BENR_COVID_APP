@@ -24,6 +24,7 @@ import { Router, Route, Switch, Redirect } from "react-router-dom";
 import Login from "layouts/Login.js";
 import Register from "layouts/Register.js";
 import RestoOwnerDash from "layouts/RestoOwnerDash.js";
+import SanitServiceDash from "layouts/SanitServiceDash.js";
 
 import "assets/css/material-dashboard-react.css?v=1.9.0";
 
@@ -35,6 +36,7 @@ ReactDOM.render(
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
       <Route path="/rodash" component={RestoOwnerDash} />
+      <Route path="/ssdash" component={SanitServiceDash} />
       <Redirect from="/" to="/login" />
       {/* configure login sessions */}
     </Switch>
