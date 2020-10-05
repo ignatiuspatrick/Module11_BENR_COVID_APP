@@ -87,8 +87,18 @@ module.exports = {
       if (err) {
         return res.status(403).send(err);
       }
+      console.log(req.params.userId);
+      // TODO: TEST
+      //Check if userId matches if it was provided in the path.
+      if(req.params.userId){
+          if(req.params.userId != payload.userId){
+            return res.status(403).send({error: 'Access denied. Incompatible userIds.'});
+          }
+      }
+
+      //check if it was indeed a customer.
       if(payload.type != 'customer'){
-        return res.status(403).send({error: 'Acces denied. Wrong user type.'})
+        return res.status(403).send({error: 'Access denied. Wrong user type.'})
       }
 
       console.log('JWT is valid and payload is\n', payload);
