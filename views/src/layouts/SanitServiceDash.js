@@ -11,7 +11,7 @@ import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 import routes from "routes.js";
 import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
-import bgImage from "assets/img/sidebar-1.jpg";
+import bgImage from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/46681769.png";
 
 let ps;
