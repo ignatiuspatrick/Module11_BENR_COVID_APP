@@ -68,8 +68,4 @@ Superuser.loginSuperuser = function(username, password, type, result){
   });
 };
 
-
-
-};
-
 module.exports = Superuser;
