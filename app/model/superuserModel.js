@@ -45,23 +45,28 @@ Superuser.createSuperuser = function (newSuperuser, result) {
 };
 
 Superuser.loginSuperuser = function(username, password, type, result){
-  sql.query('SELECT password FROM superusers WHERE username = ? AND type = ?', [username,type], function(err, queryresult, fields) {
+  sql.query('SELECT password, id FROM superusers WHERE username = ? AND type = ?', [username,type], function(err, queryresult, fields) {
       if(err){
         console.log("error: ", err);
-        result(err, null);
+        result(err, -1);
       } else {
         if(queryresult.length>0){
           let hash = queryresult[0].password;
           bcrypt.compare(password, hash).then(function(success) {
-            result(null, success);
+            if(success) {
+              result(null, queryresult[0].id);
+            }else{
+            result(null, -1);
+            }
           }).catch((error) => {
             result(error,'Promise error');
           });
         }else{
-          result(null, null);
+          result(null, -1);
         }
       }
   });
+};
 
 
 
