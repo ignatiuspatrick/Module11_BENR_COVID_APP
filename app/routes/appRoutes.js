@@ -25,6 +25,7 @@ module.exports = function(app){
   .get(users.get_user)
   .put(users.update_user)
   .delete(users.delete_user);
+  app.get('/users/getcode/:userId', verify.verifyCustomer, users.get_securecode);
 
   //SUPER USER
   //(Sanitary services & Restaurant owners)

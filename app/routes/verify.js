@@ -87,11 +87,10 @@ module.exports = {
       if (err) {
         return res.status(403).send(err);
       }
-      console.log(req.params.userId);
-      // TODO: TEST
+
       //Check if userId matches if it was provided in the path.
       if(req.params.userId){
-          if(req.params.userId != payload.userId){
+          if(req.params.userId != payload.id){
             return res.status(403).send({error: 'Access denied. Incompatible userIds.'});
           }
       }
