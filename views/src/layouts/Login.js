@@ -103,9 +103,9 @@ export default function SignInSide() {
     }
   
   function redirect() {
-    if (value == 0) {
+    if (value === 0) {
       history.push('/rodash/dashboard');
-    } else if (value == 1) {
+    } else if (value === 1) {
       history.push('/ssdash/dashboard');
     }
   }

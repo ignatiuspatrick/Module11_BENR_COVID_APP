@@ -6,7 +6,7 @@ import RODashboard from "views/Dashboard/RODashboard.js";
 import ROUserProfile from "views/UserProfile/ROUserProfile.js";
 import RONotifications from "views/Notifications/RONotifications.js";
 
-const dashboardRoutes = [
+const roRoutes = [
   {
     path: "/dashboard",
     name: "Dashboard",
@@ -30,4 +30,4 @@ const dashboardRoutes = [
   }
 ];
 
-export default dashboardRoutes;
+export default roRoutes;
