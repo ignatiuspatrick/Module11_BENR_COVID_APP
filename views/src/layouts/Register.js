@@ -119,7 +119,7 @@ export default function SignUpSide() {
   }
 
   function getErrorMessage(){
-    if(errorflag!="0"){
+    if(errorflag !== "0"){
       return errorflag;
     }
   }

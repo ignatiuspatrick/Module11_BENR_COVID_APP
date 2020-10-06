@@ -8,8 +8,8 @@ import { makeStyles } from "@material-ui/core/styles";
 // core components
 import Navbar from "components/Navbars/Navbar.js";
 import Footer from "components/Footer/Footer.js";
-import Sidebar from "components/Sidebar/Sidebar.js";
-import routes from "routes.js";
+import SSSidebar from "components/Sidebar/SSSidebar.js";
+import routes from "ssroutes.js";
 import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
 import bgImage from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/46681769.png";
@@ -73,7 +73,7 @@ export default function SanitServiceDash({ ...rest }) {
   }, [mainPanel]);
   return (
     <div className={classes.wrapper}>
-      <Sidebar
+      <SSSidebar
         routes={routes}
         logoText={"SanitDB"}
         logo={logo}

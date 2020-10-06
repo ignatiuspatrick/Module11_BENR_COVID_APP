@@ -13,7 +13,7 @@ module.exports = function(app){
   .post(restaurants.create_restaurant);
   app.route('/restaurants/:restaurantId')
   .get(restaurants.get_restaurant)
-  .put(restaurants.update_restaurant)
+  .put(verify.verifyRestaurantOwner, restaurants.update_restaurant)
   .delete(restaurants.delete_restaurant);
 
   //USERS

@@ -18,7 +18,7 @@ import styles from "assets/jss/material-dashboard-react/components/sidebarStyle.
 
 const useStyles = makeStyles(styles);
 
-export default function Sidebar(props) {
+export default function ROSidebar(props) {
   const classes = useStyles();
   // verifies if routeName is the one active (in browser input)
   function activeRoute(routeName) {
@@ -137,7 +137,7 @@ export default function Sidebar(props) {
   );
 }
 
-Sidebar.propTypes = {
+ROSidebar.propTypes = {
   handleDrawerToggle: PropTypes.func,
   bgColor: PropTypes.oneOf(["purple", "blue", "green", "peach", "red"]),
   logo: PropTypes.string,

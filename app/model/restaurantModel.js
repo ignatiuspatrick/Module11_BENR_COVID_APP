@@ -7,7 +7,7 @@ var Restaurant = function(restaurant){
     this.name = restaurant.name;
     this.location = restaurant.location;
     this.contact = restaurant.contact;
-
+    this.ownerid = restaurant.id;
 };
 
 //Restaurant SQL queries

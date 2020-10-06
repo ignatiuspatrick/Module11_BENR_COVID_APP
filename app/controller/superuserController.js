@@ -72,9 +72,9 @@ exports.login_superuser = function(req, res){
 
       //SEND TOKEN
       console.log(success);
-      if(success){
+      if(success != -1){
         var token = jwt.sign({
-          username: username,
+          id: success,
           type: type,
         }, SECRET_KEY, {expiresIn: "9h"});
         console.log(token);

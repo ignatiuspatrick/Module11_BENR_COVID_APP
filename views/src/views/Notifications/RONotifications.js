@@ -46,7 +46,7 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function Notifications() {
+export default function RONotifications() {
   const classes = useStyles();
 
   React.useEffect(() => {

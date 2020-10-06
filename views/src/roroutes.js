@@ -2,32 +2,32 @@ import Dashboard from "@material-ui/icons/Dashboard";
 import Person from "@material-ui/icons/Person";
 import Notifications from "@material-ui/icons/Notifications";
 // core components/views for Admin layout
-import DashboardPage from "views/Dashboard/Dashboard.js";
-import UserProfile from "views/UserProfile/UserProfile.js";
-import NotificationsPage from "views/Notifications/Notifications.js";
+import RODashboard from "views/Dashboard/RODashboard.js";
+import ROUserProfile from "views/UserProfile/ROUserProfile.js";
+import RONotifications from "views/Notifications/RONotifications.js";
 
-const dashboardRoutes = [
+const roRoutes = [
   {
     path: "/dashboard",
     name: "Dashboard",
     icon: Dashboard,
-    component: DashboardPage,
+    component: RODashboard,
     layout: "/rodash"
   },
   {
     path: "/notifications",
     name: "Notifications",
     icon: Notifications,
-    component: NotificationsPage,
+    component: RONotifications,
     layout: "/rodash"
   },
   {
     path: "/user",
     name: "User Profile",
     icon: Person,
-    component: UserProfile,
+    component: ROUserProfile,
     layout: "/rodash"
   }
 ];
 
-export default dashboardRoutes;
+export default roRoutes;

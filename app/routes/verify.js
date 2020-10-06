@@ -32,7 +32,7 @@ module.exports = {
       if(payload.type != 'restaurant_owner'){
         return res.status(401).send({error: 'Acces denied. Wrong user type.'})
       }
-
+      req.body.id = payload.id
       console.log('JWT is valid and payload is\n', payload);
       next();
     });
@@ -51,7 +51,7 @@ module.exports = {
       if(payload.type != 'sanitary_service'){
         return res.status(403).send({error: 'Acces denied. Wrong user type.'})
       }
-
+      req.body.id = payload.id
       console.log('JWT is valid and payload is\n', payload);
       next();
     });
