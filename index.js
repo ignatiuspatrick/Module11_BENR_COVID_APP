@@ -5,6 +5,7 @@ const path = require('path');
 
 const bodyParser = require('body-parser');
 const app = express();
+const cookieParser = require('cookie-parser');
 
 //https
 //Certs generated using:
@@ -30,10 +31,12 @@ const config = require('./db.js');
 //ROUTES & BODYPARSER FOR MIDDLEWARE
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-// enable CORS without external module
+app.use(cookieParser());
+// // enable CORS without external module
 app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header('Access-Control-Allow-Credentials',true);
     next();
   });
 

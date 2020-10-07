@@ -10,7 +10,7 @@ module.exports = function(app){
   var restaurants = require('../controller/restaurantController');
   app.route('/restaurants')
   .get(restaurants.get_all_restaurants)
-  .post(verify.verifyRestaurantOwner, restaurants.create_restaurant);
+  .post(verify.verifyRestaurantOwner,restaurants.create_restaurant);
   app.route('/restaurants/:restaurantId')
   .get(restaurants.get_restaurant)
   .put(verify.verifyRestaurantOwner, restaurants.update_restaurant)
@@ -45,5 +45,10 @@ module.exports = function(app){
   app.post('/superusers/markinfected', users.mark_user);
   //// TODO: Add the front-end pages here?
 
+
+
+  // CHECK-INS, now needs general verification
+  var checkins = require('../controller/checkinController');
+  app.post('/checkin', verify.verifyCustomer, checkins.create_checkin); //// TODO: use a verification for customers (id & type)
 
 };

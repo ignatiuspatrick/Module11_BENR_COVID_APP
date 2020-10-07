@@ -77,7 +77,10 @@ exports.login_superuser = function(req, res){
           type: type,
         }, SECRET_KEY, {expiresIn: "9h"});
         console.log(token);
-        res.status(200).json(token);
+        var tokenExpire = new Date(Date.now() + 324000);
+        // by sending a cookie instead of body, we will be stateless, see more: 
+        // https://dev.to/mr_cea/remaining-stateless-jwt-cookies-in-node-js-3lle
+        res.status(200).cookie('token', token, {expires: tokenExpire, httpOnly: true}).send();        
       } else {
         res.status(401).send({message:'Login has failed. Please try again.'});
       }
