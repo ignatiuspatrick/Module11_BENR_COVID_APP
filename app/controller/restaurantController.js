@@ -15,7 +15,7 @@ exports.get_all_restaurants = function(req, res) {
 exports.create_restaurant = function(req, res) {
   var newRestaurant = new Restaurant(req.body);
   //handles null error
-   if(isNull(newRestaurant.name) || isNull(newRestaurant.location) || isNull(newRestaurant.contacts)){
+   if(!newRestaurant.name || !newRestaurant.location || !newRestaurant.contact){
      res.status(400).send({ error:true, message: 'Please provide more information.'});
    } else {
     Restaurant.createRestaurant(newRestaurant, function(err, restaurant) {
