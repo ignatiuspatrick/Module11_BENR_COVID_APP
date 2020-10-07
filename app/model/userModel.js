@@ -104,8 +104,27 @@ User.markUser = function(code, result){
   });
   // -Find, through checkins, all users at risk (select query) and mark them.
   //=>id=>checkins=>restaurants=>checkins=>users
-  // sql.query('',,function(err, result){
+
+  //SELECT DISTINCT restid FROM checkin WHERE userid = ?
   //
+  //SELECT userid FROM checkin WHERE restid IN (SELECT DISTINCT restid FROM checkin WHERE userid = ?) AND checkin_time > ?.checkin_time AND checko
+
+        /* u1 is a visitor, u2 was infected.
+
+        Then they are at risk when (CHECK THE LOGIC!):
+
+        Case 1:
+        u1.checkin_time < u2.checkin_time AND u1.checkout_time < u2.checkout_time AND u1.checkout_time > u2.checkin_time
+
+        OR
+        case 2:
+        u1.checkin_time < u2.checkin_time AND u1.checkout_time > u2.checkout_time
+
+        OR
+        case 3:
+        u1.checkin_time > u2.checkin_time AND u1.checkin_time < u2.checkout_time */
+
+  // sql.query('',,function(err, result){
   // });
   // -Mark people that were there at the same time as at at_risk 1 (update queries + time logic)
   // -send back amount of updated ppl
