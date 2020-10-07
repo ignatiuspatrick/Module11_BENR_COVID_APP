@@ -92,4 +92,23 @@ User.generateCode = function(userId, result){
 
 }
 
+User.markUser = function(code, result){
+  //   -Mark as infected in db (new column, default 0) (update query)
+  sql.query('UPDATE users SET infected = 1 WHERE id in (SELECT userid FROM ggd_codes WHERE code = ? AND `created_at` > timestampadd(hour, -24, now()))',
+   code, function(err, queryresult){
+    if(err){
+      return result(err, null);
+    } else {
+      return result(null, queryresult);
+    }
+  });
+  // -Find, through checkins, all users at risk (select query) and mark them.
+  //=>id=>checkins=>restaurants=>checkins=>users
+  // sql.query('',,function(err, result){
+  //
+  // });
+  // -Mark people that were there at the same time as at at_risk 1 (update queries + time logic)
+  // -send back amount of updated ppl
+}
+
 module.exports= User;

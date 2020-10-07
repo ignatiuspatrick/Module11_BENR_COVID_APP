@@ -41,17 +41,16 @@ exports.create_superuser = function(req, res){
   } else if (newSuperuser.username.length >= 100){
     res.status(400).send({ error:true, message: 'Please provide a username under 100 characters.'});
   }else{
-
-  Superuser.createSuperuser(newSuperuser, function(err, superuser) {
-    if (err){
-      res.send({ error:true, message: err});
-    } else {
-      console.log('Created superuser with id ' + superuser);
-      res.status(200).send({message: 'Registration succesful! Redirect.'});
-      // TODO: Redirect user to login/success page
+    Superuser.createSuperuser(newSuperuser, function(err, superuser) {
+      if (err){
+        res.send({ error:true, message: err});
+      } else {
+        console.log('Created superuser with id ' + superuser);
+        res.status(200).send({message: 'Registration succesful! Redirect.'});
+        // TODO: Redirect user to login/success page
+      }
+    });
   }
-  });
-}
 
 };
 

@@ -13,7 +13,7 @@ module.exports = function(app){
   .post(verify.verifyRestaurantOwner, restaurants.create_restaurant);
   app.route('/restaurants/:restaurantId')
   .get(restaurants.get_restaurant)
-  .put(verify.verifyRestaurantOwner, restaurants.update_restaurant);
+  .put(verify.verifyRestaurantOwner, restaurants.update_restaurant)
   .delete(restaurants.delete_restaurant);
 
   //USERS
@@ -25,7 +25,15 @@ module.exports = function(app){
   .get(users.get_user)
   .put(users.update_user)
   .delete(users.delete_user);
+
   app.get('/users/getcode/:userId', verify.verifyCustomer, users.get_securecode);
+
+  // CHECK-INS, now needs general verification
+  var checkins = require('../controller/checkinController');
+  app.post('/users/checkin', verify.verifyCustomer, checkins.create_checkin);
+  //checkout
+  //to test, send post request as such: localhost:5000/checkout/1/
+  app.post('/users/checkout/:checkinId', verify.verifyCustomer, checkins.checkout_checkin);
 
   //SUPER USER
   //(Sanitary services & Restaurant owners)
@@ -33,13 +41,9 @@ module.exports = function(app){
   var superusers = require('../controller/superuserController');
   app.route('/superusers/create').post(superusers.create_superuser);
   app.route('/superusers/login').post(superusers.login_superuser);
+  // app.post('/superusers/markinfected', verify.verifySanitaryService, users.mark_user);
+  app.post('/superusers/markinfected', users.mark_user);
   //// TODO: Add the front-end pages here?
 
-  // CHECK-INS, now needs general verification
-  var checkins = require('../controller/checkinController');
-  app.post('/checkin', verify.verifyCustomer, checkins.create_checkin); //// TODO: use a verification for customers (id & type)
 
-    //checkout
-    //to test, send post request as such: localhost:5000/checkout/1/
-  app.post('/checkout/:checkinId', verify.verifyCustomer, checkins.checkout_checkin);
 };

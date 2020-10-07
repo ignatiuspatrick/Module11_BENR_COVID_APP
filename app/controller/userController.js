@@ -80,3 +80,22 @@ exports.get_securecode = function(req,res){
     }
   });
 };
+
+//mark user as infected in DB, and subsequently mark users that are at risk..
+exports.mark_user = function(req, res){
+  var code = req.body.code;
+
+  if(!code || code.length != 8){
+    return res.status(400).send({error: true, message: 'Please provide the correct code'});
+  }
+
+  code = code.toUpperCase(); //just to be sure.
+  User.markUser(code, function(err, result){
+    if(err){
+      res.status(400).send({error: true, message: err});
+    } else {
+      console.log(result);
+      res.status(200).send({message: 'A fuckin\' aye m8', result: result})
+    }
+  });
+};
