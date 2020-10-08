@@ -99,35 +99,43 @@ User.markUser = function(code, result){
     if(err){
       return result(err, null);
     } else {
-      return result(null, queryresult);
+      console.log(queryresult);
+      console.log('The following usercode is succesfully infected: ' + code);
     }
   });
-  // -Find, through checkins, all users at risk (select query) and mark them.
-  //=>id=>checkins=>restaurants=>checkins=>users
 
-  //SELECT DISTINCT restid FROM checkin WHERE userid = ?
-  //
-  //SELECT userid FROM checkin WHERE restid IN (SELECT DISTINCT restid FROM checkin WHERE userid = ?) AND checkin_time > ?.checkin_time AND checko
+//QUERY:
+// SELECT DISTINCT c2.userid FROM `checkin` c1, `checkin` c2 WHERE c1.userid = 20 AND c1.restid = c2.restid AND
+// ((c2.checkin_time > c1.checkin_time AND c2.checkin_time < c1.checkout_time)
+// OR (c1.checkin_time > c2.checkin_time AND c1.checkin_time < c2.checkout_time))
+// UPDATE `users`
+// SET at_risk = 1, at_risk_since = ?
+// WHERE id IN (
+//   SELECT DISTINCT c2.userid
+//   FROM `checkin` c1, `checkin` c2
+//   WHERE c1.userid = 33 AND c1.restid = c2.restid
+//     AND ((c2.checkin_time > c1.checkin_time AND c2.checkin_time < c1.checkout_time)
+//       OR (c1.checkin_time > c2.checkin_time AND c1.checkin_time < c2.checkout_time)));
 
-        /* u1 is a visitor, u2 was infected.
+  let timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
+  console.log(timestamp);
+  const query = `UPDATE users
+    SET at_risk = 1, at_risk_since = ?
+    WHERE id IN (
+      SELECT DISTINCT c2.userid
+      FROM checkin c1, checkin c2
+      WHERE c1.userid = (SELECT userid FROM ggd_codes WHERE code = ? AND created_at > timestampadd(hour, -24, now())) AND c1.restid = c2.restid
+        AND ((c2.checkin_time > c1.checkin_time AND c2.checkin_time < c1.checkout_time)
+          OR (c1.checkin_time > c2.checkin_time AND c1.checkin_time < c2.checkout_time)))`;
+  sql.query(query, [timestamp, code], function(err, queryresult){
+    if(err){
+      return result(err, null);
+    } else {
+      console.log('Succesfully market people as `at risk`.');
+      return result(err, queryresult.affectedRows); //send back how many people are at risk
+    }
+  });
 
-        Then they are at risk when (CHECK THE LOGIC!):
-
-        Case 1:
-        u1.checkin_time < u2.checkin_time AND u1.checkout_time < u2.checkout_time AND u1.checkout_time > u2.checkin_time
-
-        OR
-        case 2:
-        u1.checkin_time < u2.checkin_time AND u1.checkout_time > u2.checkout_time
-
-        OR
-        case 3:
-        u1.checkin_time > u2.checkin_time AND u1.checkin_time < u2.checkout_time */
-
-  // sql.query('',,function(err, result){
-  // });
-  // -Mark people that were there at the same time as at at_risk 1 (update queries + time logic)
-  // -send back amount of updated ppl
 }
 
 module.exports= User;
