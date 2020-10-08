@@ -56,8 +56,8 @@ Restaurant.getAllRestaurants = function (result) {
             });
 };
 Restaurant.updateRestaurant = function(restaurantId, newRestaurant, result){
-    let update = "UPDATE restaurants SET name = ?,location = ?,contact = ? WHERE id = ?";
-    let query = mysql.format(update,[newRestaurant.name,newRestaurant.location,newRestaurant.contact,restaurantId]);
+    let update = "UPDATE restaurants SET name = ?,location = ?,contact = ?,ownerid = ? WHERE id = ?";
+    let query = mysql.format(update,[newRestaurant.name,newRestaurant.location,newRestaurant.contact,newRestaurant.ownerid,restaurantId]);
     sql.query(query, (err,res)=>{
         if(err) {
             console.log("error: ", err);

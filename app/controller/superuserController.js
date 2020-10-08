@@ -41,17 +41,16 @@ exports.create_superuser = function(req, res){
   } else if (newSuperuser.username.length >= 100){
     res.status(400).send({ error:true, message: 'Please provide a username under 100 characters.'});
   }else{
-
-  Superuser.createSuperuser(newSuperuser, function(err, superuser) {
-    if (err){
-      res.send({ error:true, message: err});
-    } else {
-      console.log('Created superuser with id ' + superuser);
-      res.status(200).send({message: 'Registration succesful! Redirect.'});
-      // TODO: Redirect user to login/success page
+    Superuser.createSuperuser(newSuperuser, function(err, superuser) {
+      if (err){
+        res.send({ error:true, message: err});
+      } else {
+        console.log('Created superuser with id ' + superuser);
+        res.status(200).send({message: 'Registration succesful! Redirect.'});
+        // TODO: Redirect user to login/success page
+      }
+    });
   }
-  });
-}
 
 };
 
@@ -78,7 +77,10 @@ exports.login_superuser = function(req, res){
           type: type,
         }, SECRET_KEY, {expiresIn: "9h"});
         console.log(token);
-        res.status(200).json(token);
+        var tokenExpire = new Date(Date.now() + 324000);
+        // by sending a cookie instead of body, we will be stateless, see more: 
+        // https://dev.to/mr_cea/remaining-stateless-jwt-cookies-in-node-js-3lle
+        res.status(200).cookie('token', token, {expires: tokenExpire, httpOnly: true}).send();        
       } else {
         res.status(401).send({message:'Login has failed. Please try again.'});
       }
