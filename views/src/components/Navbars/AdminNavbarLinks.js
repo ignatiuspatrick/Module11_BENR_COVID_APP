@@ -22,10 +22,11 @@ import styles from "assets/jss/material-dashboard-react/components/headerLinksSt
 
 const useStyles = makeStyles(styles);
 
-export default function AdminNavbarLinks() {
+export default function AdminNavbarLinks(props) {
   const classes = useStyles();
   const [openNotification, setOpenNotification] = React.useState(null);
   const [openProfile, setOpenProfile] = React.useState(null);
+  const {dashboardtype} = props;
 
   let history = useHistory();
 
@@ -38,6 +39,7 @@ export default function AdminNavbarLinks() {
   };
   const handleCloseNotification = () => {
     setOpenNotification(null);
+
   };
   const handleClickProfile = event => {
     if (openProfile && openProfile.contains(event.target)) {
@@ -46,7 +48,26 @@ export default function AdminNavbarLinks() {
       setOpenProfile(event.currentTarget);
     }
   };
+
+  const handleDashboardClick = () => {
+    if (dashboardtype === "ss") {
+      history.push("/ssdash/dashboard");
+    } else if (dashboardtype === "ro") {
+      history.push("/rodash/dashboard");
+    }
+    setOpenNotification(null);
+  }
+
   const handleCloseProfile = () => {
+    setOpenProfile(null);
+  }
+
+  const handleGoToProfile = () => {
+    if (dashboardtype === "ss") {
+      history.push("/ssdash/user");
+    } else if (dashboardtype === "ro") {
+      history.push("/rodash/user");
+    }
     setOpenProfile(null);
   };
   const handleLogOut = () => {
@@ -63,6 +84,7 @@ export default function AdminNavbarLinks() {
         simple={!(window.innerWidth > 959)}
         aria-label="Dashboard"
         className={classes.buttonLink}
+        onClick={handleDashboardClick}
       >
         <Dashboard className={classes.icons} />
         <Hidden mdUp implementation="css">
@@ -186,7 +208,7 @@ export default function AdminNavbarLinks() {
                 <ClickAwayListener onClickAway={handleCloseProfile}>
                   <MenuList role="menu">
                     <MenuItem
-                      onClick={handleCloseProfile}
+                      onClick={handleGoToProfile}
                       className={classes.dropdownItem}
                     >
                       Profile

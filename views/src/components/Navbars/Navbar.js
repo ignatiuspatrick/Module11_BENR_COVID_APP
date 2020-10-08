@@ -29,7 +29,7 @@ export default function Header(props) {
     });
     return name;
   }
-  const { color } = props;
+  const { color, dashboardtype } = props;
   const appBarClasses = classNames({
     [" " + classes[color]]: color
   });
@@ -43,7 +43,7 @@ export default function Header(props) {
           </Button>
         </div>
         <Hidden smDown implementation="css">
-          <AdminNavbarLinks />
+          <AdminNavbarLinks dashboardtype={dashboardtype}/>
         </Hidden>
         <Hidden mdUp implementation="css">
           <IconButton

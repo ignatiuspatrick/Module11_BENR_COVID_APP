@@ -62,10 +62,11 @@ export default function RONotifications() {
   
   return (
     <Card>
-      <CardHeader color="primary">
+      <CardHeader color="info">
         <GridContainer>
           <GridItem xs={7}>
             <h4 className={classes.cardTitleWhite}>Notifications</h4>
+            <p className={classes.cardCategoryWhite}>Notifications from various parties</p>
           </GridItem>
           <GridItem xs={2}>
             All <Switch inputProps={{'aria-label': 'primary checkbox'}} /> Unread
@@ -96,7 +97,7 @@ export default function RONotifications() {
                 'ADMIN - This color code represents regular notifications from our product admin'
               }
               close
-              color="info"
+              color="primary"
             />
             <SnackbarContent
               message={

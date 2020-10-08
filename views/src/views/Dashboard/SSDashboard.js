@@ -5,22 +5,24 @@ import ChartistGraph from "react-chartist";
 import { makeStyles } from "@material-ui/core/styles";
 import Icon from "@material-ui/core/Icon";
 // @material-ui/icons
-import Store from "@material-ui/icons/Store";
-import Warning from "@material-ui/icons/Warning";
+import AlarmAdd from '@material-ui/icons/AlarmAdd';
+import WarningIcon from '@material-ui/icons/Warning';
 import DateRange from "@material-ui/icons/DateRange";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
 import AccessTime from "@material-ui/icons/AccessTime"
+import NotificationImportantIcon from '@material-ui/icons/NotificationImportant';
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Table from "components/Table/Table.js";
-import Danger from "components/Typography/Danger.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
+import DialogSelect from 'components/DialogSelect/DialogSelect.js'
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 
 import {
@@ -31,8 +33,28 @@ import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js"
 
 const useStyles = makeStyles(styles);
 
+// backend work
+function remindRestaurant(rid) {
+    return console.log("restaurant reminded!");
+}
+
+function copyright(restoid) {
+    return(
+        <IconButton 
+        color="inherit" 
+        aria-label="alert restaurant" 
+        component="span"
+        onClick={() => remindRestaurant(restoid)}>
+            <NotificationImportantIcon />
+        </IconButton>
+    );
+}
+
 export default function SSDashboard() {
   const classes = useStyles();
+
+  const [displayedcity, setDisplayedCity] = React.useState('Enschede');
+
   return (
     <div>
       <GridContainer>
@@ -40,34 +62,11 @@ export default function SSDashboard() {
           <Card>
             <CardHeader color="danger" stats icon>
               <CardIcon color="danger">
-                <Icon>content_copy</Icon>
+                <AlarmAdd />
               </CardIcon>
-              <p className={classes.cardCategory}>Current Visitors</p>
+              <p className={classes.cardCategory}>Confirmed Case</p>
               <h3 className={classes.cardTitle}>
-                51/50 <small>visitors</small>
-              </h3>
-            </CardHeader>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <Danger>
-                  <Warning />
-                </Danger>
-                <a href="#pablo" onClick={e => e.preventDefault()}>
-                  There might be too many visitors now.
-                </a>
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={6} md={3}>
-          <Card>
-            <CardHeader color="danger" stats icon>
-              <CardIcon color="danger">
-                <Icon>content_copy</Icon>
-              </CardIcon>
-              <p className={classes.cardCategory}>Occupied Tables</p>
-              <h3 className={classes.cardTitle}>
-                28/30 <small>tables</small>
+                140<small>K</small>
               </h3>
             </CardHeader>
             <CardFooter stats>
@@ -81,10 +80,10 @@ export default function SSDashboard() {
           <Card>
             <CardHeader color="danger" stats icon>
               <CardIcon color="danger">
-                <Store />
+                <WarningIcon />
               </CardIcon>
-              <p className={classes.cardCategory}>Past Visitors</p>
-              <h3 className={classes.cardTitle}>37</h3>
+              <p className={classes.cardCategory}>New Cases</p>
+              <h3 className={classes.cardTitle}>+4572<small>cases</small></h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
@@ -98,59 +97,93 @@ export default function SSDashboard() {
             </CardFooter>
           </Card>
         </GridItem>
-      </GridContainer>
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart>
-            <CardHeader color="danger">
-              <ChartistGraph
-                className="ct-chart"
-                data={dailySalesChart.data}
-                type="Line"
-                options={dailySalesChart.options}
-                listener={dailySalesChart.animation}
-              />
-              <ButtonGroup color="inherit" aria-label="outlined primary button group" size="small" style={{marginLeft: 20}}>
-                <Button>Week</Button>
-                <Button>Month</Button>
-                <Button>Year</Button>
-              </ButtonGroup>
+        <GridItem xs={12} sm={6} md={3}>
+          <Card>
+            <CardHeader color="danger" stats icon>
+              <CardIcon color="danger">
+                <Icon>content_copy</Icon>
+              </CardIcon>
+              <p className={classes.cardCategory}>Deaths</p>
+              <h3 className={classes.cardTitle}>
+                6.4<small>K</small>
+              </h3>
             </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Visitors Chart</h4>
-              <p className={classes.cardCategory}>
-                <span className={classes.successText}>
-                  <ArrowUpward className={classes.upArrowCardCategory} /> 55%
-                </span>{" "}
-                increase in today's visitors.
-              </p>
-            </CardBody>
-            <CardFooter chart>
+            <CardFooter stats>
               <div className={classes.stats}>
-                <AccessTime /> updated 4 minutes ago
+                <AccessTime /> updated 4 minutes ago.
               </div>
             </CardFooter>
           </Card>
         </GridItem>
-        <GridItem xs={12} sm={12} md={6}>
-          <Card>
-            <CardHeader color="danger">
-              <h4 className={classes.cardTitleWhite}>Recent Visits</h4>
-              <p className={classes.cardCategoryWhite}>
-                29th September, 2020
-              </p>
-            </CardHeader>
-            <CardBody>
-              <Table
-                tableHeaderColor="danger"
-                tableHead={["Check In", "Check Out"]}
-                tableData={[
-                  ["13.00","15.00"],
-                  ["14.00","16.00"]
-                ]}
-              />
-            </CardBody>
-          </Card>
+      </GridContainer>
+      <GridContainer>
+        <GridItem xs={12} sm={12} md={10}>
+            <Card>
+                <CardHeader color="danger">
+                    {/* <h4 className={classes.cardTitleWhite}>{displayedcity}</h4>
+                    <p className={classes.cardCategoryWhite}>
+                        Select City
+                    </p> */}
+                    <DialogSelect title="Select City"
+                    dialogTitle="Pick a City"/>
+                </CardHeader>
+                <CardBody>
+                    <GridContainer>
+                        <GridItem xs={12} sm={12} md={6}>
+                            <Card>
+                                <CardHeader color="danger">
+                                    <h4 className={classes.cardTitleWhite}>Recent Notifications</h4>
+                                    <p className={classes.cardCategoryWhite}>
+                                        Restaurants with COVID-19 Cases
+                                    </p>
+                                </CardHeader>
+                                <CardBody>
+                                <Table
+                                    tableHeaderColor="danger"
+                                    tableHead={["Date", "Restaurant", "City","Reminded","Remind"]}
+                                    tableData={[
+                                    ["6th of October","Stanislaus Brewkovich", "Enschede","Yes", copyright(0)],
+                                    ["7th of October","Gouderegentstraat 10", "Enschede","No", copyright(1)]
+                                    ]}
+                                />
+                                </CardBody>
+                            </Card>
+                            </GridItem>
+                            <GridItem xs={12} sm={12} md={6}>
+                            <Card chart>
+                                <CardHeader color="danger">
+                                <ChartistGraph
+                                    className="ct-chart"
+                                    data={dailySalesChart.data}
+                                    type="Line"
+                                    options={dailySalesChart.options}
+                                    listener={dailySalesChart.animation}
+                                />
+                                <ButtonGroup color="inherit" aria-label="outlined primary button group" size="small" style={{marginLeft: 20}}>
+                                    <Button>Week</Button>
+                                    <Button>Month</Button>
+                                    <Button>Year</Button>
+                                </ButtonGroup>
+                                </CardHeader>
+                                <CardBody>
+                                    <h4 className={classes.cardTitle}>Visitors Chart</h4>
+                                    <p className={classes.cardCategory}>
+                                        <span className={classes.successText}>
+                                        <ArrowUpward className={classes.upArrowCardCategory} /> 55%
+                                        </span>{" "}
+                                        increase in number of notified restaurants.
+                                    </p>
+                                </CardBody>
+                                <CardFooter chart>
+                                    <div className={classes.stats}>
+                                        <AccessTime /> updated 7 minutes ago
+                                    </div>
+                                </CardFooter>
+                            </Card>
+                        </GridItem>
+                    </GridContainer>
+                </CardBody>
+            </Card>
         </GridItem>
       </GridContainer>
     </div>

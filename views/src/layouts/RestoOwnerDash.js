@@ -87,6 +87,7 @@ export default function RestoOwnerDash({ ...rest }) {
         <Navbar
           routes={routes}
           handleDrawerToggle={handleDrawerToggle}
+          dashboardtype="ro"
           {...rest}
         />
         <div className={classes.content}>

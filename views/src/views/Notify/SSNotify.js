@@ -5,14 +5,12 @@ import { makeStyles } from "@material-ui/core/styles";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import SnackbarContent from "components/Snackbar/SnackbarContent.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import TextField from '@material-ui/core/TextField';
-import Button from "components/CustomButtons/Button.js";
+import Button from '@material-ui/core/Button';
 import Search from "@material-ui/icons/Search";
-import { Height } from "@material-ui/icons";
 
 const styles = {
   cardCategoryWhite: {
@@ -41,6 +39,9 @@ const styles = {
       fontWeight: "400",
       lineHeight: "1"
     }
+  },
+  searchButton: {
+    // todo later
   }
 };
 
@@ -49,7 +50,7 @@ const useStyles = makeStyles(styles);
 export default function SSNotify() {
   const classes = useStyles();
   const [query, setQuery] = React.useState('');
-
+  var result = []; // store search result
 
   React.useEffect(() => {
     // Specify how to clean up after this effect:
@@ -64,7 +65,9 @@ export default function SSNotify() {
 
   // for the backend
   function getRestaurant() {
-      return [1];
+      // search with query as param
+      // store object in result
+      // check line 97 for jsx
   }
   
   return (
@@ -73,7 +76,7 @@ export default function SSNotify() {
         <GridContainer>
           <GridItem xs={6}>
             <h4 className={classes.cardTitleWhite}>Notify</h4>
-            <p className={classes.cardCategoryWhite}>Notify Restaurants in case of COVID-19</p>
+            <p className={classes.cardCategoryWhite}>Send notifications to restaurants in case of COVID-19</p>
           </GridItem>
           <GridItem xs={6}>
             <TextField
@@ -83,7 +86,9 @@ export default function SSNotify() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             />
-            <Button color="white" aria-label="edit" justIcon round>
+            <Button 
+            className={classes.searchButton}
+            onClick={getRestaurant}>
               <Search />
             </Button>
           </GridItem>
@@ -92,7 +97,7 @@ export default function SSNotify() {
       <CardBody>
         <GridContainer>
           <GridItem xs={12} sm={12} md={10}>
-            {getRestaurant().length >= 0 ? <p>show some result</p> : null }
+            {result.length > 0 ? <p>show some result</p> : null }
           </GridItem>
         </GridContainer>
         <br />

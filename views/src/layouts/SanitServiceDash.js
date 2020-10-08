@@ -87,6 +87,7 @@ export default function SanitServiceDash({ ...rest }) {
         <Navbar
           routes={routes}
           handleDrawerToggle={handleDrawerToggle}
+          dashboardtype="ss"
           {...rest}
         />
         <div className={classes.content}>
