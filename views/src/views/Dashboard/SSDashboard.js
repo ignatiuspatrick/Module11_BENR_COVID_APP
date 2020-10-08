@@ -24,6 +24,7 @@ import DialogSelect from 'components/DialogSelect/DialogSelect.js'
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import TextField from '@material-ui/core/TextField';
 
 import {
   dailySalesChart,
@@ -117,15 +118,28 @@ export default function SSDashboard() {
         </GridItem>
       </GridContainer>
       <GridContainer>
+          <GridItem xs={12} sm={12} md={5}>
+                <Card>
+                    <CardHeader color="danger">
+                        <h4 className={classes.cardTitleWhite}>Mark Infected User</h4>
+                    </CardHeader>
+                    <CardBody>
+                        <TextField id="outlined-basic" label="Enter GGD Code" variant="outlined" helperText="8 Digits"/>
+                        <Button className={classes.notifyButton} variant="contained">
+                            Notify
+                        </Button>
+                    </CardBody>
+                </Card>
+          </GridItem>
+      </GridContainer>
+      <GridContainer>
         <GridItem xs={12} sm={12} md={10}>
             <Card>
                 <CardHeader color="danger">
-                    {/* <h4 className={classes.cardTitleWhite}>{displayedcity}</h4>
-                    <p className={classes.cardCategoryWhite}>
-                        Select City
-                    </p> */}
                     <DialogSelect title="Select City"
-                    dialogTitle="Pick a City"/>
+                    dialogTitle="Pick a City"
+                    cat1="Province"
+                    cat2="City"/>
                 </CardHeader>
                 <CardBody>
                     <GridContainer>

@@ -20,8 +20,8 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     minWidth: 120,
   },
-  dialogTitle: {
-      color: 'white'
+  titleButton: {
+      color: "white"
   }
 }));
 
@@ -30,7 +30,7 @@ export default function DialogSelect(props) {
   const [open, setOpen] = React.useState(false);
   const [age, setAge] = React.useState('');
 
-  const {title, dialogTitle} = props;
+  const {title, dialogTitle, cat1, cat2} = props;
 
   const handleChange = (event) => {
     setAge(Number(event.target.value) || '');
@@ -46,13 +46,13 @@ export default function DialogSelect(props) {
 
   return (
     <div>
-      <Button onClick={handleClickOpen}>{title}</Button>
+      <Button className={classes.titleButton} onClick={handleClickOpen}>{title}</Button>
       <Dialog disableBackdropClick disableEscapeKeyDown open={open} onClose={handleClose}>
         <DialogTitle classees={{root: classes.dialogTitle}}>{dialogTitle}</DialogTitle>
         <DialogContent>
           <form className={classes.container}>
             <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="demo-dialog-native">Age</InputLabel>
+              <InputLabel htmlFor="demo-dialog-native">{cat1}</InputLabel>
               <Select
                 native
                 value={age}
@@ -60,13 +60,11 @@ export default function DialogSelect(props) {
                 input={<Input id="demo-dialog-native" />}
               >
                 <option aria-label="None" value="" />
-                <option value={10}>Ten</option>
-                <option value={20}>Twenty</option>
-                <option value={30}>Thirty</option>
+                {/* to map jsx attributes <option> */}
               </Select>
             </FormControl>
             <FormControl className={classes.formControl}>
-              <InputLabel id="demo-dialog-select-label">Age</InputLabel>
+              <InputLabel id="demo-dialog-select-label">{cat2}</InputLabel>
               <Select
                 labelId="demo-dialog-select-label"
                 id="demo-dialog-select"
@@ -77,9 +75,7 @@ export default function DialogSelect(props) {
                 <MenuItem value="">
                   <em>None</em>
                 </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                {/* to map jsx attributes <MenuItem value="mapped items"> */}
               </Select>
             </FormControl>
           </form>

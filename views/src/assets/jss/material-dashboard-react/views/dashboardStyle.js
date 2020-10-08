@@ -76,6 +76,12 @@ const dashboardStyle = {
       fontWeight: "400",
       lineHeight: "1"
     }
+  },
+  notifyButton: {
+    marginLeft: "15px",
+    height: "55px",
+    backgroundColor: "#e53935",
+    color:"white"
   }
 };
 

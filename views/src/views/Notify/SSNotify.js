@@ -41,7 +41,7 @@ const styles = {
     }
   },
   searchButton: {
-    // todo later
+    height:"50px"
   }
 };
 
