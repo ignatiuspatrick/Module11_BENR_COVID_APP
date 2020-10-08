@@ -43,6 +43,9 @@ module.exports = function(app){
   app.route('/superusers/login').post(superusers.login_superuser);
   // app.post('/superusers/markinfected', verify.verifySanitaryService, users.mark_user);
   app.post('/superusers/markinfected', users.mark_user);
+  app.post('/superusers/logout/ro',verify.verifyRestaurantOwner, superusers.logout_ro);
+  app.post('/superusers/logout/ss',verify.verifySanitaryService, superusers.logout_ss);
+
   //// TODO: Add the front-end pages here?
 
 

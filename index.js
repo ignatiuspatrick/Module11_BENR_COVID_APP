@@ -2,10 +2,11 @@ const express = require('express');
 const path = require('path');
 // const https = require('https');
 // const fs = require('fs');
-
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const app = express();
-const cookieParser = require('cookie-parser');
+
 
 //https
 //Certs generated using:
@@ -33,12 +34,28 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 // // enable CORS without external module
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header('Access-Control-Allow-Credentials',true);
-    next();
-  });
+// app.use(function (req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     res.header('Access-Control-Allow-Credentials',true);
+//     next();
+//   });
+var allowedOrigins = ['http://localhost:3000',
+                      'http://localhost:5000'];
+app.use(cors({
+  origin: function(origin, callback){   
+    if(!origin) return callback(null, true);    
+    if(allowedOrigins.indexOf(origin) === -1){
+      var msg = 'The CORS policy for this site does not ' +
+                'allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }    
+    return callback(null, true);
+  },
+  exposedHeaders: ['Origin','Accept', 'Content-Type','X-Requested-With'],
+  credentials: true,
+}));
+
 
 //RUN SERVER
 const PORT = process.env.PORT || 5000;
