@@ -25,6 +25,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import TextField from '@material-ui/core/TextField';
+import nlAPI from 'nl.json';
 
 import {
   dailySalesChart,
@@ -55,6 +56,10 @@ export default function SSDashboard() {
   const classes = useStyles();
 
   const [displayedcity, setDisplayedCity] = React.useState('Enschede');
+
+  //for the backend
+  function notifyPeers(){
+  }
 
   return (
     <div>
@@ -125,7 +130,7 @@ export default function SSDashboard() {
                     </CardHeader>
                     <CardBody>
                         <TextField id="outlined-basic" label="Enter GGD Code" variant="outlined" helperText="8 Digits"/>
-                        <Button className={classes.notifyButton} variant="contained">
+                        <Button className={classes.notifyButton} variant="contained" onClick={notifyPeers}>
                             Notify
                         </Button>
                     </CardBody>
@@ -139,7 +144,8 @@ export default function SSDashboard() {
                     <DialogSelect title="Select City"
                     dialogTitle="Pick a City"
                     cat1="Province"
-                    cat2="City"/>
+                    cat2="City"
+                    collection={nlAPI}/>
                 </CardHeader>
                 <CardBody>
                     <GridContainer>

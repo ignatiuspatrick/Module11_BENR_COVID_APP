@@ -29,8 +29,67 @@ export default function DialogSelect(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [age, setAge] = React.useState('');
+  const [province, setProvince] = React.useState('')
+  const {title, dialogTitle, cat1, cat2, collection} = props;
 
-  const {title, dialogTitle, cat1, cat2} = props;
+  const handleProvinceChange = (event) => {
+    setProvince(event.target.value);
+  }
+  
+  function getProvinces() {
+    let provinces = [];
+    let x;
+    for (x = 0; x < collection.length; x++) {
+        if (!provinces.includes(collection[x]["admin"])){
+            provinces.push(collection[x]["admin"]);
+        }
+    }
+    return provinces;
+  }
+
+  const renderProvinces = (
+    <Select
+    native
+    value={age}
+    onChange={handleProvinceChange}
+    input={<Input id="demo-dialog-native" />}
+  >
+        <option aria-label="None" value="" />
+        {getProvinces().map(x => {
+            return <option value={x}>{x}</option>
+        })}
+    </Select>
+  );
+
+  function getCities(province){
+    let cities = [];
+    let x;
+    for (x = 0; x < collection.length; x++) {
+        // console.log(x);
+        if (collection[x]["admin"] === province){
+            cities.push(collection[x]["city"]);
+        }
+    }
+    // console.log(cities)
+    return cities;
+  };
+
+  const renderCities = (
+    <Select
+    labelId="demo-dialog-select-label"
+    id="demo-dialog-select"
+    value={age}
+    onChange={handleChange}
+    input={<Input />}
+  >
+    <MenuItem value="">
+      <em>None</em>
+    </MenuItem>
+    {getCities(province).map(x => {
+        return <option>{x}</option>
+    })}
+  </Select>
+  );
 
   const handleChange = (event) => {
     setAge(Number(event.target.value) || '');
@@ -53,30 +112,11 @@ export default function DialogSelect(props) {
           <form className={classes.container}>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="demo-dialog-native">{cat1}</InputLabel>
-              <Select
-                native
-                value={age}
-                onChange={handleChange}
-                input={<Input id="demo-dialog-native" />}
-              >
-                <option aria-label="None" value="" />
-                {/* to map jsx attributes <option> */}
-              </Select>
+              {renderProvinces}
             </FormControl>
             <FormControl className={classes.formControl}>
               <InputLabel id="demo-dialog-select-label">{cat2}</InputLabel>
-              <Select
-                labelId="demo-dialog-select-label"
-                id="demo-dialog-select"
-                value={age}
-                onChange={handleChange}
-                input={<Input />}
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {/* to map jsx attributes <MenuItem value="mapped items"> */}
-              </Select>
+              {renderCities}
             </FormControl>
           </form>
         </DialogContent>
