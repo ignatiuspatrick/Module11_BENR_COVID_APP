@@ -71,7 +71,30 @@ export default function AdminNavbarLinks(props) {
     setOpenProfile(null);
   };
   const handleLogOut = () => {
-    history.push('/login');
+    const request = require('request');
+    var options = {};
+    if (dashboardtype === "ss") {
+      options = {
+        uri: 'http://localhost:5000/superusers/logout/ss',
+        withCredentials: true
+      };
+    } else if (dashboardtype === "ro") {
+      options = {
+        uri: 'http://localhost:5000/superusers/logout/ro',
+        withCredentials: true
+      };
+    }
+    
+    request.post(options, (err, res, body)=>{
+      if (err) {
+        return console.log(err);
+    }
+    if(res.statusCode === 200 ){
+      history.push('/login');
+    }
+    });
+
+    
   }
   return (
     <div>

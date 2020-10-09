@@ -22,7 +22,8 @@ module.exports = {
   //verification for restaurant owners
   verifyRestaurantOwner: function (req, res, next){
     console.log("verifying restaurant owner.");
-    const token = req.cookies.token || '';
+    const token = req.cookies.tokenro || '';
+    console.log(token);
     // const authHeader = req.headers['authorization'];
     // const token = authHeader && authHeader.split(' ')[1];
     try{
@@ -46,7 +47,9 @@ module.exports = {
 
   //verification for sanitary_services
   verifySanitaryService: function (req, res, next){
+    const token = req.cookies.tokenss || '';
     console.log("verifying sanitary service.");
+    console.log(token);
     try{
       if (!token) return res.status(401).send({error: 'Access denied. No token provided.'})
       jwt.verify(token, SECRET_KEY, function (err, payload) {

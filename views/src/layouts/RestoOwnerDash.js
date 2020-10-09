@@ -38,39 +38,6 @@ const useStyles = makeStyles(styles);
 
 export default function RestoOwnerDash({ ...rest }) {
 
-  // just testing if after verifying token I can create a restaurant
-  
-  // function createRestaurant(){
-  //   const request = require('request');
-  //   var name = "testtest";
-  //   var location = "testtest";
-  //   var contact = "testtest";
-  //   var ownerid = "1";
-  //   let options = {};
-  //   options = {
-  //     uri: 'http://localhost:5000/restaurants/',
-  //     withCredentials: true,
-  //     method: 'POST',
-  //     form: { 
-  //       name: name,
-  //       location: location,
-  //       contact: contact,
-  //       id: ownerid
-  //     }
-  //   };
-  //   request.post(options, (err, res, body) =>{
-  //     if(err){
-  //       return console.log(err);
-  //     }
-  //     if(res.statusCode === 200){
-  //       console.log(body);
-  //     }else{
-  //       console.log(res.statusMessage);
-  //     }
-  //   });
-  // }
-  // createRestaurant();
-
   // styles
   const classes = useStyles();
   // ref to help us initialize PerfectScrollbar on windows devices
