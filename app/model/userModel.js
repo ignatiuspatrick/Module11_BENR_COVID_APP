@@ -117,6 +117,18 @@ User.markUser = function(code, result){
 //     AND ((c2.checkin_time > c1.checkin_time AND c2.checkin_time < c1.checkout_time)
 //       OR (c1.checkin_time > c2.checkin_time AND c1.checkin_time < c2.checkout_time)));
 
+/* FOR CHARACTER_SET_RESULTS
+--Case 1 where 1 checkins in before 2 and checks out before 2 (user 31 and 32)
+insert into checkin (id, restid, userid, checkin_time, checkout_time, at_risk) values (1010, 4, 31, '2020-02-29 19:00:07', '2020-02-29 20:00:59', false);
+insert into checkin (id, restid, userid, checkin_time, checkout_time, at_risk) values (1011, 4, 32, '2020-02-29 20:00:00', '2020-02-29 21:00:00', false);
+--Case 2 where 2 checks in after 1 and checks out before 1 (user id 33 and 34) and the revere also works
+insert into checkin (id, restid, userid, checkin_time, checkout_time, at_risk) values (1012, 4, 33, '2020-02-29 00:05:07', '2020-02-29 00:50:00', false);
+insert into checkin (id, restid, userid, checkin_time, checkout_time, at_risk) values (1013, 4, 34, '2020-02-29 00:10:07', '2020-02-29 01:00:00', false);
+--Case 3 where 1 checks in after 2 checks in and 1 checks out after 2 checks out
+insert into checkin (id, restid, userid, checkin_time, checkout_time, at_risk) values (1014, 4, 35, '2020-02-29 07:10:07', '2020-02-29 10:00:00', false);
+insert into checkin (id, restid, userid, checkin_time, checkout_time, at_risk) values (1015, 4, 36, '2020-02-29 08:05:07', '2020-02-29 09:30:00', false);
+*/
+
   let timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
   console.log(timestamp);
   const query = `UPDATE users
