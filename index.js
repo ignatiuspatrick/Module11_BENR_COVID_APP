@@ -36,7 +36,7 @@ app.use(cookieParser());
 // // enable CORS without external module
 // app.use(function (req, res, next) {
 //     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, ");
 //     res.header('Access-Control-Allow-Credentials',true);
 //     next();
 //   });
@@ -52,7 +52,7 @@ app.use(cors({
     }    
     return callback(null, true);
   },
-  exposedHeaders: ['Origin','Accept', 'Content-Type','X-Requested-With'],
+  exposedHeaders: ['Origin','Accept', 'Content-Type', 'x-access-token'],
   credentials: true,
 }));
 

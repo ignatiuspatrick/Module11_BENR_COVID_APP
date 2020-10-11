@@ -17,6 +17,7 @@ import Dashboard from "@material-ui/icons/Dashboard";
 // core components
 import Button from "components/CustomButtons/Button.js";
 import { useHistory } from "react-router-dom";
+import isAuthenticated from "../../auth"
 
 import styles from "assets/jss/material-dashboard-react/components/headerLinksStyle.js";
 
@@ -89,7 +90,9 @@ export default function AdminNavbarLinks(props) {
       if (err) {
         return console.log(err);
     }
-    if(res.statusCode === 200 ){
+    if(res.statusCode === 200 || res.statusCode === 401 ){
+      isAuthenticated.signoutRo();
+      isAuthenticated.signoutSs();
       history.push('/login');
     }
     });

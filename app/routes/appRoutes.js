@@ -1,4 +1,5 @@
 'use strict';
+const { verifyRestaurantOwner } = require('./verify');
 const verify = require('./verify');
 
 
@@ -45,6 +46,12 @@ module.exports = function(app){
   app.post('/superusers/markinfected', users.mark_user);
   app.post('/superusers/logout/ro',verify.verifyRestaurantOwner, superusers.logout_ro);
   app.post('/superusers/logout/ss',verify.verifySanitaryService, superusers.logout_ss);
+  app.post('/superusers/checkToken/ro', verify.verifyRestaurantOwner, (req,res) =>{
+    res.status(200).send();
+  });
+  app.post('/superusers/checkToken/ss', verify.verifySanitaryService, (req,res) =>{
+    res.status(200).send();
+  });
 
   //// TODO: Add the front-end pages here?
 

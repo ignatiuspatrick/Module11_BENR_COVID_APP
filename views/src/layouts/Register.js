@@ -245,7 +245,7 @@ export default function SignUpSide() {
                         type="password"
                         id="password"
                         autoComplete="current-password"
-                        helperText="Enter valid password"
+                        helperText="Enter a password which is at least 8 character long with at least one uppercase letter, special character and a number."
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </Grid>

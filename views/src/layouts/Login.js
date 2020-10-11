@@ -17,6 +17,7 @@ import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from "react-router-dom";
+import isAuthenticated from "../auth.js";
 
 
 function Copyright() {
@@ -107,12 +108,13 @@ export default function SignInSide() {
   
   function redirect() {
     if (value === 0) {
+      isAuthenticated.setRo();
       history.push('/rodash/dashboard');
-    } else if (value === 1) {
+        } else if (value === 1) {
+      isAuthenticated.setSs();
       history.push('/ssdash/dashboard');
     }
   }
-
   request.post(options, (err, res, body) => {
     if (err) {
         return console.log(err);
@@ -120,6 +122,7 @@ export default function SignInSide() {
     if (res.statusCode === 200) {
       setErrorflag(0);
       redirect();
+      
     }
     else if (username === '' || password === '') {
       setErrorflag(1);
@@ -131,7 +134,6 @@ export default function SignInSide() {
     }
   });
   }
-
   function getErrorMessage(){
     if (errorflag === 1) {
       return 'Please fill in both username and password.';
@@ -141,7 +143,6 @@ export default function SignInSide() {
       return 'Unknown error';
     }
   }
-  
   return (
     <Grid container component="main" direction="row" justify="center" alignItems="center" className={classes.root}>
       <CssBaseline />
