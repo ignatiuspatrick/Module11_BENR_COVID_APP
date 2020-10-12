@@ -186,7 +186,7 @@ export default function SSDashboard() {
                                 </ButtonGroup>
                                 </CardHeader>
                                 <CardBody>
-                                    <h4 className={classes.cardTitle}>Visitors Chart</h4>
+                                    <h4 className={classes.cardTitle}>Number of restaurants with COVID-19</h4>
                                     <p className={classes.cardCategory}>
                                         <span className={classes.successText}>
                                         <ArrowUpward className={classes.upArrowCardCategory} /> 55%

@@ -28,13 +28,31 @@ const useStyles = makeStyles((theme) => ({
 export default function DialogSelect(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const [age, setAge] = React.useState('');
-  const [province, setProvince] = React.useState('')
+  const [city, setCity] = React.useState('');
+  const [province, setProvince] = React.useState('');
   const {title, dialogTitle, cat1, cat2, collection} = props;
+  const [displayedTitle, setDisplayedTitle] = React.useState(title);
 
   const handleProvinceChange = (event) => {
     setProvince(event.target.value);
   }
+
+  const handleCityChange = (event) => {
+    setCity(event.target.value);
+  }
+
+  const handleTitleChange = () => {
+    setDisplayedTitle(city);
+    setOpen(false);
+  }
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   
   function getProvinces() {
     let provinces = [];
@@ -49,14 +67,15 @@ export default function DialogSelect(props) {
 
   const renderProvinces = (
     <Select
-    native
-    value={age}
+    labelId="demo-dialog-select-label"
+    id="demo-dialog-select"
+    value={province}
     onChange={handleProvinceChange}
-    input={<Input id="demo-dialog-native" />}
+    input={<Input />}
   >
         <option aria-label="None" value="" />
         {getProvinces().map(x => {
-            return <option value={x}>{x}</option>
+            return <MenuItem value={x}>{x}</MenuItem>
         })}
     </Select>
   );
@@ -78,34 +97,22 @@ export default function DialogSelect(props) {
     <Select
     labelId="demo-dialog-select-label"
     id="demo-dialog-select"
-    value={age}
-    onChange={handleChange}
+    value={city}
+    onChange={handleCityChange}
     input={<Input />}
   >
     <MenuItem value="">
       <em>None</em>
     </MenuItem>
     {getCities(province).map(x => {
-        return <option>{x}</option>
+        return <MenuItem value={x}>{x}</MenuItem>
     })}
   </Select>
   );
 
-  const handleChange = (event) => {
-    setAge(Number(event.target.value) || '');
-  };
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   return (
     <div>
-      <Button className={classes.titleButton} onClick={handleClickOpen}>{title}</Button>
+      <Button className={classes.titleButton} onClick={handleClickOpen}>{displayedTitle}</Button>
       <Dialog disableBackdropClick disableEscapeKeyDown open={open} onClose={handleClose}>
         <DialogTitle classees={{root: classes.dialogTitle}}>{dialogTitle}</DialogTitle>
         <DialogContent>
@@ -124,7 +131,7 @@ export default function DialogSelect(props) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleTitleChange} color="primary">
             Ok
           </Button>
         </DialogActions>
