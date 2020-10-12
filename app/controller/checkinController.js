@@ -13,14 +13,14 @@ exports.create_checkin = function(req, res) {
   var newCheckin = new Checkin(req.body);
 
   //handles null error
-   if(isNull(newCheckin.userid) || isNull(newCheckin.restid) || isNull(newCheckin.at_risk)){
-     res.status(400).send({ error:true, message: 'Missing info. Please add userid, restid and at_risk.'});
+   if(isNull(req.body.userid) || isNull(req.body.code)){
+     res.status(400).send({ error:true, message: 'Missing info. Please add userid and checkin code.'});
   } else {
-    Checkin.createCheckin(newCheckin, function(err, checkin) {
+    Checkin.createCheckin(req.body.userid, req.body.code, function(err, checkinId) {
     if (err){
       res.send(err);
     }
-    res.json({checkin: checkin});
+    res.json({checkinId: checkinId});
   });
 }
 };

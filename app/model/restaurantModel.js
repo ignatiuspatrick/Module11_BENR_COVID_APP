@@ -1,6 +1,7 @@
 'user strict';
 var sql = require('../../db.js');
 var mysql = require('mysql');
+const cryptoRandomString = require('crypto-random-string');
 
 //Restaurant object constructor, probably needs more fields (name etc)
 var Restaurant = function(restaurant){
@@ -47,7 +48,7 @@ Restaurant.getAllRestaurants = function (result) {
         sql.query("SELECT * FROM restaurants", function (err, res) {
                 if(err) {
                     console.log("error: ", err);
-                    result(null, err);
+                    result(err, null);
                 }
                 else{
                   console.log('restaurants : ', res);
@@ -71,12 +72,26 @@ Restaurant.deleteRestaurant = function(restaurantId, result){
      sql.query("DELETE FROM restaurants WHERE id = ?", [restaurantId], function (err, res) {
                 if(err) {
                     console.log("error: ", err);
-                    result(null, err);
+                    result(err, null);
                 }
                 else{
                  result(null, res);
                 }
             });
 };
+
+//Will generate a 16 letter cryptographically secure linkes to a restaurant to facilitate checking in with
+//unique QR codes.
+Restaurant.generateQR = function(restaurantId, result){
+  var code = cryptoRandomString({length: 16});
+  sql.query("INSERT INTO restaurant_codes SET restid = ?, code = ?", [restaurantId, code], function(err, res){
+    if(err) {
+        console.log("error: ", err);
+        result(err, null);
+    } else {
+     result(null, code);
+    }
+  });
+}
 
 module.exports= Restaurant;

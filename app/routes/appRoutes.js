@@ -16,6 +16,8 @@ module.exports = function(app){
   .get(restaurants.get_restaurant)
   .put(verify.verifyRestaurantOwner, restaurants.update_restaurant)
   .delete(restaurants.delete_restaurant);
+  app.get('/restaurants/getrestcode/:restaurantId', verify.verifyPersonnel, restaurants.get_qrcode); //Dis for checkin-code
+
 
   //USERS
   //(Customer/Restaurant personnel)
@@ -27,7 +29,7 @@ module.exports = function(app){
   .put(users.update_user)
   .delete(users.delete_user);
 
-  app.get('/users/getcode/:userId', verify.verifyCustomer, users.get_securecode);
+  app.get('/users/getsscode/:userId', verify.verifyCustomer, users.get_securecode); //Dis for GGD code
 
   // CHECK-INS, now needs general verification
   var checkins = require('../controller/checkinController');
@@ -35,6 +37,8 @@ module.exports = function(app){
   //checkout
   //to test, send post request as such: localhost:5000/checkout/1/
   app.post('/users/checkout/:checkinId', verify.verifyCustomer, checkins.checkout_checkin);
+
+
 
   //SUPER USER
   //(Sanitary services & Restaurant owners)
@@ -55,10 +59,5 @@ module.exports = function(app){
 
   //// TODO: Add the front-end pages here?
 
-
-
-  // CHECK-INS, now needs general verification
-  var checkins = require('../controller/checkinController');
-  app.post('/checkin', verify.verifyCustomer, checkins.create_checkin); //// TODO: use a verification for customers (id & type)
 
 };

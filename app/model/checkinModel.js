@@ -10,15 +10,22 @@ var Checkin = function(checkin){
 
 
 //SQL Queries for checkin in
-Checkin.createCheckin = function (newCheckin, result) {
-        sql.query("INSERT INTO checkin set ?", newCheckin, function (err, res) {
+//Restaurant is gathered from the unique
+Checkin.createCheckin = function (userId, code, result) {
+        sql.query("INSERT INTO checkin SET userid = ?, restid = ANY(SELECT restid FROM restaurant_codes WHERE code = ?), at_risk = 0", [userId, code], function (err, res) {
 
                 if(err) {
                     console.log("error: ", err);
-                    result(err, null);
+                    return result(err, null);
                 }
                 else{
-                    console.log(res.insertId);
+                  sql.query("DELETE FROM restaurant_codes WHERE code = ?", code, function(err,res){
+                    if(err){
+                      console.log("error: " + err);
+                      return result(err, null);
+                    }
+                  });
+                    console.log(res.insertId); //we return the checkinId
                     result(null, res.insertId);
                 }
             });
