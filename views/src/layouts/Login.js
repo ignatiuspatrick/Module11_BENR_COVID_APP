@@ -212,9 +212,14 @@ export default function SignInSide() {
                   Forgot password?
                 </Link>
               </Grid>
-              <Grid item>
-                <Link href="/register" variant="body2">
-                  {"Register your restaurant? Sign Up"}
+              <Grid item xs>
+                <Link href="/registerRo" variant="body2">
+                  {"Register as restaurant owner?"}
+                </Link>
+              </Grid>
+              <Grid item xs>
+                <Link href="/registerSs" variant="body2">
+                  {"Register as GGD?"}
                 </Link>
               </Grid>
             </Grid>

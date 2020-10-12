@@ -7,38 +7,21 @@ const SECRET_KEY = require('../../secret');
 //Register a superuser
 exports.create_superuser = function(req, res){
   var newSuperuser = new Superuser(req.body);
-
   var passwordcheck = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  var phonenumbercheck = /^[0-9]*$/
-
   //handles errors
   if(!(newSuperuser.type == "sanitary_service" || newSuperuser.type == "restaurant_owner")){
     res.status(400).send({ error:true, message: 'Please provide type of user.'});
   } else if (!newSuperuser.password || !newSuperuser.username){
     res.status(400).send({ error:true, message: 'Please provide login information of user.'});
-  } else if (!passwordcheck.test(newSuperuser.password)){
-    res.status(400).send({ error:true, message: 'Please provide a at least 8 character long password with at least one uppercase letter, special character and number.'});
-  } else if (!phonenumbercheck.test(newSuperuser.phonenumber)){
-    res.status(400).send({ error:true, message: 'Please provide a phone number without letters or special characters.'});
-  } else if (!newSuperuser.email || !newSuperuser.phonenumber){
-    res.status(400).send({ error:true, message: 'Please provide properly formatted contact information.'});
-  }else if (!newSuperuser.city || !newSuperuser.streetname || !newSuperuser.housenumber || !newSuperuser.postalcode){
-    res.status(400).send({ error:true, message: 'Please provide properly formatted location details.'});
-  } else if (newSuperuser.postalcode.length >= 100){
-    res.status(400).send({ error:true, message: 'Please provide a postal code under 100 characters.'});
-  } else if (newSuperuser.housenumber.length >= 100){
-    res.status(400).send({ error:true, message: 'Please provide a house number under 100 characters.'});
-  } else if (newSuperuser.streetname.length >= 100){
-    res.status(400).send({ error:true, message: 'Please provide a street name under 100 characters.'});
-  } else if (newSuperuser.city.length >= 100){
-    res.status(400).send({ error:true, message: 'Please provide a city under 100 characters.'});
-  } else if (newSuperuser.phonenumber.length >= 100){
-    res.status(400).send({ error:true, message: 'Please provide a phone number under 100 characters.'});
-  } else if (newSuperuser.email.length >= 100){
+  } else if (newSuperuser.password !== newSuperuser.confirm){
+    res.status(400).send({ error:true, message: 'Passwords do not match.'});
+  }else if (!passwordcheck.test(newSuperuser.password)){
+    res.status(400).send({ error:true, message: 'Please provide at least 8 character long password with at least one uppercase letter, special character and number.'});
+  }else if (newSuperuser.email.length >= 100){
     res.status(400).send({ error:true, message: 'Please provide an e-mail under 100 characters.'});
-  } else if (newSuperuser.password.length >= 100){
+  }else if (newSuperuser.password.length >= 100){
     res.status(400).send({ error:true, message: 'Please provide a password under 100 characters.'});
-  } else if (newSuperuser.username.length >= 100){
+  }else if (newSuperuser.username.length >= 100){
     res.status(400).send({ error:true, message: 'Please provide a username under 100 characters.'});
   }else{
     Superuser.createSuperuser(newSuperuser, function(err, superuser) {
@@ -46,8 +29,12 @@ exports.create_superuser = function(req, res){
         res.send({ error:true, message: err});
       } else {
         console.log('Created superuser with id ' + superuser);
-        res.status(200).send({message: 'Registration succesful! Redirect.'});
-        // TODO: Redirect user to login/success page
+        if(newSuperuser.type === "restaurant_owner"){
+          res.status(200).send({id:superuser});
+        }else{
+          res.status(200).send({message:"Success!"});
+
+        }
       }
     });
   }
@@ -75,7 +62,7 @@ exports.login_superuser = function(req, res){
         var token = jwt.sign({
           id: success,
           type: type,
-        }, SECRET_KEY, {expiresIn: "9h"});
+        }, SECRET_KEY, {expiresIn: "1h"});
         console.log(token);
         var tokenExpire = new Date(Date.now() + 32400000);
         // by sending a cookie instead of body, we will be stateless, see more: 
@@ -94,7 +81,7 @@ exports.login_superuser = function(req, res){
 
 exports.logout_ro = function(req,res){
 
-  //can do some checks with req.cookies.token
+  // can do some checks with req.cookies.token
   // now only remove cookie from client side.
   // even if this cookie is deleted at client side, it is still possible to steal session
   // so we need to invalidate these tokens at back end

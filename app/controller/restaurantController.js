@@ -12,12 +12,48 @@ exports.get_all_restaurants = function(req, res) {
   });
 };
 
+exports.get_not_selected = function(req, res) {
+  Restaurant.getNotSelected(function(err, restaurant) {
+    if (err){
+      res.send(err);
+    }
+    res.send(restaurant);
+  });
+};
+
 exports.create_restaurant = function(req, res) {
   var newRestaurant = new Restaurant(req.body);
+  
+  var phonenumbercheck = /^[0-9]*$/
   //handles null error
-   if(!newRestaurant.name || !newRestaurant.location || !newRestaurant.contact){
+   if(!newRestaurant.name || !newRestaurant.streetname || !newRestaurant.number || !newRestaurant.postalcode || !newRestaurant.city){
      res.status(400).send({ error:true, message: 'Please provide more information.'});
-   } else {
+   }
+  else if (!phonenumbercheck.test(newRestaurant.number)){
+    res.status(400).send({ error:true, message: 'Please provide a phone number without letters or special characters.'});
+  } 
+  else if (!newRestaurant.number){
+    res.status(400).send({ error:true, message: 'Please provide properly formatted contact information.'});
+  }
+  else if (!newRestaurant.city || !newRestaurant.streetname || !newRestaurant.number || !newRestaurant.postalcode){
+    res.status(400).send({ error:true, message: 'Please provide properly formatted location details.'});
+  } 
+  else if (newRestaurant.postalcode.length >= 100){
+    res.status(400).send({ error:true, message: 'Please provide a postal code under 100 characters.'});
+  } 
+  else if (newRestaurant.number.length >= 100){
+    res.status(400).send({ error:true, message: 'Please provide a house number under 100 characters.'});
+  } 
+  else if (newRestaurant.streetname.length >= 100){
+    res.status(400).send({ error:true, message: 'Please provide a street name under 100 characters.'});
+  } 
+  else if (newRestaurant.city.length >= 100){
+    res.status(400).send({ error:true, message: 'Please provide a city under 100 characters.'});
+  } 
+  else if (newRestaurant.number.length >= 100){
+    res.status(400).send({ error:true, message: 'Please provide a phone number under 100 characters.'});
+  }  
+   else {
     Restaurant.createRestaurant(newRestaurant, function(err, restaurant) {
     if (err){
       return res.send(err);
