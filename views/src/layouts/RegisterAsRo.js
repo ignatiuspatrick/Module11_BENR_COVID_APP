@@ -89,7 +89,7 @@ export default function SignUpSide() {
     let options = {};
     let options2 = {};
     options = {
-      url: 'http://localhost:5000/superusers/create',
+      url: 'http://195.201.98.111:5000/superusers/create',
       form: {
           username: username,
           password: password,
@@ -109,7 +109,7 @@ export default function SignUpSide() {
       id = body.id;
       console.log(id);
       options2 = {
-        url: 'http://localhost:5000/restaurants',
+        url: 'http://195.201.98.111:5000/restaurants',
         form: {
           name: businessname,
           streetname: streetname,

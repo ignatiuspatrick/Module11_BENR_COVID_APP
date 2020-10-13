@@ -41,7 +41,7 @@ app.use(cookieParser());
 //     next();
 //   });
 var allowedOrigins = ['http://localhost:3000',
-                      'http://localhost:5000'];
+                      'http://195.201.98.111:5000'];
 app.use(cors({
   origin: function(origin, callback){   
     if(!origin) return callback(null, true);    

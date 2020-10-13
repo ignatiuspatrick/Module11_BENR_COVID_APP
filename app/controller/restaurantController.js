@@ -29,9 +29,6 @@ exports.create_restaurant = function(req, res) {
    if(!newRestaurant.name || !newRestaurant.streetname || !newRestaurant.number || !newRestaurant.postalcode || !newRestaurant.city){
      res.status(400).send({ error:true, message: 'Please provide more information.'});
    }
-  else if (!phonenumbercheck.test(newRestaurant.number)){
-    res.status(400).send({ error:true, message: 'Please provide a phone number without letters or special characters.'});
-  } 
   else if (!newRestaurant.number){
     res.status(400).send({ error:true, message: 'Please provide properly formatted contact information.'});
   }
