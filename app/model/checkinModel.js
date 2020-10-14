@@ -23,7 +23,6 @@ Checkin.createCheckin = function (userId, code, result) {
     }
     else{
       //Select restaurant id from restaurrant_codes using code
-      console.log(id)
       sql.query("SELECT ToS FROM restaurants WHERE id = ?", [id[0].restid], function (err, tos) {
         if(err) {
           console.log(err);
@@ -33,11 +32,9 @@ Checkin.createCheckin = function (userId, code, result) {
           //Create user checkin
         var cot = new Date()
         var addedtime = tos[0].ToS.split(":")
-        console.log(addedtime);
         cot.setSeconds(cot.getSeconds() + parseInt(addedtime[2]));
         cot.setMinutes(cot.getMinutes() + parseInt(addedtime[1]));
         cot.setHours(cot.getHours() + parseInt(addedtime[0]));
-        console.log(cot)
         sql.query("INSERT INTO checkin SET userid = ?, restid = ?, checkin_time = ?, checkout_time = ?, at_risk = 0", [userId, id[0].restid, new Date(), cot], function (err, res) {
           if(err) {
               console.log(err);
