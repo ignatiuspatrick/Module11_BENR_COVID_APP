@@ -88,7 +88,7 @@ export default function SignUpSide() {
     const request = require('request');
     let options = {};
     options = {
-      url: 'http://localhost:5000/superusers/create',
+      url: 'http://195.201.98.111:5000/superusers/create',
       form: {
           username: username,
           password: password,
