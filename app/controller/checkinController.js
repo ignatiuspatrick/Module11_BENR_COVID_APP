@@ -11,8 +11,8 @@ const isNull = (value) => typeof value === "object" && !value
 
 exports.create_checkin = function(req, res) {
   //handles null error
-   if(!(req.body.userid) || !(req.body.code)){
-     res.status(400).send({ error:true, message: 'Missing info. Please add userid and checkin code.'});
+   if(!(req.body.code)){
+     res.status(400).send({ error:true, message: 'Missing info. Please add checkin code.'});
   } else {
     Checkin.createCheckin(req.body.userid, req.body.code, function(err, checkinId) {
     if (err){

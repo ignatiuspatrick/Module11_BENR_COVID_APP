@@ -98,7 +98,7 @@ module.exports = {
         return res.status(403).send(err);
       }
 
-      // req.body.userid = payload.id why was this here lmao
+      req.body.userid = payload.id
 
       //check if it was indeed a customer.
       if(payload.type != 'customer'){
