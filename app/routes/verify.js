@@ -42,7 +42,7 @@ module.exports = {
     }catch (err){
       return res.status(500).send(err.toString());
     }
-    
+
   },
 
   //verification for sanitary_services
@@ -98,7 +98,7 @@ module.exports = {
         return res.status(403).send(err);
       }
 
-      req.body.userid = payload.id
+      // req.body.userid = payload.id why was this here lmao
 
       //check if it was indeed a customer.
       if(payload.type != 'customer'){
