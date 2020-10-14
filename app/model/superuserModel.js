@@ -66,11 +66,11 @@ Superuser.loginSuperuser = function(username, password, type, result){
 
 Superuser.linkPersonnel = function(code, restaurantId, result){
   //find restid and userid & link them in table
-  sql,query("INSERT INTO restaurant_personnel SET userid = ?, restid = ?",[code, restaurantId] , function(err, queryresult){ // TODO: write query to link up thru code
+  sql,query("UPDATE users SET restid = ? WHERE id IN (SELECT userid FROM personnel_codes WHERE code = ?)",[restaurandId, code] , function(err, queryresult){ // TODO: write query to link up thru code
     if(err){
       return result(err, null);
     } else {
-      return resul(null, true); //What to return? rest id?
+      return result(null, true);
     }
   })
 };

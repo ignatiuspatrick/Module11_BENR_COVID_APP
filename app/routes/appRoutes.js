@@ -49,7 +49,7 @@ module.exports = function(app){
   app.route('/superusers/login').post(superusers.login_superuser);
   // app.post('/superusers/markinfected', verify.verifySanitaryService, users.mark_user);
   app.post('/superusers/markinfected', users.mark_user);
-  app.post('/superusers/linkpersonnel/:code', verify.verifyRestaurantOwner, superusers.link_personnel);
+  app.post('/superusers/linkpersonnel/:code/:restaurandId', verify.verifyRestaurantOwner, superusers.link_personnel);
   app.post('/superusers/logout/ro',verify.verifyRestaurantOwner, superusers.logout_ro);
   app.post('/superusers/logout/ss',verify.verifySanitaryService, superusers.logout_ss);
   app.post('/superusers/checkToken/ro', verify.verifyRestaurantOwner, (req,res) =>{

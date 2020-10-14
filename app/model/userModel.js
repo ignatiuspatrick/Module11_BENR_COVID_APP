@@ -159,7 +159,7 @@ User.getLink = function(userId, result){
     } else if (queryresult.length == 0){ //We don't have a valid result yet so we generate one.
 
       //Did not return yet => now we have to generate a code ourselves.
-      var code = cryptoRandomString({length: 16});
+      var code = cryptoRandomString({length: 8});
 
       sql.query("INSERT INTO personnel_codes SET userid = ?, code = ?", [userId, code], function(err,queryresult){
         if (err) {
