@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 12, 2020 at 09:49 PM
+-- Generation Time: Oct 14, 2020 at 11:56 AM
 -- Server version: 10.1.32-MariaDB
 -- PHP Version: 7.2.5
 
@@ -32,7 +32,34 @@ CREATE TABLE `checkin` (
   `userid` int(11) NOT NULL,
   `restid` int(11) NOT NULL,
   `at_risk` tinyint(1) DEFAULT '0',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `checkin_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `checkout_time` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ggd_codes`
+--
+
+CREATE TABLE `ggd_codes` (
+  `id` int(11) NOT NULL,
+  `userid` varchar(64) NOT NULL,
+  `code` varchar(8) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `personnel_codes`
+--
+
+CREATE TABLE `personnel_codes` (
+  `id` int(11) NOT NULL,
+  `userid` varchar(64) NOT NULL,
+  `code` varchar(64) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -44,7 +71,7 @@ CREATE TABLE `checkin` (
 CREATE TABLE `restaurants` (
   `id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `streetname` int(255) DEFAULT NULL,
+  `streetname` varchar(255) DEFAULT NULL,
   `number` varchar(255) DEFAULT NULL,
   `postalcode` varchar(255) DEFAULT NULL,
   `city` varchar(255) DEFAULT NULL,
@@ -182,6 +209,18 @@ INSERT INTO `restaurants` (`id`, `name`, `streetname`, `number`, `postalcode`, `
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `restaurant_codes`
+--
+
+CREATE TABLE `restaurant_codes` (
+  `id` int(11) NOT NULL,
+  `restid` int(11) NOT NULL,
+  `code` varchar(64) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `superusers`
 --
 
@@ -209,17 +248,21 @@ INSERT INTO `superusers` (`id`, `username`, `password`, `email`, `type`, `create
 --
 
 CREATE TABLE `users` (
-  `userid` int(25) NOT NULL,
-  `token` varchar(255) DEFAULT NULL
+  `id` varchar(64) NOT NULL,
+  `token` varchar(255) DEFAULT NULL,
+  `type` varchar(16) DEFAULT 'customer',
+  `infected` tinyint(1) DEFAULT '0',
+  `at_risk` tinyint(1) NOT NULL DEFAULT '0',
+  `at_risk_since` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`userid`, `token`) VALUES
-(1, '12345677890'),
-(2, 'test');
+INSERT INTO `users` (`id`, `token`, `type`, `infected`, `at_risk`, `at_risk_since`) VALUES
+('1', '12345677890', '', NULL, 0, NULL),
+('2', 'test', '', NULL, 0, NULL);
 
 --
 -- Indexes for dumped tables
@@ -232,23 +275,36 @@ ALTER TABLE `checkin`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `ggd_codes`
+--
+ALTER TABLE `ggd_codes`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `code` (`code`) USING BTREE;
+
+--
+-- Indexes for table `personnel_codes`
+--
+ALTER TABLE `personnel_codes`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `restaurants`
 --
 ALTER TABLE `restaurants`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `restaurant_codes`
+--
+ALTER TABLE `restaurant_codes`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNIQUE` (`id`,`name`);
+  ADD UNIQUE KEY `code` (`code`);
 
 --
 -- Indexes for table `superusers`
 --
 ALTER TABLE `superusers`
   ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`userid`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -264,19 +320,13 @@ ALTER TABLE `checkin`
 -- AUTO_INCREMENT for table `restaurants`
 --
 ALTER TABLE `restaurants`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
 
 --
 -- AUTO_INCREMENT for table `superusers`
 --
 ALTER TABLE `superusers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `userid` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

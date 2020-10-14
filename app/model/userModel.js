@@ -130,7 +130,6 @@ insert into checkin (id, restid, userid, checkin_time, checkout_time, at_risk) v
 */
 
   let timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
-  console.log(timestamp);
   const query = `UPDATE users
     SET at_risk = 1, at_risk_since = ?
     WHERE id IN (
@@ -150,4 +149,35 @@ insert into checkin (id, restid, userid, checkin_time, checkout_time, at_risk) v
 
 }
 
+User.getLink = function(userId, result){
+
+  sql.query("SELECT code FROM personnel_codes WHERE userid = ?", userId, function(err, queryresult){
+    if(err){
+      return result(err, null)
+    } else if(queryresult.length == 1){ //we have a valid result!
+      return result(null, queryresult[0].code);
+    } else if (queryresult.length == 0){ //We don't have a valid result yet so we generate one.
+
+      //Did not return yet => now we have to generate a code ourselves.
+      var code = cryptoRandomString({length: 8});
+
+      sql.query("INSERT INTO personnel_codes SET userid = ?, code = ?", [userId, code], function(err,queryresult){
+        if (err) {
+           //duplicate entry, very rare error but might wanna clarify if it happens, can just try again in this case.
+          if(err.code == 'ER_DUP_ENTRY' || err.errno == 1062){
+              return result("Please try again, there was a duplicate code in the database. (mysqlcode 1062)",null);
+          }else{ //different errors
+            return result(err, null);
+          }
+        } else { //eyy no errors, succesfully made a new code. Return it to user.
+          return result(null, code);
+        }
+      });
+
+    } else { //Ya idk too many queryresult entries. So I guess we gotta give an error.
+      return result("Something unknown went wrong.", null);
+    }
+  });
+
+};
 module.exports= User;

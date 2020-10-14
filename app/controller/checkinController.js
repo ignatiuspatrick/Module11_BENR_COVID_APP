@@ -10,7 +10,6 @@ const Checkin = require('../model/checkinModel');
 const isNull = (value) => typeof value === "object" && !value
 
 exports.create_checkin = function(req, res) {
-  var newCheckin = new Checkin(req.body);
 
   //handles null error
    if(isNull(req.body.userid) || isNull(req.body.code)){

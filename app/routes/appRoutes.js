@@ -30,7 +30,8 @@ module.exports = function(app){
   .delete(users.delete_user);
 
   app.get('/users/getsscode/:userId', verify.verifyCustomer, users.get_securecode); //Dis for GGD code
-
+  //This is a code restaurant personnel can give to restaurant owner to link the two
+  app.get('/users/getlinkcode/:userId', verify.verifyPersonnel, users.get_linkcode);
   // CHECK-INS, now needs general verification
   var checkins = require('../controller/checkinController');
   app.post('/users/checkin', verify.verifyCustomer, checkins.create_checkin);
@@ -48,6 +49,7 @@ module.exports = function(app){
   app.route('/superusers/login').post(superusers.login_superuser);
   // app.post('/superusers/markinfected', verify.verifySanitaryService, users.mark_user);
   app.post('/superusers/markinfected', users.mark_user);
+  app.post('/superusers/linkpersonnel/:code/:restaurandId', verify.verifyRestaurantOwner, superusers.link_personnel);
   app.post('/superusers/logout/ro',verify.verifyRestaurantOwner, superusers.logout_ro);
   app.post('/superusers/logout/ss',verify.verifySanitaryService, superusers.logout_ss);
   app.post('/superusers/checkToken/ro', verify.verifyRestaurantOwner, (req,res) =>{
