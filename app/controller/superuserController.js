@@ -78,12 +78,12 @@ exports.login_superuser = function(req, res){
         }, SECRET_KEY, {expiresIn: "9h"});
         console.log(token);
         var tokenExpire = new Date(Date.now() + 32400000);
-        // by sending a cookie instead of body, we will be stateless, see more: 
+        // by sending a cookie instead of body, we will be stateless, see more:
         // https://dev.to/mr_cea/remaining-stateless-jwt-cookies-in-node-js-3lle
         if(type == "restaurant_owner"){
-          res.status(200).cookie('tokenro', token, {expires: tokenExpire, httpOnly: true, sameSite: 'Lax'}).send();  
+          res.status(200).cookie('tokenro', token, {expires: tokenExpire, httpOnly: true, sameSite: 'Lax'}).send();
         } else if (type == "sanitary_service"){
-          res.status(200).cookie('tokenss', token, {expires: tokenExpire, httpOnly: true, sameSite: 'Lax'}).send();  
+          res.status(200).cookie('tokenss', token, {expires: tokenExpire, httpOnly: true, sameSite: 'Lax'}).send();
         }
       } else {
         res.status(401).send({message:'Login has failed. Please try again.'});
@@ -101,7 +101,7 @@ exports.logout_ro = function(req,res){
   var tokenro = req.cookies.tokenro || '';
   console.log("cookie ro cleared: " + req.cookies.tokenro);
   res.status(200).clearCookie('tokenro', {httpOnly: true, sameSite: 'Lax'}).send();
-  
+
 };
 
 exports.logout_ss = function(req,res){
@@ -109,3 +109,18 @@ exports.logout_ss = function(req,res){
   console.log("cookie ss cleared: " + req.cookies.tokenss);
   res.status(200).clearCookie('tokenss', {httpOnly: true, sameSite: 'Lax'}).send();
 };
+
+
+exports.link_personnel = function(req, res){
+  if(!req.params.code){
+    return res.status(400).send({error: true, message: "Missing code."})
+  }
+
+  Superuser.linkPersonnel(code, function(err, result){
+    if(err){
+      return res.status(400).send({error: true, message: err});
+    } else {
+      return res.status(200).send({success: true});
+    }
+  });
+}

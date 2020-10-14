@@ -95,7 +95,21 @@ exports.mark_user = function(req, res){
       res.status(400).send({error: true, message: err});
     } else {
       console.log(result);
-      res.status(200).send({message: 'A fuckin\' aye m8', result: result})
+      res.status(200).send({success: result})
+    }
+  });
+};
+
+exports.get_linkcode = function(req, res){
+  if (!req.params.userId){
+      return res.send({error: true, message: 'No id provided.'});
+  }
+
+  User.getLink(req.params.userId, function(err, code){
+    if(err){
+      res.send({error: true, message: err});
+    }else{
+      res.status(200).send({code: code});
     }
   });
 };
