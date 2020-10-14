@@ -100,7 +100,8 @@ exports.logout_ss = function(req,res){
 
 exports.link_personnel = function(req, res){
   if(!req.params.code || !req.params.restaurantId){
-    return res.status(400).send({error: true, message: "Missing information."})
+    return res.status(400).send({error: true, message: "Missing information. code: " +
+    req.params.code + " restid: " + req.params.restaurantId})
   }
 
   Superuser.linkPersonnel(req.params.code, req.params.restaurantId, function(err, result){

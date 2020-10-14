@@ -12,7 +12,6 @@ var Checkin = function(checkin){
 //SQL Queries for checkin in
 //Restaurant is gathered from the unique
 Checkin.createCheckin = function (userId, code, result) {
-  console.log("id: " + userId);
         sql.query("INSERT INTO checkin SET userid = ?, restid = (SELECT restid FROM restaurant_codes WHERE code = ?), at_risk = 0", [userId, code], function (err, res) {
 
                 if(err) {

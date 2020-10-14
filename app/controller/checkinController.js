@@ -10,7 +10,6 @@ const Checkin = require('../model/checkinModel');
 const isNull = (value) => typeof value === "object" && !value
 
 exports.create_checkin = function(req, res) {
-  console.log("userid:" + req.body.userid);  
   //handles null error
    if(!(req.body.userid) || !(req.body.code)){
      res.status(400).send({ error:true, message: 'Missing info. Please add userid and checkin code.'});
