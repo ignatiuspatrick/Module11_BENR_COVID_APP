@@ -82,6 +82,12 @@ const dashboardStyle = {
     height: "55px",
     backgroundColor: "#e53935",
     color:"white"
+  },
+  registerPersonnelButton: {
+    marginLeft: "15px",
+    height: "55px",
+    backgroundColor: "#00acc1",
+    color:"white"
   }
 };
 

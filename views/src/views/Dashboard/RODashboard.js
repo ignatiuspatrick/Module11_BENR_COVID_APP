@@ -22,6 +22,7 @@ import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import TextField from '@material-ui/core/TextField';
 
 import {
   dailySalesChart,
@@ -33,6 +34,12 @@ const useStyles = makeStyles(styles);
 
 export default function Dashboard() {
   const classes = useStyles();
+
+  // for the backend
+  function registerPersonnel() {
+
+  }
+
   return (
     <div>
       <GridContainer>
@@ -151,6 +158,55 @@ export default function Dashboard() {
               />
             </CardBody>
           </Card>
+        </GridItem>
+      </GridContainer>
+      <GridContainer>
+        <GridItem xs={12} sm={12} md={10}>
+            <Card>
+                <CardHeader color="info">
+                  <h4 className={classes.cardTitleWhite}>RPM</h4>
+                    <p className={classes.cardCategoryWhite}>
+                        Restaurant Personnel Manager
+                    </p>
+                </CardHeader>
+                <CardBody>
+                    <GridContainer>
+                      <GridItem xs={12} sm={12} md={5}>
+                        <Card>
+                          <CardHeader color="info">
+                            <h4 className={classes.cardTitleWhite}>Register Restaurant Personnel</h4>
+                          </CardHeader>
+                          <CardBody>
+                            <TextField id="outlined-basic" label="Enter Personnel Code" variant="outlined" helperText="6 Digits"/>
+                            <Button className={classes.registerPersonnelButton} variant="contained" onClick={registerPersonnel}>
+                                Register
+                            </Button>
+                          </CardBody>
+                        </Card>
+                      </GridItem>
+                      <GridItem xs={12} sm={12} md={6}>
+                        <Card>
+                          <CardHeader color="info">
+                            <h4 className={classes.cardTitleWhite}>Registered Personnels</h4>
+                            <p className={classes.cardCategoryWhite}>
+                                Personnels who has access to scan QR-codes from visitors
+                            </p>
+                          </CardHeader>
+                          <CardBody>
+                            <Table
+                                tableHeaderColor="info"
+                                tableHead={["Personnel ID", "Name", "Delete"]}
+                                tableData={[
+                                ["001","Ignatius Patrick", "delete button"],
+                                ["002","Konstantinas Averkin", "delete button"]
+                                ]}
+                            />
+                          </CardBody>
+                        </Card>
+                      </GridItem>
+                    </GridContainer>
+                </CardBody>
+            </Card>
         </GridItem>
       </GridContainer>
     </div>

@@ -58,7 +58,7 @@ export default function SSDashboard() {
   const [displayedcity, setDisplayedCity] = React.useState('Enschede');
 
   //for the backend
-  function notifyPeers(){
+  function markInfectedUser(){
   }
 
   return (
@@ -123,19 +123,19 @@ export default function SSDashboard() {
         </GridItem>
       </GridContainer>
       <GridContainer>
-          <GridItem xs={12} sm={12} md={5}>
-                <Card>
-                    <CardHeader color="danger">
-                        <h4 className={classes.cardTitleWhite}>Mark Infected User</h4>
-                    </CardHeader>
-                    <CardBody>
-                        <TextField id="outlined-basic" label="Enter GGD Code" variant="outlined" helperText="8 Digits"/>
-                        <Button className={classes.notifyButton} variant="contained" onClick={notifyPeers}>
-                            Notify
-                        </Button>
-                    </CardBody>
-                </Card>
-          </GridItem>
+        <GridItem xs={12} sm={12} md={5}>
+          <Card>
+            <CardHeader color="danger">
+              <h4 className={classes.cardTitleWhite}>Mark Infected User</h4>
+            </CardHeader>
+            <CardBody>
+              <TextField id="outlined-basic" label="Enter GGD Code" variant="outlined" helperText="8 Digits"/>
+              <Button className={classes.notifyButton} variant="contained" onClick={markInfectedUser}>
+                  Notify
+              </Button>
+            </CardBody>
+          </Card>
+        </GridItem>
       </GridContainer>
       <GridContainer>
         <GridItem xs={12} sm={12} md={10}>
@@ -168,10 +168,10 @@ export default function SSDashboard() {
                                 />
                                 </CardBody>
                             </Card>
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={6}>
+                          </GridItem>
+                          <GridItem xs={12} sm={12} md={6}>
                             <Card chart>
-                                <CardHeader color="danger">
+                              <CardHeader color="danger">
                                 <ChartistGraph
                                     className="ct-chart"
                                     data={dailySalesChart.data}
@@ -184,21 +184,21 @@ export default function SSDashboard() {
                                     <Button>Month</Button>
                                     <Button>Year</Button>
                                 </ButtonGroup>
-                                </CardHeader>
-                                <CardBody>
-                                    <h4 className={classes.cardTitle}>Number of restaurants with COVID-19</h4>
-                                    <p className={classes.cardCategory}>
-                                        <span className={classes.successText}>
-                                        <ArrowUpward className={classes.upArrowCardCategory} /> 55%
-                                        </span>{" "}
-                                        increase in number of notified restaurants.
-                                    </p>
-                                </CardBody>
-                                <CardFooter chart>
-                                    <div className={classes.stats}>
-                                        <AccessTime /> updated 7 minutes ago
-                                    </div>
-                                </CardFooter>
+                              </CardHeader>
+                              <CardBody>
+                                <h4 className={classes.cardTitle}>Number of restaurants with COVID-19</h4>
+                                  <p className={classes.cardCategory}>
+                                      <span className={classes.successText}>
+                                      <ArrowUpward className={classes.upArrowCardCategory} /> 55%
+                                      </span>{" "}
+                                      increase in number of notified restaurants.
+                                  </p>
+                              </CardBody>
+                              <CardFooter chart>
+                                <div className={classes.stats}>
+                                  <AccessTime /> updated 7 minutes ago
+                                </div>
+                              </CardFooter>
                             </Card>
                         </GridItem>
                     </GridContainer>
