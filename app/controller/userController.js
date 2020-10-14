@@ -4,21 +4,17 @@ var jwt = require('jsonwebtoken');
 const SECRET_KEY = require('../../secret');
 
 exports.create_user = function(req, res){
-  var newUser = new User(req.body);
-  console.log(newUser);
   //handles null error
-  if(!newUser.id){
-    res.status(400).send({ error:true, message: 'Please provide a unique UserId.'});
-  } else if (!(newUser.type == 'customer' || newUser.type == 'personnel')){
-    res.status(400).send({ error:true, message: 'Please provide a valid user type (customer/personnel).'});
+  if (!(req.body.type == 'customer' || req.body.type == 'personnel')){
+    res.status(400).send({ error:true, message: 'Please provide a valid user type.'});
   } else {
-
+    req.body.id = uuid.v4();
+    var newUser = new User(req.body);
     User.createUser(newUser, function(err, user) {
     if (err){
       res.send({error: true, message: err});
     } else {
       //Send TOKEN
-      // TODO: Refresh token
       var token = jwt.sign({
         id: newUser.id,
         type: newUser.type
