@@ -5,7 +5,8 @@ import { Router, Route, Switch, Redirect } from "react-router-dom";
 
 // core components
 import Login from "layouts/Login.js";
-import Register from "layouts/Register.js";
+import RegisterRo from "layouts/RegisterAsRo.js";
+import RegisterSs from "layouts/RegisterAsSs.js";
 import RestoOwnerDash from "layouts/RestoOwnerDash.js";
 import SanitServiceDash from "layouts/SanitServiceDash.js";
 import isAuthenticated from "./auth.js"
@@ -37,7 +38,8 @@ ReactDOM.render(
   <Router history={hist}>
     <Switch>
       <Route path="/login" component={Login} />
-      <Route path="/register" component={Register} />
+      <Route path="/registerRo" component={RegisterRo} />
+      <Route path="/registerSs" component={RegisterSs} />
       <PrivateRouteRo path="/rodash" component={RestoOwnerDash} />
       <PrivateRouteSs path="/ssdash" component={SanitServiceDash} />
       <Redirect from="/" to="/login" />

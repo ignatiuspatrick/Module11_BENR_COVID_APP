@@ -6,9 +6,11 @@ const cryptoRandomString = require('crypto-random-string');
 //Restaurant object constructor, probably needs more fields (name etc)
 var Restaurant = function(restaurant){
     this.name = restaurant.name;
-    this.location = restaurant.location;
-    this.contact = restaurant.contact;
-    this.ownerid = restaurant.id;
+    this.streetname = restaurant.streetname;
+    this.number = restaurant.number;
+    this.postalcode = restaurant.postalcode;
+    this.city = restaurant.city;
+    this.ownerid = restaurant.ownerid;
 };
 
 //Restaurant SQL queries
@@ -29,7 +31,7 @@ Restaurant.createRestaurant = function (newRestaurant, result) {
 };
 
 Restaurant.getRestaurant = function (restaurantId, result) {
-        sql.query("SELECT name,location,contact FROM restaurants WHERE id = ?",restaurantId, (err, res) => {
+        sql.query("SELECT name,streetname,number,postalcode,city FROM restaurants WHERE id = ?",restaurantId, (err, res) => {
                 if(err) {
                     console.log("error: ", err);
                     result(err, null);
@@ -44,6 +46,9 @@ Restaurant.getRestaurant = function (restaurantId, result) {
             });
 };
 
+
+
+
 Restaurant.getAllRestaurants = function (result) {
         sql.query("SELECT * FROM restaurants", function (err, res) {
                 if(err) {
@@ -56,8 +61,23 @@ Restaurant.getAllRestaurants = function (result) {
                 }
             });
 };
+
+
+Restaurant.getNotSelected = function (result) {
+    sql.query("SELECT name FROM restaurants WHERE ownerid = 0", function (err, res) {
+            if(err) {
+                console.log("error: ", err);
+                result(null, err);
+            }
+            else{
+            //   console.log('restaurants : ', res);
+             result(null, res);
+            }
+        });
+};
+
 Restaurant.updateRestaurant = function(restaurantId, newRestaurant, result){
-    let update = "UPDATE restaurants SET name = ?,location = ?,contact = ?,ownerid = ? WHERE id = ?";
+    let update = "UPDATE restaurants SET name = ?,streetname = ?,number = ?,postalcode = ?, city = ?, ownerid = ? WHERE id = ?";
     let query = mysql.format(update,[newRestaurant.name,newRestaurant.location,newRestaurant.contact,newRestaurant.ownerid,restaurantId]);
     sql.query(query, (err,res)=>{
         if(err) {

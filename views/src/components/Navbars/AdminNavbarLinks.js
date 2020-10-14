@@ -76,12 +76,12 @@ export default function AdminNavbarLinks(props) {
     var options = {};
     if (dashboardtype === "ss") {
       options = {
-        uri: 'http://localhost:5000/superusers/logout/ss',
+        uri: 'http://195.201.98.111:5000/superusers/logout/ss',
         withCredentials: true
       };
     } else if (dashboardtype === "ro") {
       options = {
-        uri: 'http://localhost:5000/superusers/logout/ro',
+        uri: 'http://195.201.98.111:5000/superusers/logout/ro',
         withCredentials: true
       };
     }

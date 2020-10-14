@@ -14,12 +14,8 @@ const saltRounds = 12;
 var Superuser = function(superuser){
     this.username = superuser.username;
     this.password = superuser.password; //bcrypt this
-    this.email = superuser.email;
-    this.phonenumber = superuser.phonenumber;
-    this.city = superuser.city;
-    this.streetname = superuser.streetname;
-    this.housenumber = superuser.housenumber;
-    this.postalcode = superuser.postalcode;
+    this.confirm = superuser.confirm;
+    this.email=superuser.email;
     this.type = superuser.type;
 };
 
@@ -30,7 +26,7 @@ Superuser.createSuperuser = function (newSuperuser, result) {
   //Asynchronous approach so that it is faster.
   bcrypt.hash(newSuperuser.password, saltRounds).then(function(hash){
     newSuperuser.password = hash; //replace with hash before storing
-    sql.query("INSERT INTO superusers SET ?", newSuperuser, function (err, res) {
+    sql.query("INSERT INTO superusers SET username = ?, password=?, email=?,type=?", [newSuperuser.username, newSuperuser.password, newSuperuser.email, newSuperuser.type], function (err, res) {
       if(err) {
           console.log("error: ", err);
           result("SQL error, check logs.", null);

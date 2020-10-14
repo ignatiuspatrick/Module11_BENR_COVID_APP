@@ -86,7 +86,7 @@ export default function SignInSide() {
     console.log(value);
     if(value === 0){
       options = {
-        uri: 'http://localhost:5000/superusers/login',
+        uri: 'http://195.201.98.111:5000/superusers/login',
         withCredentials: true,
         form: {
             username: username,
@@ -96,7 +96,7 @@ export default function SignInSide() {
       };
     } else if(value === 1){
       options = {
-        uri: 'http://localhost:5000/superusers/login',
+        uri: 'http://195.201.98.111:5000/superusers/login',
         withCredentials: true,
         form: {
             username: username,
@@ -207,14 +207,19 @@ export default function SignInSide() {
               Sign In
             </Button>
             <Grid container>
-              <Grid item xs>
+              <Grid item xs={4}>
                 <Link href="#" variant="body2">
                   Forgot password?
                 </Link>
               </Grid>
-              <Grid item>
-                <Link href="/register" variant="body2">
-                  {"Register your restaurant? Sign Up"}
+              <Grid item xs={4}>
+                <Link href="/registerRo" variant="body2">
+                  {"Register as restaurant owner?"}
+                </Link>
+              </Grid>
+              <Grid item xs={4}>
+                <Link href="/registerSs" variant="body2">
+                  {"Register as GGD?"}
                 </Link>
               </Grid>
             </Grid>
