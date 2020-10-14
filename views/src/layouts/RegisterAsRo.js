@@ -11,8 +11,6 @@ import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from "react-router-dom";
 
@@ -31,7 +29,7 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: '150vh',
+    height: '130vh',
     backgroundColor: '#fe7d55'
   },
   tabs: {
@@ -72,18 +70,27 @@ export default function SignUpSide() {
   const [postalcode, setPostalCode] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [passwordConfirm, confirmPassword] = React.useState('');
-  const [tnc, setTnc] = React.useState(false)
+  const [tnc, setTnc] = React.useState(0);
   const [errorflag, setErrorflag] = React.useState(0);
   
 
   const onFormSubmit = e => {
     e.preventDefault();
-    if(tnc){
+    if(tnc === 1){
       submitRegistration();
     }else{
       setErrorflag("Please agree to our terms and conditions!");
     }
   }
+
+  const onTncChange = e => {
+    if (e.target.checked) {
+      setTnc(1);
+    } else {
+      setTnc(-1);
+    }
+  }
+
   function submitRegistration() {
     const request = require('request');
     let options = {};
@@ -139,8 +146,6 @@ export default function SignUpSide() {
       setErrorflag(obj.message);
     }
   });
-  
-  
  
   }
 
@@ -164,7 +169,21 @@ export default function SignUpSide() {
           <form className={classes.form} onSubmit={onFormSubmit}>
           <Typography color='error'>{getErrorMessage()}</Typography>
             <Grid container spacing={2}>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
+                  <TextField
+                      autoComplete="fname"
+                      name="name"
+                      variant="outlined"
+                      required
+                      fullWidth
+                      id="businessname"
+                      label="Business name"
+                      onChange={(e) => setBusinessName(e.target.value)}
+                      helperText="Enter your business name."
+                      autoFocus
+                  />
+                </Grid>
+                <Grid item xs={6}>
                   <TextField
                       autoComplete="fname"
                       name="username"
@@ -192,7 +211,7 @@ export default function SignUpSide() {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                     <TextField
                         variant="outlined"
                         required
@@ -206,9 +225,9 @@ export default function SignUpSide() {
                         onChange={(e) => confirmPassword(e.target.value)}
                     />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                   <TextField
-                      autoComplete="fname"
+                      autoComplete="email"
                       name="name"
                       variant="outlined"
                       required
@@ -220,32 +239,7 @@ export default function SignUpSide() {
                       autoFocus
                   />
                 </Grid>
-                {/* <Grid item xs={12}>
-                  <RadioGroup 
-                    aria-label="type" 
-                    name="type"
-                    onChange={handleChange} 
-                    row>
-                    <FormControlLabel value="restaurant_owner" control={<Radio />} label="Restaurant Owner" />
-                    <FormControlLabel value="sanitary_service" control={<Radio />} label="Sanitary Service" />
-                  </RadioGroup>
-                </Grid> */}
-                <Grid item xs={12}>
-                  <TextField
-                      autoComplete="fname"
-                      name="name"
-                      variant="outlined"
-                      required
-                      fullWidth
-                      id="businessname"
-                      label="Business name"
-                      onChange={(e) => setBusinessName(e.target.value)}
-                      helperText="Enter your business name."
-                      autoFocus
-                  />
-                </Grid>
-                
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                   <TextField
                       variant="outlined"
                       required
@@ -297,10 +291,10 @@ export default function SignUpSide() {
                 {/* confirm password */}
                 <Grid item xs={12}>
                     <FormControlLabel
-                        control={<Checkbox value="tnc" color="primary" onChange={ (e) => setTnc(e.target.checked)}/>}
+                        control={<Checkbox value="tnc" color="primary" onChange={onTncChange}/>}
                         label="I agree to the terms and conditions."
                     />
-                    {tnc ? "" : <Typography color='error'>Please read our terms and conditions before proceeding with the registration.</Typography>}
+                    {tnc === -1 ? <Typography color='error'>Please read our terms and conditions before proceeding with the registration.</Typography> : ""}
                 </Grid>
             </Grid>
             <Button

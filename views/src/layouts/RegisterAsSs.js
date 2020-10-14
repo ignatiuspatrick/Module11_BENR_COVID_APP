@@ -29,7 +29,7 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: '150vh',
+    height: '100vh',
     backgroundColor: '#fe7d55'
   },
   tabs: {
@@ -65,16 +65,25 @@ export default function SignUpSide() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [passwordConfirm, confirmPassword] = React.useState('');
-  const [tnc, setTnc] = React.useState(false)
+  const [tnc, setTnc] = React.useState(0)
   const [errorflag, setErrorflag] = React.useState(0);
   const onFormSubmit = e => {
     e.preventDefault();
-    if(tnc){
+    if(tnc === 1){
         submitRegistration();
     }else{
         setErrorflag("Please agree to our terms and conditions!");
     }
   }
+
+  const onTncChange = e => {
+    if (e.target.checked) {
+      setTnc(1);
+    } else {
+      setTnc(-1);
+    }
+  }
+
   function submitRegistration() {
     const request = require('request');
     let options = {};
@@ -124,7 +133,21 @@ export default function SignUpSide() {
           <form className={classes.form} onSubmit={onFormSubmit}>
           <Typography color='error'>{getErrorMessage()}</Typography>
             <Grid container spacing={2}>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
+                  <TextField
+                      autoComplete="email"
+                      name="name"
+                      variant="outlined"
+                      required
+                      fullWidth
+                      id="email"
+                      label="Your email address"
+                      onChange={(e) => setEmail(e.target.value)}
+                      helperText="Enter your email address."
+                      autoFocus
+                  />
+                </Grid>
+                <Grid item xs={6}>
                   <TextField
                       autoComplete="fname"
                       name="username"
@@ -148,7 +171,7 @@ export default function SignUpSide() {
                         type="password"
                         id="password"
                         autoComplete="current-password"
-                        helperText="Enter a password which is at least 8 character long with at least one uppercase letter, special character and a number."
+                        helperText="At least 8 character long with at least one uppercase letter, special character, and a number."
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </Grid>
@@ -167,25 +190,11 @@ export default function SignUpSide() {
                     />
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField
-                      autoComplete="fname"
-                      name="name"
-                      variant="outlined"
-                      required
-                      fullWidth
-                      id="email"
-                      label="Your email address"
-                      onChange={(e) => setEmail(e.target.value)}
-                      helperText="Enter your email address."
-                      autoFocus
-                  />
-                </Grid>
-                <Grid item xs={12}>
                     <FormControlLabel
-                        control={<Checkbox value="tnc" color="primary" onChange={ (e) => setTnc(e.target.checked)}/>}
+                        control={<Checkbox value="tnc" color="primary" onChange={onTncChange}/>}
                         label="I agree to the terms and conditions."
                     />
-                    {tnc ? "" : <Typography color='error'>Please read our terms and conditions before proceeding with the registration.</Typography>}
+                    {tnc === -1 ? <Typography color='error'>Please read our terms and conditions before proceeding with the registration.</Typography> : ""}
                 </Grid>
             </Grid>
             <Button
