@@ -12,23 +12,54 @@ var Checkin = function(checkin){
 //SQL Queries for checkin in
 //Restaurant is gathered from the unique
 Checkin.createCheckin = function (userId, code, result) {
-        sql.query("INSERT INTO checkin SET userid = ?, restid = (SELECT restid FROM restaurant_codes WHERE code = ?), at_risk = 0", [userId, code], function (err, res) {
-
-                if(err) {
-                    console.log("error: ", err);
-                    return result(err, null);
-                } else{
-                  sql.query("DELETE FROM restaurant_codes WHERE code = ?", code, function(err,res){
-                    if(err){
-                      console.log("error: " + err);
-                      return result(err, null);
-                    }
-                  });
-                    console.log(res.insertId); //we return the checkinId
-                    return result(null, res.insertId);
-                }
+  //Select restaurant id from restaurrant_codes using code
+  sql.query("SELECT restid FROM restaurant_codes WHERE code = ?", [code], function (err, id) {
+    if(err) {
+      console.log(err);
+      return result(err, null);
+    } else if (id.length < 1) {
+      console.log(err);
+      return result(err, "No associated restaurant id")
+    }
+    else{
+      //Select restaurant id from restaurrant_codes using code
+      console.log(id)
+      sql.query("SELECT ToS FROM restaurants WHERE id = ?", [id[0].restid], function (err, tos) {
+        if(err) {
+          console.log(err);
+          return result(err, null);
+        }
+        else{
+          //Create user checkin
+        var cot = new Date()
+        var addedtime = tos[0].ToS.split(":")
+        console.log(addedtime);
+        cot.setSeconds(cot.getSeconds() + parseInt(addedtime[2]));
+        cot.setMinutes(cot.getMinutes() + parseInt(addedtime[1]));
+        cot.setHours(cot.getHours() + parseInt(addedtime[0]));
+        console.log(cot)
+        sql.query("INSERT INTO checkin SET userid = ?, restid = ?, checkin_time = ?, checkout_time = ?, at_risk = 0", [userId, id[0].restid, new Date(), cot], function (err, res) {
+          if(err) {
+              console.log(err);
+              return result(err, null);
+          }
+          else{
+            //Delete restaurant code
+            sql.query("DELETE FROM restaurant_codes WHERE code = ?", code, function(err,res) {
+              if(err){
+                console.log("error: " + err);
+                return result(err, null);
+              }
             });
-};
+              console.log(res.insertId); //we return the checkinId
+              result(null, res.insertId);
+          }
+        });
+      }
+      });
+    }
+  });
+}
 
 //Checking out through checkinId
 Checkin.checkout = function (checkinId, result){
