@@ -121,7 +121,7 @@ export default function Dashboard() {
               return console.log(err);
             }
             if(res.statusCode === 200){
-              setErrorflag("Registered personnel with code: ");
+              setErrorflag("Registered personnel with code: " + code);
             }else if (res.statusCode === 400){
               var obj = JSON.parse(body);
               setErrorflag(obj.message);
