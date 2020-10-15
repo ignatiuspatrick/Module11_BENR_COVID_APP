@@ -23,6 +23,8 @@ import CardFooter from "components/Card/CardFooter.js";
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import TextField from '@material-ui/core/TextField';
+import IconButton from '@material-ui/core/IconButton';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 import {
   dailySalesChart,
@@ -34,6 +36,23 @@ const useStyles = makeStyles(styles);
 
 export default function Dashboard() {
   const classes = useStyles();
+
+  // for the backend
+  function deleteEmployee(pid) {
+    return console.log("personnel deleted!");
+  }
+
+  function deleteButton(pid){
+    return(
+      <IconButton 
+        color="inherit" 
+        aria-label="alert restaurant" 
+        component="span"
+        onClick={() => deleteEmployee(pid)}>
+            <HighlightOffIcon />
+        </IconButton>
+    );
+  }
 
   // for the backend
   function registerPersonnel() {
@@ -197,8 +216,8 @@ export default function Dashboard() {
                                 tableHeaderColor="info"
                                 tableHead={["Personnel ID", "Name", "Delete"]}
                                 tableData={[
-                                ["001","Ignatius Patrick", "delete button"],
-                                ["002","Konstantinas Averkin", "delete button"]
+                                ["001","Ignatius Patrick", deleteButton(0)],
+                                ["002","Konstantinas Averkin", deleteButton(1)]
                                 ]}
                             />
                           </CardBody>

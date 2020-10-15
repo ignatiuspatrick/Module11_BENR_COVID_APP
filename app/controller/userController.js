@@ -2,6 +2,7 @@
 var User = require('../model/userModel');
 var jwt = require('jsonwebtoken');
 const SECRET_KEY = require('../../secret');
+const uuid = require('uuid');
 
 exports.create_user = function(req, res){
   //handles null error
