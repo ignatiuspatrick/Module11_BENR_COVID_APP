@@ -35,7 +35,7 @@ module.exports = {
         if(payload.type != 'restaurant_owner'){
           return res.status(401).send({error: 'Access denied. Wrong user type.'})
         }
-        req.body.id = payload.id
+        req.body.ownerid = payload.id
         console.log('JWT is valid and payload is\n', payload);
         next();
       });
