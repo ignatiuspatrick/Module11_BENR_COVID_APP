@@ -10,7 +10,15 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import back from "../../hosts.js";
+import { useHistory } from "react-router-dom";
 const styles = {
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
@@ -37,76 +45,187 @@ const useStyles = makeStyles(styles);
 
 export default function ROInformation() {
   const classes = useStyles();
+  let history = useHistory();
 
-  const [businessname, setBusinessName] = React.useState('defaultvalue'); // get thru api
-  const [city, setCity] = React.useState('defaultvalue'); // get thru api
-  const [streetname, setStreetName] = React.useState('defaultvalue'); //get thru api
-  const [number, setNumber] = React.useState('defaultvalue'); //get thru api
-  const [postalcode, setPostalCode] = React.useState('defaultvalue'); //get thru api
+
+  //fetched
+  const [ownerid,setId] = React.useState(0);
+  const [restid, setRestId] = React.useState(0);
+  // fetched data to be displayed
+  const [restname, setRestName] = React.useState('');
+  const [streetname, setStreetName] = React.useState('');
+  const [number, setNumber] = React.useState('');
+  const [postalcode, setPostalCode] = React.useState('');
+  const [city, setCity] = React.useState('');
+
+  //to be updated
+  const [businessname, updateRestName] = React.useState(''); // get thru api
+  const [newCity, updateCity] = React.useState(''); // get thru api
+  const [newStreetname, updateStreetName] = React.useState(''); //get thru api
+  const [newNumber, updateNumber] = React.useState(''); //get thru api
+  const [newPostalcode, updatePostalCode] = React.useState(''); //get thru api
+
+  const onFormSubmit = e => {
+    e.preventDefault();
+    updateInfo();
+  }
+  
+  React.useEffect(()=>{
+    async function getId(){
+      const request = require('request');
+      let options = {
+        uri: back + '/superusers/getid',
+        withCredentials: true
+      };
+      request.get(options,(err,res,body)=>{
+        if (err) {
+          return console.log(err);
+        }
+        if(res.statusCode === 200){
+          var obj=JSON.parse(body);
+          setId(obj.id);
+          // var ownerid = obj.id;
+          // localStorage.setItem('ownerid',ownerid);
+          const request2 = require('request');
+          let options2 = {
+          uri: back + '/restaurants/getrest',
+          withCredentials: true,
+          form: {
+            ownerid: obj.id
+          }
+        }
+        request2.post(options2,(err,res,body)=>{
+          if (err) {
+            return console.log(err);
+          }
+          if(res.statusCode === 200){
+            var obj = JSON.parse(body);
+            setRestId(obj[0].id);
+            // display in dashboard this data 
+            setRestName(obj[0].name);
+            setStreetName(obj[0].streetname);
+            setNumber(obj[0].number);
+            setPostalCode(obj[0].postalcode);
+            setCity(obj[0].city);
+          }
+        });
+
+        }
+      });
+    }
+    getId();
+  },[]);
 
   // for the backend
   function updateInfo() {
-
+    const request = require('request');
+    let options = {
+      uri: back + '/restaurants/' + restid,
+      withCredentials:true,
+      form: {
+        name: businessname,
+        streetname: newStreetname,
+        number: newNumber,
+        postalcode: newPostalcode,
+        city: newCity,
+        ownerid: ownerid
+      }
+    }
+    request.put(options, (err,res,body)=>{
+      if (err) {
+        return console.log(err);
+    }
+    if (res.statusCode === 200) {
+      history.push("/rodash/restoinfo");
+    }
+    });
   }
 
   return (
     <div>
       <GridContainer>
-        <GridItem xs={12} sm={12} md={8}>
+        <GridItem xs={12} sm={12} >
           <Card>
+          <form className={classes.form} onSubmit={onFormSubmit}>
             <CardHeader color="info">
               <h4 className={classes.cardTitleWhite}>Edit Information</h4>
               <p className={classes.cardCategoryWhite}>Information about your restaurant</p>
             </CardHeader>
             <CardBody>
               <GridContainer>
+              
                 <GridItem xs={12} sm={12} md={4}>
                   <TextField 
-                  id="businessname" 
+                  id="name" 
                   label="Restaurant Name"
-                  defaultValue={businessname} 
                   fullWidth
-                  onChange={(e) => setBusinessName(e.target.value)}
-                  />
-                  <TextField 
-                  id="city" 
-                  label="City"
-                  defaultValue={city} 
-                  fullWidth
-                  onChange={(e) => setCity(e.target.value)}
+                  onChange={(e) => updateRestName(e.target.value)}
                   />
                   <TextField 
                   id="streetname" 
                   label="Street Name"
-                  defaultValue={streetname} 
                   fullWidth
-                  onChange={(e) => setStreetName(e.target.value)}
+                  onChange={(e) => updateStreetName(e.target.value)}
                   />
                   <TextField
                   id="number"
                   label="Number"
-                  type="number"
-                  defaultValue={number}
                   fullWidth
-                  onChange={(e) => setNumber(e.target.value)}
+                  onChange={(e) => updateNumber(e.target.value)}
                   />
                   <TextField 
                   id="postalcode" 
                   label="Postal Code"
-                  defaultValue={postalcode} 
                   fullWidth
-                  onChange={(e) => setPostalCode(e.target.value)}
+                  onChange={(e) => updatePostalCode(e.target.value)}
                   />
+                  <TextField 
+                  id="city" 
+                  label="City"
+                  fullWidth
+                  onChange={(e) => updateCity(e.target.value)}
+                  />
+                </GridItem>
+                <GridItem xs={12} sm={12} md={8}>
+                <TableContainer component={Paper}>
+                <Table className={classes.table} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Restaurant name</TableCell>
+                      <TableCell align="center">Street&nbsp;name</TableCell>
+                      <TableCell align="center">Building&nbsp;number</TableCell>
+                      <TableCell align="center">Post&nbsp;code</TableCell>
+                      <TableCell align="center">City</TableCell>
+                    </TableRow>
+                  </TableHead>
+                <TableBody>
+                    <TableRow key={restname}>
+                      <TableCell component="th" scope="row">
+                        {restname}
+                      </TableCell>
+                      <TableCell align="center">{streetname}</TableCell>
+                      <TableCell align="center">{number}</TableCell>
+                      <TableCell align="center">{postalcode}</TableCell>
+                      <TableCell align="center">{city}</TableCell>
+                    </TableRow>
+                </TableBody>
+                  </Table>
+                </TableContainer>
                 </GridItem>
               </GridContainer>
             </CardBody>
             <CardFooter>
-              <Button 
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
               color="info"
-              onClick={updateInfo}>
-                Update Details
-              </Button>
+              className={classes.submit}
+            >
+              Update details
+            </Button>
             </CardFooter>
+            </form>
           </Card>
         </GridItem>
       </GridContainer>

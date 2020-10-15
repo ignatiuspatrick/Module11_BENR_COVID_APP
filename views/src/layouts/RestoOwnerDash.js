@@ -13,7 +13,6 @@ import routes from "roroutes.js";
 import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
 import bgImage from "assets/img/sidebar-1.jpg";
 import logo from "assets/img/46681769.png";
-
 let ps;
 
 const switchRoutes = (
@@ -55,7 +54,16 @@ export default function RestoOwnerDash({ ...rest }) {
     }
   };
   // initialize and destroy the PerfectScrollbar plugin
+  
+
+
+
+
+
+
   React.useEffect(() => {
+  
+
     if (navigator.platform.indexOf("Win") > -1) {
       ps = new PerfectScrollbar(mainPanel.current, {
         suppressScrollX: true,
