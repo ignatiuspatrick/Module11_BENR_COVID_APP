@@ -26,16 +26,26 @@ import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
+import back from "../../hosts.js";
 import {
   dailySalesChart,
 } from "variables/charts.js";
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(styles);
 
 export default function Dashboard() {
   const classes = useStyles();
+  const [code, setCode] = React.useState('');
+  const [errorflag, setErrorflag] = React.useState(0);
+
+  const onFormSubmit = e => {
+    e.preventDefault();
+    registerPersonnel();
+    e.target.reset();
+  }
 
   // for the backend
   function deleteEmployee(pid) {
@@ -56,9 +66,79 @@ export default function Dashboard() {
 
   // for the backend
   function registerPersonnel() {
-    return console.log('personnel registered!')
+    if(!code || code.length!==8){
+      setErrorflag("Please provide a valid code!");
+    }else{
+    const request = require('request');
+    let options = {
+      uri: back + '/superusers/getid',
+      withCredentials: true
+    };
+    var ownerid = 0;
+    var restid = 0;
+    var name = '';
+    var streetname = '';
+    var number = '';
+    var postalcode = '';
+    var city = '';
+
+    request.get(options,(err,res,body)=>{
+      if (err) {
+        return console.log(err);
+      }
+      if(res.statusCode === 200){
+        var obj=JSON.parse(body);
+        ownerid = obj.id;
+        const request2 = require('request');
+        let options2 = {
+          uri: back + '/restaurants/getrestcode',
+          withCredentials: true,
+          form: {
+            ownerid: ownerid
+          }
+        }
+      request2.post(options2,(err,res,body)=>{
+        if (err) {
+          return console.log(err);
+        }
+        if(res.statusCode === 200){
+          var obj = JSON.parse(body);
+          restid = obj[0].id;
+          // display in dashboard this data 
+          name = obj[0].name;
+          streetname = obj[0].streetname;
+          number = obj[0].number;
+          postalcode = obj[0].postalcode;
+          city = obj[0].city;
+          // not finished, sql query in back end not correct
+          const request3 = require('request');
+          let options3 = {
+            uri: back + '/superusers/linkpersonnel/' + code + '/' + restid,
+            withCredentials:true
+          }
+          request3.post(options3,(err,res,body)=>{
+            if (err) {
+              return console.log(err);
+            }
+            if(res.statusCode === 200){
+              setErrorflag("Registered personnel with code: " + code);
+            }else if (res.statusCode === 400){
+              var obj = JSON.parse(body);
+              setErrorflag(obj.message);
+            }
+          });
+        }
+      });
+    }
+    });
   }
 
+  }
+  function getErrorMessage(){
+    if(errorflag!==0){
+      return errorflag;
+    }
+  }
   return (
     <div>
       <GridContainer>
@@ -196,10 +276,13 @@ export default function Dashboard() {
                             <h4 className={classes.cardTitleWhite}>Register Restaurant Personnel</h4>
                           </CardHeader>
                           <CardBody>
-                            <TextField id="outlined-basic" label="Enter Personnel Code" variant="outlined" helperText="6 Digits"/>
-                            <Button className={classes.registerPersonnelButton} variant="contained" onClick={registerPersonnel}>
+                            <form className={classes.form} onSubmit={onFormSubmit}>
+                            <TextField id="outlined-basic" label="Enter Personnel Code" variant="outlined" helperText="8 Digits"onChange={(e) => setCode(e.target.value)}/>
+                            <Button className={classes.submit} variant="contained" type="submit">
                                 Register
                             </Button>
+                            <Typography color='error'>{getErrorMessage()}</Typography>
+                            </form>
                           </CardBody>
                         </Card>
                       </GridItem>

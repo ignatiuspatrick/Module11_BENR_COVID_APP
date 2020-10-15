@@ -1,5 +1,5 @@
 'use strict';
-const { verifyRestaurantOwner } = require('./verify');
+const { verifyRestaurantOwner, verifySanitaryService } = require('./verify');
 const verify = require('./verify');
 
 
@@ -13,11 +13,10 @@ module.exports = function(app){
   .get(restaurants.get_all_restaurants)
   .post(verify.verifyRestaurantOwner,restaurants.create_restaurant);
   app.route('/restaurants/:restaurantId')
-  .get(restaurants.get_restaurant)
   .put(verify.verifyRestaurantOwner, restaurants.update_restaurant)
   .delete(restaurants.delete_restaurant);
   app.get('/restaurants/getrestcode/:restaurantId', verify.verifyPersonnel, restaurants.get_qrcode); //Dis for checkin-code
-
+  app.post('/restaurants/getrestcode',restaurants.get_restaurant);
 
   //USERS
   //(Customer/Restaurant personnel)
@@ -48,13 +47,14 @@ module.exports = function(app){
   app.route('/superusers/create').post(superusers.create_superuser);
   app.route('/superusers/login').post(superusers.login_superuser);
   // app.post('/superusers/markinfected', verify.verifySanitaryService, users.mark_user);
-  app.post('/superusers/markinfected', users.mark_user);
+  app.post('/superusers/markinfected',verifySanitaryService, users.mark_user);
   app.post('/superusers/linkpersonnel/:code/:restaurantId', verify.verifyRestaurantOwner, superusers.link_personnel);
   app.post('/superusers/logout/ro',verify.verifyRestaurantOwner, superusers.logout_ro);
   app.post('/superusers/logout/ss',verify.verifySanitaryService, superusers.logout_ss);
   app.post('/superusers/checkToken/ro', verify.verifyRestaurantOwner, (req,res) =>{
     res.status(200).send();
   });
+  app.get('/superusers/getid',verify.verifyRestaurantOwner,superusers.get_ro_id);
   app.post('/superusers/checkToken/ss', verify.verifySanitaryService, (req,res) =>{
     res.status(200).send();
   });

@@ -30,8 +30,8 @@ Restaurant.createRestaurant = function (newRestaurant, result) {
             });
 };
 
-Restaurant.getRestaurant = function (restaurantId, result) {
-        sql.query("SELECT name,streetname,number,postalcode,city FROM restaurants WHERE id = ?",restaurantId, (err, res) => {
+Restaurant.getRestaurant = function (ownerid, result) {
+        sql.query("SELECT id,name,streetname,number,postalcode,city FROM restaurants WHERE ownerid = ?",ownerid, (err, res) => {
                 if(err) {
                     console.log("error: ", err);
                     result(err, null);

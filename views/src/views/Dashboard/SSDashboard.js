@@ -26,6 +26,9 @@ import IconButton from '@material-ui/core/IconButton';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import TextField from '@material-ui/core/TextField';
 import nlAPI from 'nl.json';
+import back from "../../hosts.js";
+import Typography from '@material-ui/core/Typography';
+
 
 import {
   dailySalesChart,
@@ -55,8 +58,48 @@ function copyright(restoid) {
 export default function SSDashboard() {
   const classes = useStyles();
 
+  const [displayedcity, setDisplayedCity] = React.useState('Enschede');
+  const [code, setCode] = React.useState('');
+  const [errorflag, setErrorflag] = React.useState(0);
+
+  const onFormSubmit = e => {
+    e.preventDefault();
+    markInfectedUser();
+    e.target.reset();
+  }
   //for the backend
   function markInfectedUser(){
+    const request = require('request');
+    let options = {};
+    console.log(code);
+    options = {
+      uri: back + '/superusers/markinfected',
+      withCredentials: true,
+      form: {
+          code:code
+      }
+    };
+    request.post(options,(err,res,body) => {
+      var obj=JSON.parse(body);
+      if (err) {
+        return console.log(err);
+    } 
+    if(res.statusCode === 200) {
+      console.log(obj.success);
+      setErrorflag("Marked user: " + code +  " . Currently infected: " + obj.success);
+    }else {
+      console.log(obj.message);
+      setErrorflag("Error! " + obj.message);
+    }
+    });
+
+
+
+  }
+  function getErrorMessage(){
+    if(errorflag!==0){
+      return errorflag;
+    }
   }
 
   return (
@@ -127,10 +170,13 @@ export default function SSDashboard() {
               <h4 className={classes.cardTitleWhite}>Mark Infected User</h4>
             </CardHeader>
             <CardBody>
-              <TextField id="outlined-basic" label="Enter GGD Code" variant="outlined" helperText="8 Digits"/>
-              <Button className={classes.notifyButton} variant="contained" onClick={markInfectedUser}>
+              <form className={classes.form} onSubmit={onFormSubmit}>
+              <TextField id="outlined-basic" label="Enter GGD Code" variant="outlined" helperText="8 Digits" onChange={(e) => setCode(e.target.value)}/>
+              <Button type="submit" variant="contained" className={classes.submit}>
                   Notify
               </Button>
+              <Typography color='error'>{getErrorMessage()}</Typography>
+              </form>
             </CardBody>
           </Card>
         </GridItem>

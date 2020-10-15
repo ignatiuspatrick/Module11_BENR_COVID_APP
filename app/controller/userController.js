@@ -2,6 +2,7 @@
 var User = require('../model/userModel');
 var jwt = require('jsonwebtoken');
 const SECRET_KEY = require('../../secret');
+const uuid = require('uuid');
 
 exports.create_user = function(req, res){
   //handles null error
@@ -82,7 +83,7 @@ exports.mark_user = function(req, res){
   var code = req.body.code;
 
   if(!code || code.length != 8){
-    return res.status(400).send({error: true, message: 'Please provide the correct code'});
+    return res.status(400).send({error: true, message: 'Please provide the correct code!'});
   }
 
   code = code.toUpperCase(); //just to be sure.

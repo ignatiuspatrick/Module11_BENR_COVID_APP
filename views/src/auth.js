@@ -1,10 +1,13 @@
+import back from "hosts.js"
+
+
 const isAuthenticated = {
     isAuthro: false,
     authenticateRo(){
       const request = require('request');
       let options = {};
       options = {
-        uri: 'http://localhost:5000/superusers/checkToken/ro',
+        uri: back + '/superusers/checkToken/ro',
         withCredentials: true
       }
       request.post(options, (err, res, body) => {
@@ -35,7 +38,7 @@ const isAuthenticated = {
       const request = require('request');
       let options = {};
       options = {
-        uri: 'http://localhost:5000/superusers/checkToken/ro',
+        uri: back + '/superusers/checkToken/ss',
         withCredentials: true
       }
       request.post(options, (err, res, body) => {
