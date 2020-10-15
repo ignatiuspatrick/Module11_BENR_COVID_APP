@@ -215,12 +215,12 @@ export default function SignInSide() {
               </Grid>
               <Grid item xs={4}>
                 <Link href="/registerRo" variant="body2">
-                  {"Register as restaurant owner?"}
+                  Register as restaurant owner?
                 </Link>
               </Grid>
               <Grid item xs={4}>
                 <Link href="/registerSs" variant="body2">
-                  {"Register as GGD?"}
+                  Register as GGD?
                 </Link>
               </Grid>
             </Grid>
