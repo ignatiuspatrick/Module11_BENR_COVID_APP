@@ -1,14 +1,19 @@
 'user strict';
 var sql = require('../../db.js');
 const cryptoRandomString = require('crypto-random-string');
+const bcrypt = require('bcrypt');
+const saltRounds = 12;
 
-//User object constructor, needs more fields
+
+
+//User object constructor. This is sufficient for Customers.
 var User = function(user){
   this.id = user.id;
   this.type = user.type;
 };
 
-User.createUser = function (newUser, result) {
+//We barely store anything from customers; just id and type
+User.createCustomer = function (newUser, result) {
         sql.query("INSERT INTO users set ?", newUser, function (err, res) {
                 if(err) {
                     console.log("error: ", err);
@@ -18,6 +23,46 @@ User.createUser = function (newUser, result) {
                     result(null, res.insertId);
                 }
             });
+};
+
+//for Restaurant personnel we store id, type, email and their hashed+salted pwd.
+User.createPersonnel = function (userId, type, email, password, result){
+  bcrypt.hash(password, saltRounds).then(function(hash){
+    sql.query("INSERT INTO users SET id = ?, type = ?, email = ?, password = ?", [userId, type, email, hash], function(err, res){
+      if(err){
+        return result(err, null);
+      } else {
+        return result(null, userId)
+      }
+    });
+  });
+};
+
+//Sign in personnel through unique email and a password.
+User.signInPersonnel = function(email, password, result){
+  sql.query('SELECT password FROM users WHERE email = ?',email, function(err, queryresult, fields) {
+      if(err){
+        console.log("error: ", err);
+        result(err, false);
+      } else {
+        if(queryresult.length>0){ //To make sure we got query results
+          console.log(queryresult);
+          let hash = queryresult[0].password;
+          bcrypt.compare(password, hash).then(function(success) { //Async compare for higher speed
+            if(success) {
+              result(null, true); //yay login
+            }else{
+              result(null, false); //nay login
+            }
+          }).catch((error) => {
+            result(error,'Promise error');
+          });
+        }else{ //No query results
+          console.log("Not registered or wrong email?");
+          result(null, false);
+        }
+      }
+  });
 };
 
 User.getUser = function (userId, result) {

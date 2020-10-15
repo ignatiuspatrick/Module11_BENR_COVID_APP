@@ -21,8 +21,17 @@ module.exports = function(app){
   //USERS
   //(Customer/Restaurant personnel)
   var users = require('../controller/userController');
+
+    /*
+    To create customer: provide just a type customer.
+    To create personnel: Provide type personnel, email and password.
+    */
   app.route('/users')
   .post(users.create_user);
+
+//logs in personnel with email + password
+  app.route('/users/loginpersonnel')
+  .post(users.login_personnel)
   app.route('/users/:userId')
   .get(users.get_user)
   .put(users.update_user)
