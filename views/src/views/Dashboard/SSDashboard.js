@@ -55,8 +55,6 @@ function copyright(restoid) {
 export default function SSDashboard() {
   const classes = useStyles();
 
-  const [displayedcity, setDisplayedCity] = React.useState('Enschede');
-
   //for the backend
   function markInfectedUser(){
   }
