@@ -3,7 +3,7 @@ import Person from "@material-ui/icons/Person";
 import Notifications from "@material-ui/icons/Notifications";
 // core components/views for Admin layout
 import RODashboard from "views/Dashboard/RODashboard.js";
-import ROUserProfile from "views/UserProfile/ROUserProfile.js";
+import ROInformation from "views/UserProfile/ROInformation.js";
 import RONotifications from "views/Notifications/RONotifications.js";
 
 const roRoutes = [
@@ -22,10 +22,10 @@ const roRoutes = [
     layout: "/rodash"
   },
   {
-    path: "/user",
-    name: "User Profile",
+    path: "/restoinfo",
+    name: "Information",
     icon: Person,
-    component: ROUserProfile,
+    component: ROInformation,
     layout: "/rodash"
   }
 ];

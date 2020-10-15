@@ -36,7 +36,7 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
-export default function ROUserProfile() {
+export default function ROInformation() {
   const classes = useStyles();
   return (
     <div>
@@ -44,8 +44,8 @@ export default function ROUserProfile() {
         <GridItem xs={12} sm={12} md={8}>
           <Card>
             <CardHeader color="info">
-              <h4 className={classes.cardTitleWhite}>Edit Profile</h4>
-              <p className={classes.cardCategoryWhite}>Complete your profile</p>
+              <h4 className={classes.cardTitleWhite}>Edit Information</h4>
+              <p className={classes.cardCategoryWhite}>Information about your restaurant</p>
             </CardHeader>
             <CardBody>
               <GridContainer>
@@ -149,27 +149,6 @@ export default function ROUserProfile() {
             <CardFooter>
               <Button color="info">Update Profile</Button>
             </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card profile>
-            <CardAvatar profile>
-              <a href="#pablo" onClick={e => e.preventDefault()}>
-                <img src={avatar} alt="..." />
-              </a>
-            </CardAvatar>
-            <CardBody profile>
-              <h6 className={classes.cardCategory}>CEO / CO-FOUNDER</h6>
-              <h4 className={classes.cardTitle}>Alec Thompson</h4>
-              <p className={classes.description}>
-                Don{"'"}t be scared of the truth because we need to restart the
-                human foundation in truth And I love you like Kanye loves Kanye
-                I love Rick Owens’ bed design but the back is...
-              </p>
-              <Button color="info" round>
-                Follow
-              </Button>
-            </CardBody>
           </Card>
         </GridItem>
       </GridContainer>

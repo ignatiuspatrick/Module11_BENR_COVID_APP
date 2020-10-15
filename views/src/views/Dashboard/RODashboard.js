@@ -56,7 +56,7 @@ export default function Dashboard() {
 
   // for the backend
   function registerPersonnel() {
-
+    return console.log('personnel registered!')
   }
 
   return (
