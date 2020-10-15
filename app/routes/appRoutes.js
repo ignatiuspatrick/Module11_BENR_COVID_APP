@@ -16,7 +16,7 @@ module.exports = function(app){
   .put(verify.verifyRestaurantOwner, restaurants.update_restaurant)
   .delete(restaurants.delete_restaurant);
   app.get('/restaurants/getrestcode/:restaurantId', verify.verifyPersonnel, restaurants.get_qrcode); //Dis for checkin-code
-  app.post('/restaurants/getrestcode',restaurants.get_restaurant);
+  app.post('/restaurants/getrest',restaurants.get_restaurant);
 
   //USERS
   //(Customer/Restaurant personnel)

@@ -78,7 +78,7 @@ Restaurant.getNotSelected = function (result) {
 
 Restaurant.updateRestaurant = function(restaurantId, newRestaurant, result){
     let update = "UPDATE restaurants SET name = ?,streetname = ?,number = ?,postalcode = ?, city = ?, ownerid = ? WHERE id = ?";
-    let query = mysql.format(update,[newRestaurant.name,newRestaurant.location,newRestaurant.contact,newRestaurant.ownerid,restaurantId]);
+    let query = mysql.format(update,[newRestaurant.name,newRestaurant.streetname,newRestaurant.number,newRestaurant.postalcode,newRestaurant.city,newRestaurant.ownerid,restaurantId]);
     sql.query(query, (err,res)=>{
         if(err) {
             console.log("error: ", err);

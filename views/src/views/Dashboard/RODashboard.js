@@ -36,10 +36,72 @@ import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(styles);
 
+
+
+
 export default function Dashboard() {
   const classes = useStyles();
   const [code, setCode] = React.useState('');
   const [errorflag, setErrorflag] = React.useState(0);
+  // const [name,setName] = React.useState('');
+  const [ownerid,setId] = React.useState(0);
+  const [restid, setRestId] = React.useState(0);
+  const [restname, setRestName] = React.useState('');
+  const [streetname, setStreetName] = React.useState('');
+  const [number, setNumber] = React.useState('');
+  const [postalcode, setPostalCode] = React.useState('');
+  const [city, setCity] = React.useState('');
+  
+  React.useEffect(()=>{
+    async function getId(){
+      const request = require('request');
+      let options = {
+        uri: back + '/superusers/getid',
+        withCredentials: true
+      };
+      request.get(options,(err,res,body)=>{
+        if (err) {
+          return console.log(err);
+        }
+        if(res.statusCode === 200){
+          var obj=JSON.parse(body);
+          setId(obj.id);
+          // var ownerid = obj.id;
+          // localStorage.setItem('ownerid',ownerid);
+          const request2 = require('request');
+          let options2 = {
+          uri: back + '/restaurants/getrest',
+          withCredentials: true,
+          form: {
+            ownerid: obj.id
+          }
+        }
+        request2.post(options2,(err,res,body)=>{
+          if (err) {
+            return console.log(err);
+          }
+          if(res.statusCode === 200){
+            var obj = JSON.parse(body);
+            setRestId(obj[0].id);
+            // display in dashboard this data 
+            setRestName(obj[0].name);
+            setStreetName(obj[0].streetname);
+            setNumber(obj[0].number);
+            setPostalCode(obj[0].postalcode);
+            setCity(obj[0].city);
+          }
+        });
+
+        }
+      });
+    }
+    getId();
+  },[]);
+
+
+
+
+
 
   const onFormSubmit = e => {
     e.preventDefault();
@@ -69,68 +131,24 @@ export default function Dashboard() {
     if(!code || code.length!==8){
       setErrorflag("Please provide a valid code!");
     }else{
-    const request = require('request');
-    let options = {
-      uri: back + '/superusers/getid',
-      withCredentials: true
-    };
-    var ownerid = 0;
-    var restid = 0;
-    var name = '';
-    var streetname = '';
-    var number = '';
-    var postalcode = '';
-    var city = '';
-
-    request.get(options,(err,res,body)=>{
-      if (err) {
-        return console.log(err);
+      // not finished, sql query in back end not correct
+      const request3 = require('request');
+      let options3 = {
+        uri: back + '/superusers/linkpersonnel/' + code + '/' + restid,
+        withCredentials:true
       }
-      if(res.statusCode === 200){
-        var obj=JSON.parse(body);
-        ownerid = obj.id;
-        const request2 = require('request');
-        let options2 = {
-          uri: back + '/restaurants/getrestcode',
-          withCredentials: true,
-          form: {
-            ownerid: ownerid
-          }
-        }
-      request2.post(options2,(err,res,body)=>{
+      request3.post(options3,(err,res,body)=>{
         if (err) {
           return console.log(err);
         }
         if(res.statusCode === 200){
+          console.log("Restid: " + restid);
+          setErrorflag("Registered personnel with code: " + code);
+        }else if (res.statusCode === 400){
           var obj = JSON.parse(body);
-          restid = obj[0].id;
-          // display in dashboard this data 
-          name = obj[0].name;
-          streetname = obj[0].streetname;
-          number = obj[0].number;
-          postalcode = obj[0].postalcode;
-          city = obj[0].city;
-          // not finished, sql query in back end not correct
-          const request3 = require('request');
-          let options3 = {
-            uri: back + '/superusers/linkpersonnel/' + code + '/' + restid,
-            withCredentials:true
-          }
-          request3.post(options3,(err,res,body)=>{
-            if (err) {
-              return console.log(err);
-            }
-            if(res.statusCode === 200){
-              setErrorflag("Registered personnel with code: " + code);
-            }else if (res.statusCode === 400){
-              var obj = JSON.parse(body);
-              setErrorflag(obj.message);
-            }
-          });
+          setErrorflag(obj.message);
         }
       });
-    }
-    });
   }
 
   }
@@ -139,6 +157,13 @@ export default function Dashboard() {
       return errorflag;
     }
   }
+  // console.log("Ownerid: " + ownerid);
+  // console.log("Restid: " + restid);
+  // console.log("Rest name: " + restname);
+  // console.log("Street name: " + streetname);
+  // console.log("number: " + number);
+  // console.log("Post code: " + postalcode);
+  // console.log("city: " + city);
   return (
     <div>
       <GridContainer>
