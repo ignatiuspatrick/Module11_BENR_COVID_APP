@@ -18,13 +18,14 @@ import RestaurantIcon from '@material-ui/icons/Restaurant';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from "react-router-dom";
 import isAuthenticated from "../auth.js";
+import back from "../hosts.js";
 
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://www.google.com/search?q=mindhash+bv&oq=mindhash&aqs=chrome.1.69i57j35i39j0l3j69i61l3.2853j0j7&sourceid=chrome&ie=UTF-8">
+      <Link color="inherit" href="https://www.mindhash.nl/">
         Mindhash BV.
       </Link>{' '}
       {new Date().getFullYear()}
@@ -86,7 +87,7 @@ export default function SignInSide() {
     console.log(value);
     if(value === 0){
       options = {
-        uri: 'http://195.201.98.111:5000/superusers/login',
+        uri: back + '/superusers/login',
         withCredentials: true,
         form: {
             username: username,
@@ -96,7 +97,7 @@ export default function SignInSide() {
       };
     } else if(value === 1){
       options = {
-        uri: 'http://195.201.98.111:5000/superusers/login',
+        uri: back + '/superusers/login',
         withCredentials: true,
         form: {
             username: username,

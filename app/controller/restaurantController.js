@@ -61,7 +61,7 @@ exports.create_restaurant = function(req, res) {
 };
 
 exports.get_restaurant = function(req, res) {
-  Restaurant.getRestaurant(req.params.restaurantId, function(err, restaurant) {
+  Restaurant.getRestaurant(req.body.ownerid, function(err, restaurant) {
     if (err){
       return res.send(err);
     }

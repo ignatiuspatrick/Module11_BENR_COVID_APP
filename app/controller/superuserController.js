@@ -86,17 +86,23 @@ exports.logout_ro = function(req,res){
   // even if this cookie is deleted at client side, it is still possible to steal session
   // so we need to invalidate these tokens at back end
   var tokenro = req.cookies.tokenro || '';
-  console.log("cookie ro cleared: " + req.cookies.tokenro);
+  console.log("cookie ro cleared: " + tokenro);
   res.status(200).clearCookie('tokenro', {httpOnly: true, sameSite: 'Lax'}).send();
 
 };
 
 exports.logout_ss = function(req,res){
   var tokenss = req.cookies.tokenss || '';
-  console.log("cookie ss cleared: " + req.cookies.tokenss);
+  console.log("cookie ss cleared: " + tokenss);
   res.status(200).clearCookie('tokenss', {httpOnly: true, sameSite: 'Lax'}).send();
 };
-
+exports.get_ro_id = function(req,res){
+  var tokenro = req.cookies.tokenro || '';
+  var decoded = jwt.decode(tokenro , {complete: true});
+  console.log(decoded.payload.id);
+  var id = decoded.payload.id;
+  return res.status(200).send({id:id});
+};
 
 exports.link_personnel = function(req, res){
   if(!req.params.code || !req.params.restaurantId){

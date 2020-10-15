@@ -19,7 +19,7 @@ export default function Footer(props) {
           <span style={{paddingBottom:"10px"}}>
               &copy; {1900 + new Date().getYear()}{" "}
               <a
-                href="https://www.creative-tim.com?ref=mdr-footer"
+                href="https://www.mindhash.nl/"
                 target="_blank"
                 className={classes.a}
               >

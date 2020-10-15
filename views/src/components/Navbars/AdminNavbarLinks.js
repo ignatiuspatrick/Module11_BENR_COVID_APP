@@ -20,6 +20,7 @@ import { useHistory } from "react-router-dom";
 import isAuthenticated from "../../auth"
 
 import styles from "assets/jss/material-dashboard-react/components/headerLinksStyle.js";
+import back from "../../hosts.js";
 
 const useStyles = makeStyles(styles);
 
@@ -76,12 +77,12 @@ export default function AdminNavbarLinks(props) {
     var options = {};
     if (dashboardtype === "ss") {
       options = {
-        uri: 'http://195.201.98.111:5000/superusers/logout/ss',
+        uri: back + '/superusers/logout/ss',
         withCredentials: true
       };
     } else if (dashboardtype === "ro") {
       options = {
-        uri: 'http://195.201.98.111:5000/superusers/logout/ro',
+        uri: back + '/superusers/logout/ro',
         withCredentials: true
       };
     }

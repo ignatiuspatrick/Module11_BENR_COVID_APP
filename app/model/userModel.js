@@ -142,7 +142,7 @@ insert into checkin (id, restid, userid, checkin_time, checkout_time, at_risk) v
     if(err){
       return result(err, null);
     } else {
-      console.log('Succesfully market people as `at risk`.');
+      console.log('Succesfully marked user/customer as `at risk`.');
       return result(err, queryresult.affectedRows); //send back how many people are at risk
     }
   });
