@@ -12,8 +12,6 @@ import Poppers from "@material-ui/core/Popper";
 import Divider from "@material-ui/core/Divider";
 // @material-ui/icons
 import Person from "@material-ui/icons/Person";
-import Notifications from "@material-ui/icons/Notifications";
-import Dashboard from "@material-ui/icons/Dashboard";
 // core components
 import Button from "components/CustomButtons/Button.js";
 import { useHistory } from "react-router-dom";
@@ -140,13 +138,18 @@ export default function AdminNavbarLinks(props) {
               <Paper>
                 <ClickAwayListener onClickAway={handleCloseProfile}>
                   <MenuList role="menu">
-                    <MenuItem
+                    {dashboardtype === "ro" ? 
+                    <div>
+                      <MenuItem
                       onClick={handleGoToProfile}
                       className={classes.dropdownItem}
-                    >
-                      Restaurant Information
-                    </MenuItem>
-                    <Divider light />
+                      >
+                        Restaurant Information
+                      </MenuItem>
+                      <Divider light />
+                    </div>
+                    :
+                    null}
                     <MenuItem
                       onClick={handleLogOut}
                       className={classes.dropdownItem}

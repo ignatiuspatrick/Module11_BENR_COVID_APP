@@ -54,6 +54,14 @@ export default function Dashboard() {
   var dd = String(today.getDate()).padStart(2, '0');
   var mm = today.toLocaleString('default', { month: 'long' });
   var yyyy = today.getFullYear();
+
+  // for check-in table
+  var tablehead = ["Check In", "Check Out"];
+  var tabledata = [
+    ["13.00","15.00"],
+    ["14.00","16.00"]
+  ];
+
   
   React.useEffect(()=>{
     async function getId(){
@@ -284,11 +292,8 @@ export default function Dashboard() {
             <CardBody>
               <Table
                 tableHeaderColor="info"
-                tableHead={["Check In", "Check Out"]}
-                tableData={[
-                  ["13.00","15.00"],
-                  ["14.00","16.00"]
-                ]}
+                tableHead={tablehead}
+                tableData={tabledata}
               />
             </CardBody>
           </Card>

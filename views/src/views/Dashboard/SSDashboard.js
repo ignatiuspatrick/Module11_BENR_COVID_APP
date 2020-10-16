@@ -20,12 +20,9 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-import DialogSelect from 'components/DialogSelect/DialogSelect.js'
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import TextField from '@material-ui/core/TextField';
-import nlAPI from 'nl.json';
 import back from "../../hosts.js";
 import Typography from '@material-ui/core/Typography';
 
@@ -38,28 +35,18 @@ import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js"
 const useStyles = makeStyles(styles);
 
 // backend work
-function remindRestaurant(rid) {
-    return console.log("restaurant reminded!");
-}
-
-function copyright(restoid) {
-    return(
-        <IconButton 
-        color="inherit" 
-        aria-label="alert restaurant" 
-        component="span"
-        onClick={() => remindRestaurant(restoid)}>
-            <NotificationImportantIcon />
-        </IconButton>
-    );
-}
 
 export default function SSDashboard() {
   const classes = useStyles();
 
-  const [displayedcity, setDisplayedCity] = React.useState('Enschede');
   const [code, setCode] = React.useState('');
   const [errorflag, setErrorflag] = React.useState(0);
+
+  var recentnotiftablehead = ["GGD Code", "City"];
+  var recentnotiftabledata = [
+    ["******", "Enschede"],
+    ["******", "Utrecht"]
+    ];
 
   const onFormSubmit = e => {
     e.preventDefault();
@@ -168,7 +155,7 @@ export default function SSDashboard() {
             <CardBody>
               <form className={classes.form} onSubmit={onFormSubmit}>
               <TextField id="outlined-basic" label="Enter GGD Code" variant="outlined" helperText="8 Digits" onChange={(e) => setCode(e.target.value)}/>
-              <Button type="submit" variant="contained" className={classes.submit}>
+              <Button type="submit" variant="contained" className={classes.notifyUserButton}>
                   Notify
               </Button>
               <Typography color='error'>{getErrorMessage()}</Typography>
@@ -181,11 +168,7 @@ export default function SSDashboard() {
         <GridItem xs={12} sm={12} md={10}>
             <Card>
                 <CardHeader color="danger">
-                    <DialogSelect title="Select City"
-                    dialogTitle="Pick a City"
-                    cat1="Province"
-                    cat2="City"
-                    collection={nlAPI}/>
+                  <h4 className={classes.cardTitleWhite}>Statistics of Infected Users</h4>
                 </CardHeader>
                 <CardBody>
                     <GridContainer>
@@ -194,17 +177,14 @@ export default function SSDashboard() {
                                 <CardHeader color="danger">
                                     <h4 className={classes.cardTitleWhite}>Recent Notifications</h4>
                                     <p className={classes.cardCategoryWhite}>
-                                        Restaurants with COVID-19 Cases
+                                        Marked COVID-19 Cases from Restaurants
                                     </p>
                                 </CardHeader>
                                 <CardBody>
                                 <Table
                                     tableHeaderColor="danger"
-                                    tableHead={["Date", "Restaurant", "City","Reminded","Remind"]}
-                                    tableData={[
-                                    ["6th of October","Stanislaus Brewkovich", "Enschede","Yes", copyright(0)],
-                                    ["7th of October","Gouderegentstraat 10", "Enschede","No", copyright(1)]
-                                    ]}
+                                    tableHead={recentnotiftablehead}
+                                    tableData={recentnotiftabledata}
                                 />
                                 </CardBody>
                             </Card>

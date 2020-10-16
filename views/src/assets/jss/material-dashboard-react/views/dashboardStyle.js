@@ -80,7 +80,7 @@ const dashboardStyle = {
   formControl: {
     marginTop: '10px'
   },
-  notifyButton: {
+  notifyUserButton: {
     marginLeft: "15px",
     height: "55px",
     backgroundColor: "#e53935",
@@ -99,7 +99,8 @@ const dashboardStyle = {
   },
   downloadQRButtonGroup: {
     color: "#999",
-    marginLeft: 10
+    marginLeft: '10px',
+    marginTop: '5px'
   }
 };
 
