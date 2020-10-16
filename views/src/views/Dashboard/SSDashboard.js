@@ -29,7 +29,6 @@ import nlAPI from 'nl.json';
 import back from "../../hosts.js";
 import Typography from '@material-ui/core/Typography';
 
-
 import {
   dailySalesChart,
 } from "variables/charts.js";
@@ -92,9 +91,6 @@ export default function SSDashboard() {
       setErrorflag("Error! " + obj.message);
     }
     });
-
-
-
   }
   function getErrorMessage(){
     if(errorflag!==0){

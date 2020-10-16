@@ -6,15 +6,15 @@ import { makeStyles } from "@material-ui/core/styles";
 import Icon from "@material-ui/core/Icon";
 // @material-ui/icons
 import Store from "@material-ui/icons/Store";
-import Warning from "@material-ui/icons/Warning";
 import DateRange from "@material-ui/icons/DateRange";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
 import AccessTime from "@material-ui/icons/AccessTime"
+import GetAppIcon from '@material-ui/icons/GetApp';
+import RestaurantIcon from '@material-ui/icons/Restaurant';
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Table from "components/Table/Table.js";
-import Danger from "components/Typography/Danger.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
@@ -36,9 +36,6 @@ import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(styles);
 
-
-
-
 export default function Dashboard() {
   const classes = useStyles();
   const [code, setCode] = React.useState('');
@@ -51,6 +48,12 @@ export default function Dashboard() {
   const [number, setNumber] = React.useState('');
   const [postalcode, setPostalCode] = React.useState('');
   const [city, setCity] = React.useState('');
+  const [qrformat, setQRFormat] = React.useState('');
+
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = today.toLocaleString('default', { month: 'long' });
+  var yyyy = today.getFullYear();
   
   React.useEffect(()=>{
     async function getId(){
@@ -98,15 +101,19 @@ export default function Dashboard() {
     getId();
   },[]);
 
-
-
-
-
-
   const onFormSubmit = e => {
     e.preventDefault();
     registerPersonnel();
     e.target.reset();
+  }
+
+  // for the backend
+  function handleQRFormatChange(qrf) {
+    setQRFormat(qrf);
+  }
+
+  function downloadQRCode() {
+    console.log('downloaded format ' + qrformat);
   }
 
   // for the backend
@@ -171,22 +178,23 @@ export default function Dashboard() {
           <Card>
             <CardHeader color="info" stats icon>
               <CardIcon color="info">
-                <Icon>content_copy</Icon>
+                <GetAppIcon />
               </CardIcon>
-              <p className={classes.cardCategory}>Current Visitors</p>
-              <h3 className={classes.cardTitle}>
-                51/50 <small>visitors</small>
-              </h3>
+              <p className={classes.cardCategory}>Download QR Code</p>
+
+              <ButtonGroup color="default" aria-label="outlined primary button group" size="small">
+                  <Button onClick={(e) => handleQRFormatChange("PDF")}>PDF</Button>
+                  <Button onClick={(e) => handleQRFormatChange("JPEG")}>JPEG</Button>
+                  <Button onClick={(e) => handleQRFormatChange("PNG")}>PNG</Button>
+              </ButtonGroup>
             </CardHeader>
             <CardFooter stats>
-              <div className={classes.stats}>
-                <Danger>
-                  <Warning />
-                </Danger>
-                <a href="#pablo" onClick={e => e.preventDefault()}>
-                  There might be too many visitors now.
-                </a>
-              </div>
+              {qrformat === '' ? null 
+              :
+              <Button className={classes.downloadQRButton} variant="contained" onClick={downloadQRCode}>
+                Download {qrformat}
+              </Button> 
+              }
             </CardFooter>
           </Card>
         </GridItem>
@@ -266,9 +274,12 @@ export default function Dashboard() {
         <GridItem xs={12} sm={12} md={6}>
           <Card>
             <CardHeader color="info">
-              <h4 className={classes.cardTitleWhite}>Recent Visits</h4>
+              <CardIcon color="info">
+                <RestaurantIcon />
+              </CardIcon>
+              <h4 className={classes.cardTitleWhite}>Recent Check-ins</h4>
               <p className={classes.cardCategoryWhite}>
-                29th September, 2020
+                {dd}th of {mm}, {yyyy}
               </p>
             </CardHeader>
             <CardBody>
@@ -303,7 +314,7 @@ export default function Dashboard() {
                           <CardBody>
                             <form className={classes.form} onSubmit={onFormSubmit}>
                             <TextField id="outlined-basic" label="Enter Personnel Code" variant="outlined" helperText="8 Digits"onChange={(e) => setCode(e.target.value)}/>
-                            <Button className={classes.submit} variant="contained" type="submit">
+                            <Button className={classes.registerPersonnelButton} variant="contained" type="submit">
                                 Register
                             </Button>
                             <Typography color='error'>{getErrorMessage()}</Typography>

@@ -77,6 +77,9 @@ const dashboardStyle = {
       lineHeight: "1"
     }
   },
+  formControl: {
+    marginTop: '10px'
+  },
   notifyButton: {
     marginLeft: "15px",
     height: "55px",
@@ -88,7 +91,12 @@ const dashboardStyle = {
     height: "55px",
     backgroundColor: "#00acc1",
     color:"white"
-  }
+  },
+  downloadQRButton: {
+    height: "35px",
+    backgroundColor: "#00acc1",
+    color:"white"
+  },
 };
 
 export default dashboardStyle;
