@@ -181,8 +181,7 @@ export default function Dashboard() {
                 <GetAppIcon />
               </CardIcon>
               <p className={classes.cardCategory}>Download QR Code</p>
-
-              <ButtonGroup color="default" aria-label="outlined primary button group" size="small">
+              <ButtonGroup color="inherit" aria-label="outlined primary button group" size="small" className={classes.downloadQRButtonGroup}>
                   <Button onClick={(e) => handleQRFormatChange("PDF")}>PDF</Button>
                   <Button onClick={(e) => handleQRFormatChange("JPEG")}>JPEG</Button>
                   <Button onClick={(e) => handleQRFormatChange("PNG")}>PNG</Button>

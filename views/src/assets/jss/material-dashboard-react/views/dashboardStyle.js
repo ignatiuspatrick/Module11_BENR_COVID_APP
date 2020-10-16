@@ -97,6 +97,10 @@ const dashboardStyle = {
     backgroundColor: "#00acc1",
     color:"white"
   },
+  downloadQRButtonGroup: {
+    color: "#999",
+    marginLeft: 10
+  }
 };
 
 export default dashboardStyle;
