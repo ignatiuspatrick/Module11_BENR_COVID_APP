@@ -25,6 +25,7 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import Box from '@material-ui/core/Box';
 
 import back from "../../hosts.js";
 import {
@@ -38,16 +39,17 @@ const useStyles = makeStyles(styles);
 
 export default function Dashboard() {
   const classes = useStyles();
-  const [code, setCode] = React.useState('');
+  // const [code, setCode] = React.useState('');
   const [errorflag, setErrorflag] = React.useState(0);
   // const [name,setName] = React.useState('');
-  const [ownerid,setId] = React.useState(0);
-  const [restid, setRestId] = React.useState(0);
-  const [restname, setRestName] = React.useState('');
-  const [streetname, setStreetName] = React.useState('');
-  const [number, setNumber] = React.useState('');
-  const [postalcode, setPostalCode] = React.useState('');
-  const [city, setCity] = React.useState('');
+  // const [ownerid,setId] = React.useState(0);
+  const username = localStorage.getItem('name');
+  // const [restid, setRestId] = React.useState(0);
+  // const [restname, setRestName] = React.useState('');
+  // const [streetname, setStreetName] = React.useState('');
+  // const [number, setNumber] = React.useState('');
+  // const [postalcode, setPostalCode] = React.useState('');
+  // const [city, setCity] = React.useState('');
   const [qrformat, setQRFormat] = React.useState('');
 
   var today = new Date();
@@ -62,58 +64,58 @@ export default function Dashboard() {
     ["14th of October", "14.00","16.00"]
   ];
 
-  
-  React.useEffect(()=>{
-    async function getId(){
-      const request = require('request');
-      let options = {
-        uri: back + '/superusers/getid',
-        withCredentials: true
-      };
-      request.get(options,(err,res,body)=>{
-        if (err) {
-          return console.log(err);
-        }
-        if(res.statusCode === 200){
-          var obj=JSON.parse(body);
-          setId(obj.id);
-          // var ownerid = obj.id;
-          // localStorage.setItem('ownerid',ownerid);
-          const request2 = require('request');
-          let options2 = {
-          uri: back + '/restaurants/getrest',
-          withCredentials: true,
-          form: {
-            ownerid: obj.id
-          }
-        }
-        request2.post(options2,(err,res,body)=>{
-          if (err) {
-            return console.log(err);
-          }
-          if(res.statusCode === 200){
-            var obj = JSON.parse(body);
-            setRestId(obj[0].id);
-            // display in dashboard this data 
-            setRestName(obj[0].name);
-            setStreetName(obj[0].streetname);
-            setNumber(obj[0].number);
-            setPostalCode(obj[0].postalcode);
-            setCity(obj[0].city);
-          }
-        });
+  //might be useful for later
+  // React.useEffect(()=>{
+  //   async function getId(){
+  //     const request = require('request');
+  //     let options = {
+  //       uri: back + '/superusers/getid',
+  //       withCredentials: true
+  //     };
+  //     request.get(options,(err,res,body)=>{
+  //       if (err) {
+  //         return console.log(err);
+  //       }
+  //       if(res.statusCode === 200){
+  //         var obj=JSON.parse(body);
+  //         setId(obj.id);
+  //         // var ownerid = obj.id;
+  //         // localStorage.setItem('ownerid',ownerid);
+  //         const request2 = require('request');
+  //         let options2 = {
+  //         uri: back + '/restaurants/getrest',
+  //         withCredentials: true,
+  //         form: {
+  //           ownerid: obj.id
+  //         }
+  //       }
+  //       request2.post(options2,(err,res,body)=>{
+  //         if (err) {
+  //           return console.log(err);
+  //         }
+  //         if(res.statusCode === 200){
+  //           var obj = JSON.parse(body);
+  //           setRestId(obj[0].id);
+  //           // display in dashboard this data 
+  //           setRestName(obj[0].name);
+  //           setStreetName(obj[0].streetname);
+  //           setNumber(obj[0].number);
+  //           setPostalCode(obj[0].postalcode);
+  //           setCity(obj[0].city);
+  //         }
+  //       });
 
-        }
-      });
-    }
-    getId();
-  },[]);
+  //       }
+  //     });
+  //   }
+  //   getId();
+  // },[]);
 
-  const onFormSubmit = e => {
-    e.preventDefault();
-    registerPersonnel();
-    e.target.reset();
-  }
+  // const onFormSubmit = e => {
+  //   e.preventDefault();
+  //   registerPersonnel();
+  //   e.target.reset();
+  // }
 
   // for the backend
   function handleQRFormatChange(qrf) {
@@ -127,64 +129,10 @@ export default function Dashboard() {
   function downloadQRCode() {
     console.log('downloaded format ' + qrformat);
   }
-
-  // for the backend
-  function deleteEmployee(pid) {
-    return console.log("personnel deleted!");
-  }
-
-  function deleteButton(pid){
-    return(
-      <IconButton 
-        color="inherit" 
-        aria-label="alert restaurant" 
-        component="span"
-        onClick={() => deleteEmployee(pid)}>
-            <HighlightOffIcon />
-        </IconButton>
-    );
-  }
-
-  // for the backend
-  function registerPersonnel() {
-    if(!code || code.length!==8){
-      setErrorflag("Please provide a valid code!");
-    }else{
-      // not finished, sql query in back end not correct
-      const request3 = require('request');
-      let options3 = {
-        uri: back + '/superusers/linkpersonnel/' + code + '/' + restid,
-        withCredentials:true
-      }
-      request3.post(options3,(err,res,body)=>{
-        if (err) {
-          return console.log(err);
-        }
-        if(res.statusCode === 200){
-          console.log("Restid: " + restid);
-          setErrorflag("Registered personnel with code: " + code);
-        }else if (res.statusCode === 400){
-          var obj = JSON.parse(body);
-          setErrorflag(obj.message);
-        }
-      });
-  }
-
-  }
-  function getErrorMessage(){
-    if(errorflag!==0){
-      return errorflag;
-    }
-  }
-  // console.log("Ownerid: " + ownerid);
-  // console.log("Restid: " + restid);
-  // console.log("Rest name: " + restname);
-  // console.log("Street name: " + streetname);
-  // console.log("number: " + number);
-  // console.log("Post code: " + postalcode);
-  // console.log("city: " + city);
+  
   return (
     <div>
+      <h3>Welcome, {username}!</h3>
       <GridContainer>
         <GridItem xs={12} sm={6} md={3}>
           <Card>
@@ -236,8 +184,6 @@ export default function Dashboard() {
             </CardFooter>
           </Card>
         </GridItem>
-      </GridContainer>
-      <GridContainer>
         <GridItem xs={12} sm={12} md={6}>
           <Card>
             <CardHeader color="info">
@@ -258,6 +204,9 @@ export default function Dashboard() {
             </CardBody>
           </Card>
         </GridItem>
+      </GridContainer>
+      <GridContainer>
+        
       </GridContainer>
     </div>
   );

@@ -41,6 +41,8 @@ export default function SSDashboard() {
 
   const [code, setCode] = React.useState('');
   const [errorflag, setErrorflag] = React.useState(0);
+  const username = localStorage.getItem('name');
+
 
   var recentnotiftablehead = ["GGD Code", "City"];
   var recentnotiftabledata = [
@@ -87,6 +89,7 @@ export default function SSDashboard() {
 
   return (
     <div>
+      <h3>Welcome, {username}!</h3>
       <GridContainer>
         <GridItem xs={12} sm={6} md={3}>
           <Card>
