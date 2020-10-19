@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#fe7d55',
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '100%',
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -106,24 +106,30 @@ export default function SignInSide() {
         }
       };
     }
-  
-  function redirect() {
+    function sleep(delay = 0) {
+      return new Promise((resolve) => {
+        setTimeout(resolve, delay);
+      });
+    }
+  async function redirect() {
     if (value === 0) {
-      isAuthenticated.setRo();
+      isAuthenticated.authenticateRo();
+      await sleep(1e2);
       history.push('/rodash/dashboard');
-        } else if (value === 1) {
-      isAuthenticated.setSs();
+      } else if (value === 1) {
+      isAuthenticated.authenticateSs();
+      await sleep(1e2);
       history.push('/ssdash/dashboard');
     }
   }
-  request.post(options, (err, res, body) => {
+  request.post(options, (err, res) => {
     if (err) {
         return console.log(err);
     }
     if (res.statusCode === 200) {
+      localStorage.setItem('name',username);
       setErrorflag(0);
       redirect();
-      
     }
     else if (username === '' || password === '') {
       setErrorflag(1);
@@ -135,6 +141,7 @@ export default function SignInSide() {
     }
   });
   }
+  
   function getErrorMessage(){
     if (errorflag === 1) {
       return 'Please fill in both username and password.';
