@@ -41,8 +41,8 @@ Superuser.createSuperuser = function (newSuperuser, result) {
 };
 
 //Check if ownederid corresponds with restid.
-Superuser.checkValidRestid = function(ownerid, id, result) {
-  sql.query("SELECT COUNT(id) as c FROM restaurants WHERE ownerid = ? AND id = ?",[ownerid, id], function (err, res) {
+Superuser.checkValidRestid = function(ownerid, restid, result) {
+  sql.query("SELECT COUNT(id) as c FROM restaurants WHERE ownerid = ? AND id = ?",[ownerid, restid], function (err, res) {
     if(err) {
         console.log("error: ", err);
         result("SQL error, check logs.", null);
@@ -55,7 +55,7 @@ Superuser.checkValidRestid = function(ownerid, id, result) {
 }
 
 //Returns Total visits over specified time.
-Superuser.visitedToday = function (restid, days, result) {
+Superuser.visited = function (restid, days, result) {
   var startDay = new Date(new Date().toDateString());
   var endDay = new Date(startDay);
   startDay.setHours(startDay.getHours() - 24 * days)
@@ -69,6 +69,36 @@ Superuser.visitedToday = function (restid, days, result) {
     }
     else {
         result(null, res[0].c);
+    }
+  });
+}
+
+//Returns a list with check-in time / check-out time of infected customers.
+Superuser.listInfections = function(restid, result) {
+  sql.query("SELECT checkin.checkin_time, checkin.checkout_time FROM checkin, users WHERE checkin.userid = users.id AND users.infected = 1 AND checkin.restid = ?",[restid], function (err, res) {
+    if(err) {
+        console.log("error: ", err);
+        result("SQL error, check logs.", null);
+        return;
+    }
+    else {
+      console.log(res)
+      result(null, res);
+    }
+  });
+}
+
+//Returns a list with of restids owned by the ownerid.
+Superuser.getrestids = function(ownerid, result) {
+  sql.query("SELECT restaurants.id, restaurants.name FROM restaurants, superusers WHERE restaurants.ownerid = superusers.id AND superusers.id = ?",[ownerid], function (err, res) {
+    if(err) {
+        console.log("error: ", err);
+        result("SQL error, check logs.", null);
+        return;
+    }
+    else {
+      console.log(res)
+      result(null, res);
     }
   });
 }

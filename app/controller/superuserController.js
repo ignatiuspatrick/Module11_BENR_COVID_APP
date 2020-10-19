@@ -56,14 +56,33 @@ exports.checkValidRestid = function(req,res,next) {
 }
 
 exports.visited = function(req,res) {
-    Superuser.visitedToday(req.body.restid, req.body.days, function(err, success) {
+    Superuser.visited(req.body.restid, req.body.days, function(err, success) {
       if (err){
         res.status(400).send({error: true, message: err});
       } else {
-        return res.status(200).send({visited:success});
+        return res.status(200).send({result: success});
       }
     });
+}
 
+exports.listInfections = function(req,res) {
+    Superuser.listInfections(req.body.restid, function(err, success) {
+      if (err){
+        res.status(400).send({error: true, message: err});
+      } else {
+        return res.status(200).send({result: success});
+      }
+    });
+}
+
+exports.getrestids = function(req,res) {
+    Superuser.getrestids(req.body.ownerid, function(err, success) {
+      if (err){
+        res.status(400).send({error: true, message: err});
+      } else {
+        return res.status(200).send({result: success});
+      }
+    });
 }
 
 exports.login_superuser = function(req, res){
