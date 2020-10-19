@@ -40,6 +40,24 @@ Superuser.createSuperuser = function (newSuperuser, result) {
 
 };
 
+//Fetch the amount of check-ins for the current day.
+Superuser.visitedToday = function (restid, result) {
+  var startDay = new Date(new Date().toDateString());
+  var endDay = new Date(startDay);
+  endDay.setHours(endDay.getHours() + 24);
+  //Asynchronous approach so that it is faster.
+  sql.query("SELECT COUNT(id) as c FROM checkin WHERE restid = ? AND checkin_time >= ? AND checkin_time < ?",[restid, startDay, endDay], function (err, res) {
+    if(err) {
+        console.log("error: ", err);
+        result("SQL error, check logs.", null);
+        return;
+    }
+    else {
+        result(null, res[0].c);
+    }
+  });
+}
+
 Superuser.loginSuperuser = function(username, password, type, result){
   sql.query('SELECT password, id FROM superusers WHERE username = ? AND type = ?', [username,type], function(err, queryresult, fields) {
       if(err){
