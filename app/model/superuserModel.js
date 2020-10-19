@@ -40,7 +40,7 @@ Superuser.createSuperuser = function (newSuperuser, result) {
 
 };
 
-//Check owner of restaurant.
+//Check if ownederid corresponds with restid.
 Superuser.checkValidRestid = function(ownerid, id, result) {
   sql.query("SELECT COUNT(id) as c FROM restaurants WHERE ownerid = ? AND id = ?",[ownerid, id], function (err, res) {
     if(err) {
@@ -54,10 +54,11 @@ Superuser.checkValidRestid = function(ownerid, id, result) {
   });
 }
 
-//Fetch the amount of check-ins for the current day.
-Superuser.visitedToday = function (restid, result) {
+//Returns Total visits over specified time.
+Superuser.visitedToday = function (restid, days, result) {
   var startDay = new Date(new Date().toDateString());
   var endDay = new Date(startDay);
+  startDay.setHours(startDay.getHours() - 24 * days)
   endDay.setHours(endDay.getHours() + 24);
   //Asynchronous approach so that it is faster.
   sql.query("SELECT COUNT(id) as c FROM checkin WHERE restid = ? AND checkin_time >= ? AND checkin_time < ?",[restid, startDay, endDay], function (err, res) {

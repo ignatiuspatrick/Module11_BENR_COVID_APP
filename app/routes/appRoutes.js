@@ -55,7 +55,7 @@ module.exports = function(app){
   var superusers = require('../controller/superuserController');
   app.route('/superusers/create').post(superusers.create_superuser);
   app.route('/superusers/login').post(superusers.login_superuser);
-  app.route('/superusers/visitedToday').get(verify.verifyRestaurantOwner, superusers.visitedToday);
+  app.route('/superusers/visited').get(verify.verifyRestaurantOwner, superusers.checkValidRestid, superusers.visited);
   // app.post('/superusers/markinfected', verify.verifySanitaryService, users.mark_user);
   app.post('/superusers/markinfected',verifySanitaryService, users.mark_user);
   app.post('/superusers/linkpersonnel/:code/:restaurantId', verify.verifyRestaurantOwner, superusers.link_personnel);

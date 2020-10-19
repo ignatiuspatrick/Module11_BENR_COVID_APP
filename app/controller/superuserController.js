@@ -41,7 +41,7 @@ exports.create_superuser = function(req, res){
 
 };
 
-exports.visitedToday = function(req,res) {
+exports.checkValidRestid = function(req,res,next) {
   Superuser.checkValidRestid(req.body.ownerid, req.body.restid, function(err, restid) {
     if (err){
       return res.status(400).send({error: true, message: err});
@@ -50,16 +50,20 @@ exports.visitedToday = function(req,res) {
         console.log(restid)
         return res.status(401).send({message:'Invalid restaurant id.'});
       }
-      Superuser.visitedToday(req.body.restid, function(err, success) {
-        if (err){
-          console.log("cccccc")
-          res.status(400).send({error: true, message: err});
-        } else {
-          return res.status(200).send({visited:success});
-        }
-      });
+      next();
     }
   });
+}
+
+exports.visited = function(req,res) {
+    Superuser.visitedToday(req.body.restid, req.body.days, function(err, success) {
+      if (err){
+        res.status(400).send({error: true, message: err});
+      } else {
+        return res.status(200).send({visited:success});
+      }
+    });
+
 }
 
 exports.login_superuser = function(req, res){
