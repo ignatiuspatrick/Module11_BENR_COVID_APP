@@ -40,6 +40,20 @@ Superuser.createSuperuser = function (newSuperuser, result) {
 
 };
 
+//Check owner of restaurant.
+Superuser.checkValidRestid = function(ownerid, id, result) {
+  sql.query("SELECT COUNT(id) as c FROM restaurants WHERE ownerid = ? AND id = ?",[ownerid, id], function (err, res) {
+    if(err) {
+        console.log("error: ", err);
+        result("SQL error, check logs.", null);
+        return;
+    }
+    else {
+        result(null, res[0].c);
+    }
+  });
+}
+
 //Fetch the amount of check-ins for the current day.
 Superuser.visitedToday = function (restid, result) {
   var startDay = new Date(new Date().toDateString());
