@@ -120,6 +120,10 @@ export default function Dashboard() {
     setQRFormat(qrf);
   }
 
+  function generateQRCode() {
+    console.log("qr code generated!")
+  }
+
   function downloadQRCode() {
     console.log('downloaded format ' + qrformat);
   }
@@ -196,6 +200,9 @@ export default function Dashboard() {
               </ButtonGroup>
             </CardHeader>
             <CardFooter stats>
+              <Button className={classes.downloadQRButton} variant="contained" onClick={generateQRCode}>
+                Generate QR Code
+              </Button>
               {qrformat === '' ? null 
               :
               <Button className={classes.downloadQRButton} variant="contained" onClick={downloadQRCode}>
