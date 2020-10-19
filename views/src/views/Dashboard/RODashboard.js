@@ -1,14 +1,9 @@
 import React from "react";
-// react plugin for creating charts
-import ChartistGraph from "react-chartist";
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
-import Icon from "@material-ui/core/Icon";
 // @material-ui/icons
 import Store from "@material-ui/icons/Store";
 import DateRange from "@material-ui/icons/DateRange";
-import ArrowUpward from "@material-ui/icons/ArrowUpward";
-import AccessTime from "@material-ui/icons/AccessTime"
 import GetAppIcon from '@material-ui/icons/GetApp';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
 // core components
@@ -22,17 +17,10 @@ import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import TextField from '@material-ui/core/TextField';
-import IconButton from '@material-ui/core/IconButton';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 import back from "../../hosts.js";
-import {
-  dailySalesChart,
-} from "variables/charts.js";
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
-import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(styles);
 
@@ -49,33 +37,33 @@ export default function Dashboard() {
   const [postalcode, setPostalCode] = React.useState('');
   const [city, setCity] = React.useState('');
   const [qrformat, setQRFormat] = React.useState('');
+  const [novisitors, setNovisitors] = React.useState(0);
 
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0');
   var mm = today.toLocaleString('default', { month: 'long' });
   var yyyy = today.getFullYear();
 
-  // for check-in table
+  // for the backend
   var tablehead = ["Date", "Check In", "Check Out"];
   var tabledata = [
     ["13th of October", "13.00","15.00"],
     ["14th of October", "14.00","16.00"]
   ];
-
   
-  React.useEffect(()=>{
+  React.useEffect(() => {
     async function getId(){
       const request = require('request');
       let options = {
         uri: back + '/superusers/getid',
         withCredentials: true
       };
-      request.get(options,(err,res,body)=>{
+      request.get(options,(err,res,body) => {
         if (err) {
           return console.log(err);
         }
-        if(res.statusCode === 200){
-          var obj=JSON.parse(body);
+        if (res.statusCode === 200) {
+          var obj = JSON.parse(body);
           setId(obj.id);
           // var ownerid = obj.id;
           // localStorage.setItem('ownerid',ownerid);
@@ -87,11 +75,11 @@ export default function Dashboard() {
             ownerid: obj.id
           }
         }
-        request2.post(options2,(err,res,body)=>{
+        request2.post(options2,(err,res,body) => {
           if (err) {
             return console.log(err);
           }
-          if(res.statusCode === 200){
+          if (res.statusCode === 200) {
             var obj = JSON.parse(body);
             setRestId(obj[0].id);
             // display in dashboard this data 
@@ -100,14 +88,29 @@ export default function Dashboard() {
             setNumber(obj[0].number);
             setPostalCode(obj[0].postalcode);
             setCity(obj[0].city);
-          }
-        });
-
+          }});
         }
       });
     }
     getId();
   },[]);
+
+  // function getNOVisitors(type) {
+  //   const request4 = require("request");
+  //   let options4 = {
+  //     uri: back + '/superusers/visitedToday',
+  //     withCredentials: true
+  //   }
+  //   request4.get(options4,(err, res, body) => {
+  //     if (err) {
+  //       return console.log(err);
+  //     }
+  //     if (res.statusCode === 200) {
+  //       var obj = JSON.parse(body);
+        
+  //     }
+  //   });
+  // }
 
   const onFormSubmit = e => {
     e.preventDefault();
@@ -115,7 +118,6 @@ export default function Dashboard() {
     e.target.reset();
   }
 
-  // for the backend
   function handleQRFormatChange(qrf) {
     setQRFormat(qrf);
   }
@@ -129,64 +131,35 @@ export default function Dashboard() {
   }
 
   // for the backend
-  function deleteEmployee(pid) {
-    return console.log("personnel deleted!");
-  }
-
-  function deleteButton(pid){
-    return(
-      <IconButton 
-        color="inherit" 
-        aria-label="alert restaurant" 
-        component="span"
-        onClick={() => deleteEmployee(pid)}>
-            <HighlightOffIcon />
-        </IconButton>
-    );
-  }
-
-  // for the backend
   function registerPersonnel() {
-    if(!code || code.length!==8){
+    if (!code || code.length !== 8){
       setErrorflag("Please provide a valid code!");
-    }else{
+    } else {
       // not finished, sql query in back end not correct
       const request3 = require('request');
       let options3 = {
         uri: back + '/superusers/linkpersonnel/' + code + '/' + restid,
         withCredentials:true
       }
-      request3.post(options3,(err,res,body)=>{
+      request3.post(options3,(err,res,body) => {
         if (err) {
           return console.log(err);
         }
-        if(res.statusCode === 200){
+        if (res.statusCode === 200) {
           console.log("Restid: " + restid);
           setErrorflag("Registered personnel with code: " + code);
-        }else if (res.statusCode === 400){
+        } else if (res.statusCode === 400) {
           var obj = JSON.parse(body);
           setErrorflag(obj.message);
         }
       });
-  }
-
-  }
-  function getErrorMessage(){
-    if(errorflag!==0){
-      return errorflag;
     }
   }
-  // console.log("Ownerid: " + ownerid);
-  // console.log("Restid: " + restid);
-  // console.log("Rest name: " + restname);
-  // console.log("Street name: " + streetname);
-  // console.log("number: " + number);
-  // console.log("Post code: " + postalcode);
-  // console.log("city: " + city);
+  
   return (
     <div>
       <GridContainer>
-        <GridItem xs={12} sm={6} md={3}>
+        <GridItem xs={12} sm={6} md={4}>
           <Card>
             <CardHeader color="info" stats icon>
               <CardIcon color="info">
@@ -219,7 +192,7 @@ export default function Dashboard() {
                 <Store />
               </CardIcon>
               <p className={classes.cardCategory}>Number of Visitors</p>
-              <h3 className={classes.cardTitle}>37</h3>
+              <h3 className={classes.cardTitle}>{novisitors}</h3>
               <p className={classes.cardCategoryGrey}>
                 {dd}th of {mm}, {yyyy}
               </p>
@@ -228,9 +201,9 @@ export default function Dashboard() {
               <div className={classes.stats}>
                 <DateRange />
                 <ButtonGroup color="inherit" aria-label="outlined primary button group" size="small" style={{marginLeft: 10}}>
-                  <Button>Today</Button>
-                  <Button>Week</Button>
-                  <Button>Month</Button>
+                  <Button onClick={getNOVisitors(0)}>Today</Button>
+                  <Button onClick={getNOVisitors(1)}>Week</Button>
+                  <Button onClick={getNOVisitors(2)}>Month</Button>
                 </ButtonGroup>
               </div>
             </CardFooter>
