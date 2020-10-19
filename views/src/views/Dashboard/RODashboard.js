@@ -105,6 +105,25 @@ export default function Dashboard() {
   //   e.target.reset();
   // }
 
+  function getNOVisitors(type) {
+    const request3 = require('request');
+    let options3 = {
+      uri: back + 'superusers/visited/',
+      form: {
+        restid: 0, // might want to fix later
+        days: type
+      }
+    }
+    request3.get(options3, (err,res,body) => {
+      if (err) {
+        return console.log(err);
+      } else if (res.statusCode === 200) {
+        var obj = JSON.parse(body);
+        setNovisitors(obj[0].visited)
+      }
+    })
+  }
+
   function handleQRFormatChange(qrf) {
     setQRFormat(qrf);
   }
@@ -164,8 +183,9 @@ export default function Dashboard() {
                 <DateRange />
                 <ButtonGroup color="inherit" aria-label="outlined primary button group" size="small" style={{marginLeft: 10}}>
                   <Button onClick={getNOVisitors(0)}>Today</Button>
-                  <Button onClick={getNOVisitors(1)}>Week</Button>
-                  <Button onClick={getNOVisitors(2)}>Month</Button>
+                  <Button onClick={getNOVisitors(6)}>Week</Button>
+                  {/* later change with this months amount of days */}
+                  <Button onClick={getNOVisitors(29)}>Month</Button> 
                 </ButtonGroup>
               </div>
             </CardFooter>
