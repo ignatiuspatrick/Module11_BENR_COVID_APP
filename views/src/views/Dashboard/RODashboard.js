@@ -56,10 +56,10 @@ export default function Dashboard() {
   var yyyy = today.getFullYear();
 
   // for check-in table
-  var tablehead = ["Check In", "Check Out"];
+  var tablehead = ["Date", "Check In", "Check Out"];
   var tabledata = [
-    ["13.00","15.00"],
-    ["14.00","16.00"]
+    ["13th of October", "13.00","15.00"],
+    ["14th of October", "14.00","16.00"]
   ];
 
   
@@ -209,28 +209,13 @@ export default function Dashboard() {
           <Card>
             <CardHeader color="info" stats icon>
               <CardIcon color="info">
-                <Icon>content_copy</Icon>
-              </CardIcon>
-              <p className={classes.cardCategory}>Occupied Tables</p>
-              <h3 className={classes.cardTitle}>
-                28/30 <small>tables</small>
-              </h3>
-            </CardHeader>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <AccessTime /> updated 4 minutes ago.
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={6} md={3}>
-          <Card>
-            <CardHeader color="info" stats icon>
-              <CardIcon color="info">
                 <Store />
               </CardIcon>
-              <p className={classes.cardCategory}>Past Visitors</p>
+              <p className={classes.cardCategory}>Number of Visitors</p>
               <h3 className={classes.cardTitle}>37</h3>
+              <p className={classes.cardCategoryGrey}>
+                {dd}th of {mm}, {yyyy}
+              </p>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
@@ -246,47 +231,15 @@ export default function Dashboard() {
         </GridItem>
       </GridContainer>
       <GridContainer>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart>
-            <CardHeader color="info">
-              <ChartistGraph
-                className="ct-chart"
-                data={dailySalesChart.data}
-                type="Line"
-                options={dailySalesChart.options}
-                listener={dailySalesChart.animation}
-              />
-              <ButtonGroup color="inherit" aria-label="outlined primary button group" size="small" style={{marginLeft: 20}}>
-                <Button>Week</Button>
-                <Button>Month</Button>
-                <Button>Year</Button>
-              </ButtonGroup>
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Visitors Chart</h4>
-              <p className={classes.cardCategory}>
-                <span className={classes.successText}>
-                  <ArrowUpward className={classes.upArrowCardCategory} /> 55%
-                </span>{" "}
-                increase in today's visitors.
-              </p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> updated 4 minutes ago
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
         <GridItem xs={12} sm={12} md={6}>
           <Card>
             <CardHeader color="info">
               <CardIcon color="info">
                 <RestaurantIcon />
               </CardIcon>
-              <h4 className={classes.cardTitleWhite}>Recent Check-ins</h4>
+              <h4 className={classes.cardTitleWhite}>Recent COVID-19 Cases Log</h4>
               <p className={classes.cardCategoryWhite}>
-                {dd}th of {mm}, {yyyy}
+                History
               </p>
             </CardHeader>
             <CardBody>
@@ -297,58 +250,6 @@ export default function Dashboard() {
               />
             </CardBody>
           </Card>
-        </GridItem>
-      </GridContainer>
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={10}>
-            <Card>
-                <CardHeader color="info">
-                  <h4 className={classes.cardTitleWhite}>RPM</h4>
-                    <p className={classes.cardCategoryWhite}>
-                        Restaurant Personnel Manager
-                    </p>
-                </CardHeader>
-                <CardBody>
-                    <GridContainer>
-                      <GridItem xs={12} sm={12} md={5}>
-                        <Card>
-                          <CardHeader color="info">
-                            <h4 className={classes.cardTitleWhite}>Register Restaurant Personnel</h4>
-                          </CardHeader>
-                          <CardBody>
-                            <form className={classes.form} onSubmit={onFormSubmit}>
-                            <TextField id="outlined-basic" label="Enter Personnel Code" variant="outlined" helperText="8 Digits"onChange={(e) => setCode(e.target.value)}/>
-                            <Button className={classes.registerPersonnelButton} variant="contained" type="submit">
-                                Register
-                            </Button>
-                            <Typography color='error'>{getErrorMessage()}</Typography>
-                            </form>
-                          </CardBody>
-                        </Card>
-                      </GridItem>
-                      <GridItem xs={12} sm={12} md={6}>
-                        <Card>
-                          <CardHeader color="info">
-                            <h4 className={classes.cardTitleWhite}>Registered Personnels</h4>
-                            <p className={classes.cardCategoryWhite}>
-                                Personnels who has access to scan QR-codes from visitors
-                            </p>
-                          </CardHeader>
-                          <CardBody>
-                            <Table
-                                tableHeaderColor="info"
-                                tableHead={["Personnel ID", "Name", "Delete"]}
-                                tableData={[
-                                ["001","Ignatius Patrick", deleteButton(0)],
-                                ["002","Konstantinas Averkin", deleteButton(1)]
-                                ]}
-                            />
-                          </CardBody>
-                        </Card>
-                      </GridItem>
-                    </GridContainer>
-                </CardBody>
-            </Card>
         </GridItem>
       </GridContainer>
     </div>

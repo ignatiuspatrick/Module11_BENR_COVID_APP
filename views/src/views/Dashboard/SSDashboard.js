@@ -94,9 +94,9 @@ export default function SSDashboard() {
               <CardIcon color="danger">
                 <AlarmAdd />
               </CardIcon>
-              <p className={classes.cardCategory}>Confirmed Case</p>
+              <p className={classes.cardCategory}>Total Marked User</p>
               <h3 className={classes.cardTitle}>
-                140<small>K</small>
+                140 <small>Users</small>
               </h3>
             </CardHeader>
             <CardFooter stats>
@@ -112,8 +112,8 @@ export default function SSDashboard() {
               <CardIcon color="danger">
                 <WarningIcon />
               </CardIcon>
-              <p className={classes.cardCategory}>New Cases</p>
-              <h3 className={classes.cardTitle}>+4572<small>cases</small></h3>
+              <p className={classes.cardCategory}>Impacted Restaurants</p>
+              <h3 className={classes.cardTitle}>32 <small>restos</small></h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
@@ -123,24 +123,6 @@ export default function SSDashboard() {
                   <Button>Week</Button>
                   <Button>Month</Button>
                 </ButtonGroup>
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={6} md={3}>
-          <Card>
-            <CardHeader color="danger" stats icon>
-              <CardIcon color="danger">
-                <Icon>content_copy</Icon>
-              </CardIcon>
-              <p className={classes.cardCategory}>Deaths</p>
-              <h3 className={classes.cardTitle}>
-                6.4<small>K</small>
-              </h3>
-            </CardHeader>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <AccessTime /> updated 4 minutes ago.
               </div>
             </CardFooter>
           </Card>
