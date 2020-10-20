@@ -104,7 +104,12 @@ Restaurant.deleteRestaurant = function(restaurantId, result){
 //unique QR codes.
 Restaurant.generateQR = function(restaurantId, result){
   var code = cryptoRandomString({length: 16});
-  sql.query("INSERT INTO restaurant_codes SET restid = ?, code = ?", [restaurantId, code], function(err, res){
+  sql.query("DELETE FROM restaurant_codes WHERE restid = ?", restaurantId, function(err, res){
+    if(err){
+      return result(err, null);
+    }
+  });
+  sql.query("INSERT INTO restaurant_codes SET restid = ?, code = ?", [restaurantId, code], function(err, queryresult){
     if(err) {
         console.log("error: ", err);
         result(err, null);
@@ -114,4 +119,17 @@ Restaurant.generateQR = function(restaurantId, result){
   });
 }
 
+Restaurant.getQR = function(restaurantId, result){
+  sql.query("SELECT code FROM restaurant_codes WHERE restid = ?", restaurantId, function(err, queryresult){
+    if(err){
+      return (err, null);
+    } else {
+      if (queryresult.length == 0){ // no code available
+        return Restaurant.generateQR(restaurantId);
+      } else {
+        return result(null, queryresult[0].code);
+      }
+    }
+  });
+}
 module.exports= Restaurant;
