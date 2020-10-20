@@ -16,7 +16,7 @@ exports.create_checkin = function(req, res) {
   } else {
     Checkin.createCheckin(req.body.userid, req.body.code, function(err, checkinId) {
     if (err){
-      res.send(err);
+      return res.status(404).send({message: checkinId});
     }
     res.json({checkinId: checkinId});
   });
