@@ -19,9 +19,12 @@ import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
+import { jsPDF } from "jspdf";
+
 import back from "../../hosts.js";
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
+
 
 const useStyles = makeStyles(styles);
 
@@ -149,18 +152,25 @@ export default function Dashboard() {
 
   function downloadQRCode() {
     console.log('downloaded format ' + qrformat);
+    var url;
+    const canvas = document.getElementById("qrimg");
     if (qrformat === "PNG"){
-      const canvas = document.getElementById("qrimg");
-      const pngUrl = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-      let downloadLink = document.createElement("a");
-      downloadLink.href = pngUrl;
-      downloadLink.download = "123456.png";
-      document.body.appendChild(downloadLink);
-      downloadLink.click();
-      document.body.removeChild(downloadLink);
-    } else {
-      console.log("additional format coming soon!")
+      url = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+    } else if (qrformat === "JPEG") {
+      url = canvas.toDataURL('image/jpeg', 1.0);
+    } else if (qrformat === "PDF") {
+      url = canvas.toDataURL("image/jpeg", 1.0);
+      var pdf = new jsPDF();
+      pdf.addImage(url, 'JPEG', 0, 0);
+      pdf.save("123456.pdf");
+      return null; // terminate
     }
+    let downloadLink = document.createElement("a");
+    downloadLink.href = url;
+    downloadLink.download = "123456." + qrformat.toLowerCase();
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
   }
   
   return (
