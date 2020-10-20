@@ -119,9 +119,9 @@ export default function Dashboard() {
   function getNOVisitors(type) {
     const request3 = require('request');
     let options3 = {
-      uri: back + 'superusers/visited/',
+      uri: back + '/superusers/visited/',
       form: {
-        restid: 0, // might want to fix later
+        restid: 122, // restoid for laplace, might want to fix later
         days: type
       }
     }
