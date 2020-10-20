@@ -99,7 +99,7 @@ console.log("restid: " + restid);
     const request3 = require('request');
     let options3 = {
       uri: back + '/superusers/visited/',
-      withCredentials:true,
+      withCredentials: true,
       form: {
         ownerid: ownerid,
         restid: restid, // might want to fix later
