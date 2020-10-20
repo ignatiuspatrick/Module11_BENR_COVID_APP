@@ -1,6 +1,9 @@
 import React from "react";
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Grid from '@material-ui/core/Grid';
 // @material-ui/icons
 import Store from "@material-ui/icons/Store";
 import DateRange from "@material-ui/icons/DateRange";
@@ -15,8 +18,6 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 
 import back from "../../hosts.js";
 
@@ -37,10 +38,10 @@ export default function Dashboard() {
   // const [number, setNumber] = React.useState('');
   // const [postalcode, setPostalCode] = React.useState('');
   // const [city, setCity] = React.useState('');
+  const [qrvalue, setQRValue] = React.useState('123456'); // get from the backend later
   const [qrformat, setQRFormat] = React.useState('');
   const [novisitors, setNovisitors] = React.useState(0);
-  const [isshownqr, setIsShownqr] = React.useState(false);
-  const [isgenerated, setIsGenerated] = React.useState(false);
+  const [isshownqr, setIsShownQR] = React.useState(false);
 
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0');
@@ -135,9 +136,15 @@ export default function Dashboard() {
     setQRFormat(qrf);
   }
 
+  // for the backend
   function generateQRCode() {
     console.log("qr code generated!");
-    setIsShownqr(true);
+    setIsShownQR(true);
+  }
+
+  function hideQRCode() {
+    console.log("qr code is hidden!")
+    setIsShownQR(false);
   }
 
   function downloadQRCode() {
@@ -155,32 +162,51 @@ export default function Dashboard() {
                 <GetAppIcon />
               </CardIcon>
               <p className={classes.cardCategory}>Download QR Code</p>
-              <ButtonGroup color="inherit" aria-label="outlined primary button group" size="small" className={classes.downloadQRButtonGroup}>
-                  <Button onClick={(e) => handleQRFormatChange("PDF")}>PDF</Button>
-                  <Button onClick={(e) => handleQRFormatChange("JPEG")}>JPEG</Button>
-                  <Button onClick={(e) => handleQRFormatChange("PNG")}>PNG</Button>
-              </ButtonGroup>
-              <Button className={classes.downloadQRButton} variant="contained" onClick={generateQRCode}>
-                Generate QR Code
-              </Button>
+              <Grid container>
+                <Grid item xs={12}>
+                  <ButtonGroup color="inherit" aria-label="outlined primary button group" size="small" className={classes.downloadQRButtonGroup}>
+                    <Button onClick={(e) => handleQRFormatChange("PDF")}>PDF</Button>
+                    <Button onClick={(e) => handleQRFormatChange("JPEG")}>JPEG</Button>
+                    <Button onClick={(e) => handleQRFormatChange("PNG")}>PNG</Button>
+                  </ButtonGroup>
+                </Grid>
+                <Grid item xs={12}>
+                {isshownqr ? 
+                <Button className={classes.downloadQRButton} variant="contained" onClick={hideQRCode}>
+                  Minimize QR Code
+                </Button>
+                :
+                <Button className={classes.downloadQRButton} variant="contained" onClick={generateQRCode}>
+                  Generate QR Code
+                </Button>
+                }
+                </Grid>
+              </Grid>
             </CardHeader>
             <CardFooter stats>
-              {isshownqr ? 
-              <QRCode
-              id="123456"
-              value="123456"
-              size={290}
-              level={"H"}
-              includeMargin={true}
-            />
-              : 
-              null}
-              {qrformat === '' && !isshownqr ? null 
-              :
-              <Button className={classes.downloadQRButton} variant="contained" onClick={downloadQRCode}>
-                Download {qrformat}
-              </Button> 
-              }
+              <Grid container>
+                <Grid item xs={12}>
+                  {isshownqr ? 
+                  <QRCode
+                  id="qrimg"
+                  value={qrvalue}
+                  size={290}
+                  level={"H"}
+                  includeMargin={true}
+                  />
+                  : 
+                  null}
+                </Grid>
+                <Grid item xs={12}>
+                  {qrformat !== '' && isshownqr ? 
+                  <Button className={classes.downloadQRButton} variant="contained" onClick={downloadQRCode}>
+                    Download {qrformat}
+                  </Button>
+                  :
+                  null
+                  }
+                </Grid>
+              </Grid>
             </CardFooter>
           </Card>
         </GridItem>
