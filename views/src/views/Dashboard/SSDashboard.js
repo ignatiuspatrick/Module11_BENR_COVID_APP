@@ -3,14 +3,15 @@ import React from "react";
 import ChartistGraph from "react-chartist";
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
-import Icon from "@material-ui/core/Icon";
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 // @material-ui/icons
 import AlarmAdd from '@material-ui/icons/AlarmAdd';
 import WarningIcon from '@material-ui/icons/Warning';
 import DateRange from "@material-ui/icons/DateRange";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
-import AccessTime from "@material-ui/icons/AccessTime"
-import NotificationImportantIcon from '@material-ui/icons/NotificationImportant';
+import AccessTime from "@material-ui/icons/AccessTime";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -20,9 +21,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import TextField from '@material-ui/core/TextField';
+
 import back from "../../hosts.js";
 import Typography from '@material-ui/core/Typography';
 
@@ -41,13 +40,22 @@ export default function SSDashboard() {
 
   const [code, setCode] = React.useState('');
   const [errorflag, setErrorflag] = React.useState(0);
+  const [totmarkedusers, setTotMarkedUsers] = React.useState(23); // backend invocation
+  const [totimpactedresto, setTotImpactedResto] = React.useState(32); // backend invocation
   const username = localStorage.getItem('name');
 
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = today.toLocaleString('default', { month: 'long' });
+  var yyyy = today.getFullYear();
 
-  var recentnotiftablehead = ["GGD Code", "City"];
+  // for stats
+  var counter = new Date(today.getFullYear, today.getMonth, 0).getDate();
+
+  var recentnotiftablehead = ["City", "Marked Users"];
   var recentnotiftabledata = [
-    ["******", "Enschede"],
-    ["******", "Utrecht"]
+    ["Enschede", "100"],
+    ["Utrecht", "99"]
     ];
 
   const onFormSubmit = e => {
@@ -81,6 +89,11 @@ export default function SSDashboard() {
     }
     });
   }
+
+  function getTotMarkedUsers(range) {
+    console.log("range: " + range);
+  }
+
   function getErrorMessage(){
     if(errorflag!==0){
       return errorflag;
@@ -99,12 +112,17 @@ export default function SSDashboard() {
               </CardIcon>
               <p className={classes.cardCategory}>Total Marked User</p>
               <h3 className={classes.cardTitle}>
-                140 <small>Users</small>
+                {totmarkedusers}
               </h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
-                <AccessTime /> updated 4 minutes ago.
+                <DateRange />
+                <ButtonGroup color="inherit" aria-label="outlined primary button group" size="small" style={{marginLeft: 10}}>
+                  <Button onClick={() => getTotMarkedUsers(0)}>Today</Button>
+                  <Button onClick={() => getTotMarkedUsers(6)}>Week</Button>
+                  <Button onClick={() => getTotMarkedUsers(counter - 1)}>Month</Button>
+                </ButtonGroup>
               </div>
             </CardFooter>
           </Card>
@@ -116,7 +134,7 @@ export default function SSDashboard() {
                 <WarningIcon />
               </CardIcon>
               <p className={classes.cardCategory}>Impacted Restaurants</p>
-              <h3 className={classes.cardTitle}>32 <small>restos</small></h3>
+              <h3 className={classes.cardTitle}>{totimpactedresto}</h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
@@ -160,9 +178,9 @@ export default function SSDashboard() {
                         <GridItem xs={12} sm={12} md={6}>
                             <Card>
                                 <CardHeader color="danger">
-                                    <h4 className={classes.cardTitleWhite}>Recent Notifications</h4>
+                                    <h4 className={classes.cardTitleWhite}>Most Infected Cities</h4>
                                     <p className={classes.cardCategoryWhite}>
-                                        Marked COVID-19 Cases from Restaurants
+                                        Count of marked COVID-19 cases for each city
                                     </p>
                                 </CardHeader>
                                 <CardBody>
