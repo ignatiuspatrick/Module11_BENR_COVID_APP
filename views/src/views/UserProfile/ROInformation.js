@@ -19,6 +19,8 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import back from "../../hosts.js";
 import { useHistory } from "react-router-dom";
+import Typography from '@material-ui/core/Typography';
+
 const styles = {
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
@@ -64,6 +66,8 @@ export default function ROInformation() {
   const [newStreetname, updateStreetName] = React.useState(''); //get thru api
   const [newNumber, updateNumber] = React.useState(''); //get thru api
   const [newPostalcode, updatePostalCode] = React.useState(''); //get thru api
+  const [errorflag, setErrorflag] = React.useState(0);
+
 
   const onFormSubmit = e => {
     e.preventDefault();
@@ -84,8 +88,6 @@ export default function ROInformation() {
         if(res.statusCode === 200){
           var obj=JSON.parse(body);
           setId(obj.id);
-          // var ownerid = obj.id;
-          // localStorage.setItem('ownerid',ownerid);
           const request2 = require('request');
           let options2 = {
           uri: back + '/restaurants/getrest',
@@ -101,12 +103,12 @@ export default function ROInformation() {
           if(res.statusCode === 200){
             var obj = JSON.parse(body);
             setRestId(obj[0].id);
-            // display in dashboard this data 
             setRestName(obj[0].name);
             setStreetName(obj[0].streetname);
             setNumber(obj[0].number);
             setPostalCode(obj[0].postalcode);
             setCity(obj[0].city);
+            setErrorflag(0);
           }
         });
 
@@ -136,9 +138,23 @@ export default function ROInformation() {
         return console.log(err);
     }
     if (res.statusCode === 200) {
-      history.push("/rodash/restoinfo");
+      setRestName(businessname);
+      setStreetName(newStreetname);
+      setNumber(newNumber);
+      setPostalCode(newPostalcode);
+      setCity(newCity);
+
+    } else if(res.statusCode === 400 || res.statusCode === 401){
+      var obj=JSON.parse(body);
+      setErrorflag(obj.message);
     }
     });
+  }
+
+  function getErrorMessage(){
+    if(errorflag!==0){
+      return errorflag;
+    }
   }
 
   return (
@@ -214,6 +230,7 @@ export default function ROInformation() {
                 </GridItem>
               </GridContainer>
             </CardBody>
+            <Typography color='error'>{getErrorMessage()}</Typography>
             <CardFooter>
             <Button
               type="submit"
