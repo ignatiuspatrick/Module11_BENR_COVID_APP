@@ -149,6 +149,18 @@ export default function Dashboard() {
 
   function downloadQRCode() {
     console.log('downloaded format ' + qrformat);
+    if (qrformat === "PNG"){
+      const canvas = document.getElementById("qrimg");
+      const pngUrl = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+      let downloadLink = document.createElement("a");
+      downloadLink.href = pngUrl;
+      downloadLink.download = "123456.png";
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+    } else {
+      console.log("additional format coming soon!")
+    }
   }
   
   return (
@@ -234,7 +246,7 @@ export default function Dashboard() {
             </CardFooter>
           </Card>
         </GridItem>
-        <GridItem xs={12} sm={12} md={6}>
+        <GridItem xs={12} sm={12} md={7}>
           <Card>
             <CardHeader color="info">
               <CardIcon color="info">
