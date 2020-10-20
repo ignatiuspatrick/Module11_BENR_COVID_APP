@@ -120,6 +120,7 @@ export default function Dashboard() {
     const request3 = require('request');
     let options3 = {
       uri: back + '/superusers/visited/',
+      withCredentials: true,
       form: {
         restid: 122, // restoid for laplace, might want to fix later
         days: type
