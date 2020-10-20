@@ -39,11 +39,15 @@ export default function Dashboard() {
   // const [city, setCity] = React.useState('');
   const [qrformat, setQRFormat] = React.useState('');
   const [novisitors, setNovisitors] = React.useState(0);
+  const [isshownqr, setIsShownqr] = React.useState(false);
+  const [isgenerated, setIsGenerated] = React.useState(false);
 
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0');
   var mm = today.toLocaleString('default', { month: 'long' });
   var yyyy = today.getFullYear();
+
+  var QRCode = require('qrcode.react');
 
   // for the backend
   var tablehead = ["Date", "Check In", "Check Out"];
@@ -51,6 +55,9 @@ export default function Dashboard() {
     ["13th of October", "13.00","15.00"],
     ["14th of October", "14.00","16.00"]
   ];
+
+  // for stats
+  var counter = new Date(today.getFullYear, today.getMonth, 0).getDate();
 
   //might be useful for later
   // React.useEffect(()=>{
@@ -129,7 +136,8 @@ export default function Dashboard() {
   }
 
   function generateQRCode() {
-    console.log("qr code generated!")
+    console.log("qr code generated!");
+    setIsShownqr(true);
   }
 
   function downloadQRCode() {
@@ -152,12 +160,22 @@ export default function Dashboard() {
                   <Button onClick={(e) => handleQRFormatChange("JPEG")}>JPEG</Button>
                   <Button onClick={(e) => handleQRFormatChange("PNG")}>PNG</Button>
               </ButtonGroup>
-            </CardHeader>
-            <CardFooter stats>
               <Button className={classes.downloadQRButton} variant="contained" onClick={generateQRCode}>
                 Generate QR Code
               </Button>
-              {qrformat === '' ? null 
+            </CardHeader>
+            <CardFooter stats>
+              {isshownqr ? 
+              <QRCode
+              id="123456"
+              value="123456"
+              size={290}
+              level={"H"}
+              includeMargin={true}
+            />
+              : 
+              null}
+              {qrformat === '' && !isshownqr ? null 
               :
               <Button className={classes.downloadQRButton} variant="contained" onClick={downloadQRCode}>
                 Download {qrformat}
@@ -184,8 +202,7 @@ export default function Dashboard() {
                 <ButtonGroup color="inherit" aria-label="outlined primary button group" size="small" style={{marginLeft: 10}}>
                   <Button onClick={getNOVisitors(0)}>Today</Button>
                   <Button onClick={getNOVisitors(6)}>Week</Button>
-                  {/* later change with this months amount of days */}
-                  <Button onClick={getNOVisitors(29)}>Month</Button> 
+                  <Button onClick={getNOVisitors(counter - 1)}>Month</Button> 
                 </ButtonGroup>
               </div>
             </CardFooter>
