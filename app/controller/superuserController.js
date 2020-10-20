@@ -103,18 +103,3 @@ exports.get_ro_id = function(req,res){
   var id = decoded.payload.id;
   return res.status(200).send({id:id});
 };
-
-exports.link_personnel = function(req, res){
-  if(!req.params.code || !req.params.restaurantId){
-    return res.status(400).send({error: true, message: "Missing information. code: " +
-    req.params.code + " restid: " + req.params.restaurantId})
-  }
-
-  Superuser.linkPersonnel(req.params.code, req.params.restaurantId, function(err, result){
-    if(err){
-      return res.status(400).send({error: true, message: err});
-    } else {
-      return res.status(200).send({success: true});
-    }
-  });
-}
