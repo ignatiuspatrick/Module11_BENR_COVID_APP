@@ -15,10 +15,11 @@ module.exports = function(app){
   app.route('/restaurants/:restaurantId')
   .put(verify.verifyRestaurantOwner, restaurants.update_restaurant)
   .delete(restaurants.delete_restaurant);
-
-//// TODO: dis one is no longer 4 rest personnel but for rest owner in the future
-  app.get('/restaurants/getrestcode/:restaurantId', verify.verifyPersonnel, restaurants.get_qrcode);
   app.post('/restaurants/getrest',restaurants.get_restaurant);
+  //This route gives back the QRcode code that is already in the DB for the restaurant (and if not exists, make one)
+  app.route('/restaurants/getqr/:restaurantId').get(verify.verifyRestaurantOwner, restaurants.get_qrcode);
+  //This route generates a new QRcode code for the restaurant
+  app.route('/restaurants/generateqr/:restaurantId').get(verify.verifyRestaurantOwner, restaurants.generate_qrcode);
 
   //USERS
   //(Customer/Restaurant personnel)
