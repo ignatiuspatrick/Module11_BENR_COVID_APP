@@ -77,9 +77,9 @@ export default function SignUpSide() {
 
   const onFormSubmit = e => {
     e.preventDefault();
-    if(tnc === 1){
+    if(tnc === 1) {
       submitRegistration();
-    }else{
+    } else {
       setErrorflag("Please agree to our terms and conditions!");
     }
   }
@@ -134,15 +134,15 @@ export default function SignUpSide() {
         }
         if (res.statusCode === 200) {
           history.push('/login');
-        }else if(res.statusCode === 400 || res.statusCode === 401){
-          var obj=JSON.parse(body)
+        } else if (res.statusCode === 400 || res.statusCode === 401) {
+          var obj = JSON.parse(body)
           console.log(obj.message)
           setErrorflag(obj.message);
         }
       });
       // history.push('/login');
-    }else if(res.statusCode === 400 || res.statusCode === 401){
-      var obj=JSON.parse(body);
+    } else if (res.statusCode === 400 || res.statusCode === 401) {
+      var obj = JSON.parse(body);
       console.log(obj.message);
       setErrorflag(obj.message);
     }
@@ -150,8 +150,8 @@ export default function SignUpSide() {
  
   }
 
-  function getErrorMessage(){
-    if(errorflag!==0){
+  function getErrorMessage() {
+    if (errorflag!==0) {
       return errorflag;
     }
   }

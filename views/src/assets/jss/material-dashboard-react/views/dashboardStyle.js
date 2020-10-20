@@ -102,7 +102,8 @@ const dashboardStyle = {
   downloadQRButton: {
     height: "auto",
     backgroundColor: "#00acc1",
-    color:"white"
+    color:"white",
+    marginTop: '5px'
   },
   downloadQRButtonGroup: {
     color: "#999",
