@@ -14,7 +14,7 @@ module.exports = function(app){
   .post(verify.verifyRestaurantOwner,restaurants.create_restaurant);
   app.route('/restaurants/:restaurantId')
   .put(verify.verifyRestaurantOwner, restaurants.update_restaurant)
-  .delete(restaurants.delete_restaurant);
+  .delete(verify.verifyRestaurantOwner, estaurants.delete_restaurant);
   app.post('/restaurants/getrest',restaurants.get_restaurant);
   //This route gives back the QRcode code that is already in the DB for the restaurant (and if not exists, make one)
   app.route('/restaurants/getqr/:restaurantId').get(verify.verifyRestaurantOwner, restaurants.get_qrcode);
