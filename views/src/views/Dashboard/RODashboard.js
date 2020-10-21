@@ -19,6 +19,8 @@ import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
+import { jsPDF } from "jspdf";
+
 import back from "../../hosts.js";
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
@@ -50,6 +52,7 @@ export default function Dashboard() {
   const [ownerid,setId] = React.useState(0);
   const [restid, setRestId] = React.useState(0);
   const [tableData, setTable] = React.useState([]);
+
   //might be useful for later
   React.useEffect(()=>{
     async function getId(){
@@ -119,6 +122,7 @@ export default function Dashboard() {
     }
     getId();
   },[]);
+
   function getNOVisitors(type) {
     const request3 = require('request');
     let options3 = {
@@ -146,7 +150,24 @@ export default function Dashboard() {
 
   // for the backend
   function generateQRCode() {
-    console.log("qr code generated!");
+    const requestqr = require('request');
+    let optionsqr = {
+      uri: back + '/restaurants/getqr/' + restid,
+      withCredentials: true,
+      form: {
+        ownerid: ownerid
+      }
+    };
+    requestqr.get(optionsqr, (err,res,body) => {
+      console.log("res status code = " + res.statusCode)
+      if (err) {
+        return console.log(err);
+      } else if (res.statusCode === 200) {
+        var obj = JSON.parse(body);
+        console.log("success! obj = " + obj);
+        setQRValue(obj.result);
+      }
+    })
     setIsShownQR(true);
   }
 
@@ -157,17 +178,22 @@ export default function Dashboard() {
 
   function downloadQRCode() {
     console.log('downloaded format ' + qrformat);
+    const canvas = document.getElementById("qrimg");
+    var url;
     if (qrformat === "PNG"){
-      const canvas = document.getElementById("qrimg");
-      const pngUrl = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+      url = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
       let downloadLink = document.createElement("a");
-      downloadLink.href = pngUrl;
-      downloadLink.download = "123456.png";
+      downloadLink.href = url;
+      downloadLink.download = "qrcode." + qrformat.toLowerCase();
       document.body.appendChild(downloadLink);
       downloadLink.click();
       document.body.removeChild(downloadLink);
-    } else {
-      console.log("additional format coming soon!")
+    } else if (qrformat === "PDF") {
+      var imgData = canvas.toDataURL("image/jpeg", 1.0);
+      var pdf = new jsPDF();
+      pdf.addImage(imgData, 'JPEG', 0, 0);
+      pdf.save("qrcode.pdf");
+      return null;
     }
   }
   
@@ -186,7 +212,6 @@ export default function Dashboard() {
                 <Grid item xs={12}>
                   <ButtonGroup color="inherit" aria-label="outlined primary button group" size="small" className={classes.downloadQRButtonGroup}>
                     <Button onClick={(e) => handleQRFormatChange("PDF")}>PDF</Button>
-                    <Button onClick={(e) => handleQRFormatChange("JPEG")}>JPEG</Button>
                     <Button onClick={(e) => handleQRFormatChange("PNG")}>PNG</Button>
                   </ButtonGroup>
                 </Grid>
