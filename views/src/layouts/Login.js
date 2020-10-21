@@ -209,12 +209,12 @@ export default function SignInSide() {
               Sign In
             </Button>
             <Grid container>
-              <Grid item xs={9}>
+              <Grid item xs={10}>
                 <Link href="/registerRo" variant="body2">
                   Register as restaurant owner?
                 </Link>
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={2}>
                 <Link href="/registerSs" variant="body2">
                   Register as GGD?
                 </Link>
