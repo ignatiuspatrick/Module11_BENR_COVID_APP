@@ -11,7 +11,7 @@ exports.create_superuser = function(req, res){
   //handles errors
   if(!(newSuperuser.type == "sanitary_service" || newSuperuser.type == "restaurant_owner")){
     res.status(400).send({ error:true, message: 'Please provide type of user.'});
-  } else if (!newSuperuser.password || !newSuperuser.username){
+  } else if (!newSuperuser.password || !newSuperuser.username || !newSuperuser.email){
     res.status(400).send({ error:true, message: 'Please provide login information of user.'});
   } else if (newSuperuser.password !== newSuperuser.confirm){
     res.status(400).send({ error:true, message: 'Passwords do not match.'});

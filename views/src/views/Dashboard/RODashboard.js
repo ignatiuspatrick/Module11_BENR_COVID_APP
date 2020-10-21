@@ -44,16 +44,12 @@ export default function Dashboard() {
 
   // for the backend
   var tablehead = ["Date", "Check In", "Check Out"];
-  var tabledata = [
-    ["13th of October", "13.00","15.00"],
-    ["14th of October", "14.00","16.00"]
-  ];
-
   // for stats
   var counter = new Date(today.getFullYear, today.getMonth, 0).getDate();
 
   const [ownerid,setId] = React.useState(0);
   const [restid, setRestId] = React.useState(0);
+  const [tableData, setTable] = React.useState([]);
   //might be useful for later
   React.useEffect(()=>{
     async function getId(){
@@ -69,7 +65,7 @@ export default function Dashboard() {
         if(res.statusCode === 200){
           var obj=JSON.parse(body);
           setId(obj.id);
-          
+          var owid = obj.id;
           const request2 = require('request');
           let options2 = {
           uri: back + '/restaurants/getrest',
@@ -85,6 +81,36 @@ export default function Dashboard() {
           if(res.statusCode === 200){
             var obj = JSON.parse(body);
             setRestId(obj[0].id);
+            const request3 = require('request');
+            let options3 = {
+              uri: back + '/superusers/listinfections',
+              withCredentials: true,
+              form:{
+                ownerid:owid,
+                restid: obj[0].id
+              }
+            };
+            request3.post(options3,(err,res,body)=>{
+              if (err) {
+                return console.log(err);
+              }
+              if(res.statusCode === 200){
+                var obj = JSON.parse(body);
+                var tabledata = [];
+                for(var i=0; i<obj.result.length; i++){
+                  var checkin = obj.result[i].checkin_time.split("T");
+                  var checkout = obj.result[i].checkout_time.split("T");
+                  if(checkin[0]===checkout[0]){
+                    var item = [];
+                    item.push(checkin[0],checkin[1].substring(0,8),checkout[1].substring(0,8));
+                    tabledata.push(item);
+                  }else{
+                    console.log("different days of checkin!");
+                  }
+                }
+                setTable(tabledata);
+              }
+            });
           }
         });
 
@@ -93,12 +119,10 @@ export default function Dashboard() {
     }
     getId();
   },[]);
-console.log("restid: " + restid);
-
   function getNOVisitors(type) {
     const request3 = require('request');
     let options3 = {
-      uri: back + '/superusers/visited/',
+      uri: back + '/superusers/visited',
       withCredentials: true,
       form: {
         ownerid: ownerid,
@@ -245,7 +269,7 @@ console.log("restid: " + restid);
               <Table
                 tableHeaderColor="info"
                 tableHead={tablehead}
-                tableData={tabledata}
+                tableData={tableData}
               />
             </CardBody>
           </Card>
