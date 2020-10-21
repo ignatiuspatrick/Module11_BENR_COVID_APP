@@ -58,6 +58,7 @@ module.exports = function(app){
   app.route('/superusers/restaurants').get(verify.verifyRestaurantOwner, superusers.getrestids);
   // app.post('/superusers/markinfected', verify.verifySanitaryService, users.mark_user);
   app.post('/superusers/markinfected',verifySanitaryService, users.mark_user);
+  app.post('/users/getMarked', verify.verifySanitaryService, users.get_Marked_Users);
   app.post('/superusers/logout/ro',verify.verifyRestaurantOwner, superusers.logout_ro);
   app.post('/superusers/logout/ss',verify.verifySanitaryService, superusers.logout_ss);
   app.post('/superusers/checkToken/ro', verify.verifyRestaurantOwner, (req,res) =>{
