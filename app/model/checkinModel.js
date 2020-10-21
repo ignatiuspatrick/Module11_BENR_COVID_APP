@@ -19,7 +19,7 @@ Checkin.createCheckin = function (userId, code, result) {
       return result(err, null);
     } else if (id.length < 1) {
       console.log(err);
-      return result(err, "No associated restaurant id")
+      return result(1, "No associated restaurant id")
     }
     else{
       //Select restaurant id from restaurrant_codes using code
