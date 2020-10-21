@@ -73,6 +73,64 @@ Superuser.visited = function (restid, days, result) {
   });
 }
 
+//Returns Total infections over specified time.
+Superuser.infected = function (days, result) {
+  var startDay = new Date(new Date().toDateString());
+  var endDay = new Date(startDay);
+  startDay.setHours(startDay.getHours() - 24 * days)
+  endDay.setHours(endDay.getHours() + 24);
+  //Asynchronous approach so that it is faster.
+  sql.query("SELECT COUNT(id) as c FROM users WHERE infected_since >= ? AND infected_since < ?",[startDay, endDay], function (err, res) {
+    if(err) {
+        console.log("error: ", err);
+        result("SQL error, check logs.", null);
+        return;
+    }
+    else {
+        result(null, res[0].c);
+    }
+  });
+}
+
+//Returns Total marked at risk over specified time.
+Superuser.marked = function (days, result) {
+  var startDay = new Date(new Date().toDateString());
+  var endDay = new Date(startDay);
+  startDay.setHours(startDay.getHours() - 24 * days)
+  endDay.setHours(endDay.getHours() + 24);
+  //Asynchronous approach so that it is faster.
+  sql.query("SELECT COUNT(id) as c FROM users WHERE at_risk_since >= ? AND at_risk_since < ?",[startDay, endDay], function (err, res) {
+    if(err) {
+        console.log("error: ", err);
+        result("SQL error, check logs.", null);
+        return;
+    }
+    else {
+        result(null, res[0].c);
+    }
+  });
+}
+
+//Returns Total restaurants with infections over specified time.
+Superuser.infectedrestaurants = function (days, result) {
+  var startDay = new Date(new Date().toDateString());
+  var endDay = new Date(startDay);
+  startDay.setHours(startDay.getHours() - 24 * days)
+  endDay.setHours(endDay.getHours() + 24);
+  //Asynchronous approach so that it is faster.
+  sql.query("SELECT COUNT(DISTINCT restaurants.id) as c FROM restaurants, checkin, users WHERE restaurants.id = checkin.restid AND checkin.userid = users.id AND infected_since >= ? AND infected_since < ?",[startDay, endDay], function (err, res) {
+    if(err) {
+        console.log("error: ", err);
+        result("SQL error, check logs.", null);
+        return;
+    }
+    else {
+        result(null, res[0].c);
+    }
+  });
+}
+
+
 //Returns a list with check-in time / check-out time of infected customers.
 Superuser.listInfections = function(restid, result) {
   sql.query("SELECT checkin.checkin_time, checkin.checkout_time FROM checkin, users WHERE checkin.userid = users.id AND users.infected = 1 AND checkin.restid = ?",[restid], function (err, res) {
