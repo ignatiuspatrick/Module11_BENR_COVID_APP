@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 21, 2020 at 02:29 PM
--- Server version: 10.1.32-MariaDB
--- PHP Version: 7.2.5
+-- Generation Time: Oct 21, 2020 at 11:10 PM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.4.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -31,9 +31,9 @@ CREATE TABLE `checkin` (
   `id` int(11) NOT NULL,
   `userid` varchar(64) NOT NULL,
   `restid` int(11) NOT NULL,
-  `at_risk` tinyint(1) DEFAULT '0',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `checkin_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `at_risk` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `checkin_time` datetime NOT NULL DEFAULT current_timestamp(),
   `checkout_time` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -56,7 +56,7 @@ CREATE TABLE `ggd_codes` (
   `id` int(11) NOT NULL,
   `userid` varchar(64) NOT NULL,
   `code` varchar(8) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -259,7 +259,7 @@ CREATE TABLE `superusers` (
   `password` text NOT NULL,
   `email` varchar(255) DEFAULT NULL,
   `type` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -278,9 +278,10 @@ INSERT INTO `superusers` (`id`, `username`, `password`, `email`, `type`, `create
 
 CREATE TABLE `users` (
   `id` varchar(64) NOT NULL,
-  `infected` tinyint(1) NOT NULL DEFAULT '0',
-  `at_risk` tinyint(1) NOT NULL DEFAULT '0',
-  `at_risk_since` datetime DEFAULT CURRENT_TIMESTAMP,
+  `infected` tinyint(1) NOT NULL DEFAULT 0,
+  `infected_since` datetime DEFAULT NULL,
+  `at_risk` tinyint(1) NOT NULL DEFAULT 0,
+  `at_risk_since` datetime DEFAULT current_timestamp(),
   `notification_token` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -288,11 +289,11 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `infected`, `at_risk`, `at_risk_since`, `notification_token`) VALUES
-('7a883203-7240-4c0e-8f86-6e83793a1c47', 1, 1, '2020-10-20 15:03:21', NULL),
-('bd1a9cf7-5bdb-415f-99e4-a65cc98a7cff', 1, 1, '2020-10-20 14:41:21', NULL),
-('f9be5e76-88e3-48e1-9c87-748a8fe5c569', 1, 0, NULL, NULL),
-('fb2fad91-0e74-47a8-b972-93348684dfd1', 0, 0, NULL, NULL);
+INSERT INTO `users` (`id`, `infected`, `infected_since`, `at_risk`, `at_risk_since`, `notification_token`) VALUES
+('7a883203-7240-4c0e-8f86-6e83793a1c47', 1, NULL, 1, '2020-10-20 15:03:21', NULL),
+('bd1a9cf7-5bdb-415f-99e4-a65cc98a7cff', 1, NULL, 1, '2020-10-20 14:41:21', NULL),
+('f9be5e76-88e3-48e1-9c87-748a8fe5c569', 1, NULL, 0, NULL, NULL),
+('fb2fad91-0e74-47a8-b972-93348684dfd1', 0, NULL, 0, NULL, NULL);
 
 --
 -- Indexes for dumped tables
