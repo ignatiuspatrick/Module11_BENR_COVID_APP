@@ -40,6 +40,10 @@ const styles = {
   },
   textFieldInfo: {
     marginLeft: "15px"
+  },
+  typoError: {
+    height: "auto",
+    marginLeft: "20px"
   }
 };
 
@@ -152,7 +156,7 @@ export default function ROInformation() {
   }
 
   function getErrorMessage(){
-    if(errorflag!==0){
+    if (errorflag !== 0){
       return errorflag;
     }
   }
@@ -160,7 +164,7 @@ export default function ROInformation() {
   return (
     <div>
       <GridContainer>
-        <GridItem xs={12} sm={12} >
+        <GridItem xs={12} sm={12} md={7}>
           <Card>
           <form className={classes.form} onSubmit={onFormSubmit}>
             <CardHeader color="info">
@@ -169,80 +173,120 @@ export default function ROInformation() {
             </CardHeader>
             <CardBody>
               <GridContainer>
-              
-                <GridItem xs={12} sm={12} md={4}>
+                <GridItem xs={6} sm={3} md={4}>
                   <TextField 
                   id="name" 
                   label="Restaurant Name"
                   fullWidth
                   onChange={(e) => updateRestName(e.target.value)}
                   />
+                </GridItem>
+                <GridItem xs={6} sm={3} md={4}>
                   <TextField 
                   id="streetname" 
                   label="Street Name"
                   fullWidth
                   onChange={(e) => updateStreetName(e.target.value)}
                   />
+                </GridItem>
+                <GridItem xs={6} sm={3} md={4}>
                   <TextField
                   id="number"
+                  type="number"
                   label="Number"
                   fullWidth
                   onChange={(e) => updateNumber(e.target.value)}
                   />
+                </GridItem>
+                <GridItem xs={6} sm={3} md={4}>
                   <TextField 
                   id="postalcode" 
                   label="Postal Code"
                   fullWidth
                   onChange={(e) => updatePostalCode(e.target.value)}
                   />
-                  <TextField 
+                </GridItem>
+                <GridItem xs={6} sm={3} md={4}>
+                 <TextField 
                   id="city" 
                   label="City"
                   fullWidth
                   onChange={(e) => updateCity(e.target.value)}
                   />
                 </GridItem>
-                <GridItem xs={12} sm={12} md={8}>
-                <TableContainer component={Paper}>
-                <Table className={classes.table} aria-label="simple table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Restaurant name</TableCell>
-                      <TableCell align="center">Street&nbsp;name</TableCell>
-                      <TableCell align="center">Building&nbsp;number</TableCell>
-                      <TableCell align="center">Post&nbsp;code</TableCell>
-                      <TableCell align="center">City</TableCell>
-                    </TableRow>
-                  </TableHead>
-                <TableBody>
-                    <TableRow key={restname}>
-                      <TableCell component="th" scope="row">
-                        {restname}
-                      </TableCell>
-                      <TableCell align="center">{streetname}</TableCell>
-                      <TableCell align="center">{number}</TableCell>
-                      <TableCell align="center">{postalcode}</TableCell>
-                      <TableCell align="center">{city}</TableCell>
-                    </TableRow>
-                </TableBody>
-                  </Table>
-                </TableContainer>
+              </GridContainer>
+            </CardBody>
+            <Typography color='error' className={classes.typoError}>{getErrorMessage()}</Typography>
+              <CardFooter>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="info"
+                  className={classes.submit}
+                >
+                  Update
+                </Button>
+              </CardFooter>
+            </form>
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={12} md={5}>
+          <Card>
+            <CardHeader color="info">
+              <h4 className={classes.cardTitleWhite}>Information</h4>
+              <p className={classes.cardCategoryWhite}>Displayed Information</p>
+            </CardHeader>
+            <CardBody>
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={12} style={{marginBottom: "10px"}}>
+                  <TextField
+                    disabled
+                    id="outlined-disabled"
+                    label="Restaurant Name"
+                    fullWidth
+                    value={restname}
+                    variant="outlined"
+                  />
+                </GridItem>
+                <GridItem xs={12} sm={12} md={6} style={{marginBottom: "10px"}}>
+                  <TextField
+                    disabled
+                    id="outlined-disabled"
+                    label="Street Name"
+                    value={streetname}
+                    variant="outlined"
+                  />
+                </GridItem>
+                <GridItem xs={12} sm={12} md={6} style={{marginBottom: "10px"}}>
+                  <TextField
+                    disabled
+                    id="outlined-disabled"
+                    label="Number"
+                    value={number}
+                    variant="outlined"
+                  />
+                </GridItem>
+                <GridItem xs={12} sm={12} md={6} style={{marginBottom: "10px"}}>
+                  <TextField
+                    disabled
+                    id="outlined-disabled"
+                    label="Postal Code"
+                    value={postalcode}
+                    variant="outlined"
+                  />
+                </GridItem>
+                <GridItem xs={12} sm={12} md={6} style={{marginBottom: "10px"}}>
+                  <TextField
+                    disabled
+                    id="outlined-disabled"
+                    label="City"
+                    value={city}
+                    variant="outlined"
+                  />
                 </GridItem>
               </GridContainer>
             </CardBody>
-            <Typography color='error'>{getErrorMessage()}</Typography>
-            <CardFooter>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="info"
-              className={classes.submit}
-            >
-              Update details
-            </Button>
-            </CardFooter>
-            </form>
           </Card>
         </GridItem>
       </GridContainer>

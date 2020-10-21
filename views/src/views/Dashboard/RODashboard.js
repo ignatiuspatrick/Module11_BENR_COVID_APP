@@ -154,12 +154,8 @@ export default function Dashboard() {
     let optionsqr = {
       uri: back + '/restaurants/getqr/' + restid,
       withCredentials: true,
-      form: {
-        ownerid: ownerid
-      }
     };
     requestqr.get(optionsqr, (err,res,body) => {
-      console.log("res status code = " + res.statusCode)
       if (err) {
         return console.log(err);
       } else if (res.statusCode === 200) {
