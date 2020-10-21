@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 4.9.5deb2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Oct 19, 2020 at 01:04 PM
--- Server version: 10.1.32-MariaDB
--- PHP Version: 7.2.5
+-- Host: localhost:3306
+-- Generation Time: Oct 21, 2020 at 09:52 AM
+-- Server version: 8.0.21-0ubuntu0.20.04.4
+-- PHP Version: 7.4.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -28,9 +29,9 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `checkin` (
-  `id` int(11) NOT NULL,
-  `userid` int(11) NOT NULL,
-  `restid` int(11) NOT NULL,
+  `id` int NOT NULL,
+  `userid` int NOT NULL,
+  `restid` int NOT NULL,
   `at_risk` tinyint(1) DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `checkin_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -44,7 +45,7 @@ CREATE TABLE `checkin` (
 --
 
 CREATE TABLE `ggd_codes` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `userid` varchar(64) NOT NULL,
   `code` varchar(8) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -55,7 +56,36 @@ CREATE TABLE `ggd_codes` (
 --
 
 INSERT INTO `ggd_codes` (`id`, `userid`, `code`, `created_at`) VALUES
-(1, '2387gh2w8n', 'EUP20XWD', '2020-10-05 10:24:51');
+(1, 'f9be5e76-88e3-48e1-9c87-748a8fe5c569', '8H0PHRH4', '2020-10-15 10:18:54'),
+(2, '6708cd1a-d92d-4ecc-baa6-30f31761b2f1', 'WWDKEPCX', '2020-10-15 10:26:17'),
+(3, '9c94a30f-5f4c-419b-8318-e17364a5fc3b', 'YMYEXDD1', '2020-10-15 10:28:21'),
+(4, '144a809c-db94-49e5-b92e-de6229a6d9e2', 'U5KX4DPY', '2020-10-15 10:28:44'),
+(5, '6d7f91fe-d4b9-43c1-ac84-79a0da943f9f', 'TTU4EEYE', '2020-10-15 10:28:58'),
+(6, '52cc2561-4a47-4c79-8b2a-8389d04c3b7b', '5K5DUW51', '2020-10-16 09:48:41'),
+(7, '0b616e07-6129-4465-aa46-082fa63e28c4', '5MW0YEX4', '2020-10-16 09:49:40'),
+(8, 'e6b26a0b-155a-41a8-ba36-ab2200317564', '2MMRHUU0', '2020-10-16 15:22:53'),
+(9, '5900a03c-4bd7-4999-96ce-d6265813f0ad', '1U4PWWE0', '2020-10-17 13:55:07'),
+(10, '5298a595-c77b-4f5e-ace8-388534b57b6d', 'PHP0WXXW', '2020-10-17 13:55:26'),
+(11, 'ddd53fd0-6235-435f-8458-64ec43bac523', 'PPM48RME', '2020-10-17 14:08:35'),
+(12, 'f80a9cd1-6b9e-4944-8ebc-14997a666a08', '5P8DDKX4', '2020-10-17 14:14:43'),
+(13, '5d37fdca-7769-4274-ada4-4969b7c71113', 'TTCTKK8M', '2020-10-17 14:15:17'),
+(14, '8a7eac20-76c3-496c-a374-7baef4d777f4', '1PX28PRR', '2020-10-17 14:17:54'),
+(15, 'd3e6be21-9c21-4b04-980f-6b3d5752ea83', '00EMH5PU', '2020-10-17 14:18:35'),
+(16, '5e418220-8373-423d-9c6e-02b84f193090', '4MUHP2EM', '2020-10-17 14:19:12'),
+(17, 'ab8bdcb2-227e-43a1-b7ed-97c0e958b301', 'M4CX04EE', '2020-10-17 22:39:53'),
+(18, 'd343ebdd-726b-4584-ab56-dfc36dd41f9a', '25MRWP8U', '2020-10-19 16:28:21');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `personnel_codes`
+--
+
+CREATE TABLE `personnel_codes` (
+  `id` int NOT NULL,
+  `userid` varchar(64) NOT NULL,
+  `code` varchar(64) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -64,13 +94,13 @@ INSERT INTO `ggd_codes` (`id`, `userid`, `code`, `created_at`) VALUES
 --
 
 CREATE TABLE `restaurants` (
-  `id` int(11) NOT NULL,
+  `id` int NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `streetname` varchar(255) DEFAULT NULL,
   `number` varchar(255) DEFAULT NULL,
   `postalcode` varchar(255) DEFAULT NULL,
   `city` varchar(255) DEFAULT NULL,
-  `ownerid` int(13) NOT NULL
+  `ownerid` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -199,7 +229,7 @@ INSERT INTO `restaurants` (`id`, `name`, `streetname`, `number`, `postalcode`, `
 (119, 'Restaurant Fleur De Sel', NULL, '', '', NULL, 0),
 (120, 'Shivani\'s Surinaams Eethuis', NULL, '', '', NULL, 0),
 (121, 'The Bombay Spice', NULL, '', '', NULL, 0),
-(122, 'La Placeeeee', 'NewStreeeet', '222', 'lsad', 'Vilnius', 1);
+(122, 'La Place', NULL, '', '', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -208,8 +238,8 @@ INSERT INTO `restaurants` (`id`, `name`, `streetname`, `number`, `postalcode`, `
 --
 
 CREATE TABLE `restaurant_codes` (
-  `id` int(11) NOT NULL,
-  `restid` int(11) NOT NULL,
+  `id` int NOT NULL,
+  `restid` int NOT NULL,
   `code` varchar(64) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -220,13 +250,13 @@ CREATE TABLE `restaurant_codes` (
 --
 
 CREATE TABLE `superusers` (
-  `id` int(11) NOT NULL,
-  `username` varchar(100) NOT NULL,
+  `id` int NOT NULL,
+  `username` varchar(255) NOT NULL,
   `password` text NOT NULL,
   `email` varchar(255) DEFAULT NULL,
   `type` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `superusers`
@@ -244,17 +274,23 @@ INSERT INTO `superusers` (`id`, `username`, `password`, `email`, `type`, `create
 
 CREATE TABLE `users` (
   `id` varchar(64) NOT NULL,
-  `infected` tinyint(1) NOT NULL DEFAULT '0',
+  `token` varchar(255) DEFAULT NULL,
+  `type` varchar(16) DEFAULT 'customer',
+  `infected` tinyint(1) DEFAULT '0',
   `at_risk` tinyint(1) NOT NULL DEFAULT '0',
-  `at_risk_since` datetime DEFAULT NULL
+  `at_risk_since` datetime DEFAULT NULL,
+  `notification_token` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `infected`, `at_risk`, `at_risk_since`) VALUES
-('1', 0, 0, NULL);
+INSERT INTO `users` (`id`, `token`, `type`, `infected`, `at_risk`, `at_risk_since`, `notification_token`) VALUES
+('bd1a9cf7-5bdb-415f-99e4-a65cc98a7cff', NULL, NULL, 0, 0, NULL, NULL),
+('45ab241b-b687-4577-85c1-af526bc196ce', NULL, NULL, 0, 0, NULL, NULL),
+('7a883203-7240-4c0e-8f86-6e83793a1c47', NULL, 'alien', 0, 0, NULL, NULL),
+('fb2fad91-0e74-47a8-b972-93348684dfd1', NULL, NULL, 0, 0, NULL, 'alien');
 
 --
 -- Indexes for dumped tables
@@ -271,7 +307,13 @@ ALTER TABLE `checkin`
 --
 ALTER TABLE `ggd_codes`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `code` (`code`);
+  ADD UNIQUE KEY `code` (`code`) USING BTREE;
+
+--
+-- Indexes for table `personnel_codes`
+--
+ALTER TABLE `personnel_codes`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `restaurants`
@@ -300,31 +342,37 @@ ALTER TABLE `superusers`
 -- AUTO_INCREMENT for table `checkin`
 --
 ALTER TABLE `checkin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `ggd_codes`
 --
 ALTER TABLE `ggd_codes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
+-- AUTO_INCREMENT for table `personnel_codes`
+--
+ALTER TABLE `personnel_codes`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `restaurants`
 --
 ALTER TABLE `restaurants`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
 
 --
 -- AUTO_INCREMENT for table `restaurant_codes`
 --
 ALTER TABLE `restaurant_codes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `superusers`
 --
 ALTER TABLE `superusers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

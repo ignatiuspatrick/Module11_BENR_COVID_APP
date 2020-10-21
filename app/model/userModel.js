@@ -5,11 +5,11 @@ const bcrypt = require('bcrypt');
 const saltRounds = 12;
 
 
-
 //User object constructor. This is sufficient for Customers.
 var User = function(user){
   this.id = user.id;
   this.type = user.type;
+  this.notification_token = user.notification_token
 };
 
 //We barely store anything from customers; just id and type
