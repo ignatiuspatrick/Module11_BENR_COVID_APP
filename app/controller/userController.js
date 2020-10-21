@@ -94,3 +94,13 @@ exports.mark_user = function(req, res){
     }
   });
 };
+
+exports.get_Marked_Users = function(req,res) {
+  User.getMarkedUsers(req.body.days, function(err,success){
+    if (err){
+      res.status(400).send({error: true, message: err});
+    } else {
+      return res.status(200).send({result: success});
+    }
+  })
+}

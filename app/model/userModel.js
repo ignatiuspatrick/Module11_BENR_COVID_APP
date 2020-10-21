@@ -140,7 +140,7 @@ User.generateCode = function(userId, result){
 
 User.markUser = function(code, result){
   //   -Mark as infected in db (new column, default 0) (update query)
-  sql.query('UPDATE users SET infected = 1, at_risk_since=CURRENT_TIMESTAMP WHERE id in (SELECT userid FROM ggd_codes WHERE code = ? AND `created_at` > timestampadd(hour, -24, now()))',
+  sql.query('UPDATE users SET infected = 1 WHERE id in (SELECT userid FROM ggd_codes WHERE code = ? AND `created_at` > timestampadd(hour, -24, now()))',
    code, function(err, queryresult){
     if(err){
       return result(err, null);
@@ -237,9 +237,21 @@ insert into checkin (id, restid, userid, checkin_time, checkout_time, at_risk) v
   });
 
 }
-User.getMarked = function(){
-
-
+User.getMarkedUsers = function(days,result){
+  var startDay = new Date(new Date().toDateString());
+  var endDay = new Date(startDay);
+  startDay.setHours(startDay.getHours() - 24 * days)
+  endDay.setHours(endDay.getHours() + 24);
+  sql.query("SELECT COUNT(id) as c FROM users WHERE infected = 1 AND at_risk_since >= ? AND at_risk_since < ?",[startDay,endDay], function(err,res){
+    if(err) {
+      console.log("error: ", err);
+      result("SQL error, check logs.", null);
+      return;
+  }
+  else {
+      result(null, res[0].c);
+  }
+  })
 
 
 
