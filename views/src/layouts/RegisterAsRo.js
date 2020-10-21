@@ -112,10 +112,8 @@ export default function SignUpSide() {
         return console.log(err);
     }
     if (res.statusCode === 200) {
-      var body = JSON.parse(body);
-      var id = 0;
-      id = body.id;
-      console.log(id);
+      var body1 = JSON.parse(body);
+      var id = body1.id;
       options2 = {
         url: back + '/restaurants',
         form: {

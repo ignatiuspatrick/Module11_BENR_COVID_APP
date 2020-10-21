@@ -82,7 +82,7 @@ export default function SSDashboard() {
     } 
     if(res.statusCode === 200) {
       console.log(obj.success);
-      setErrorflag("Marked user: " + code +  " . Currently infected: " + obj.success);
+      setErrorflag("Marked user: " + code);
     }else {
       console.log(obj.message);
       setErrorflag("Error! " + obj.message);
@@ -110,7 +110,7 @@ export default function SSDashboard() {
               <CardIcon color="danger">
                 <AlarmAdd />
               </CardIcon>
-              <p className={classes.cardCategory}>Total Marked User</p>
+              <p className={classes.cardCategory}>Total Marked Users</p>
               <h3 className={classes.cardTitle}>
                 {totmarkedusers}
               </h3>

@@ -30,7 +30,6 @@ const useStyles = makeStyles(styles);
 export default function Dashboard() {
   const classes = useStyles();
   // const [code, setCode] = React.useState('');
-  const [errorflag, setErrorflag] = React.useState(0);
   const username = localStorage.getItem('name');
   const [qrvalue, setQRValue] = React.useState('123456'); // get from the backend later
   const [qrformat, setQRFormat] = React.useState('');
@@ -129,7 +128,7 @@ export default function Dashboard() {
       withCredentials: true,
       form: {
         ownerid: ownerid,
-        restid: restid, // might want to fix later
+        restid: restid,
         days: type
       }
     }
@@ -159,7 +158,6 @@ export default function Dashboard() {
         return console.log(err);
       } else if (res.statusCode === 200) {
         var obj = JSON.parse(body);
-        console.log("success! obj = " + obj.code);
         setQRValue(obj.code);
       }
     })
@@ -167,12 +165,10 @@ export default function Dashboard() {
   }
 
   function hideQRCode() {
-    console.log("qr code is hidden!")
     setIsShownQR(false);
   }
 
   function downloadQRCode() {
-    console.log('downloaded format ' + qrformat);
     const canvas = document.getElementById("qrimg");
     var url;
     if (qrformat === "PNG"){

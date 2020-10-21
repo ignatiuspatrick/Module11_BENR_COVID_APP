@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 21, 2020 at 01:54 PM
+-- Generation Time: Oct 21, 2020 at 02:29 PM
 -- Server version: 10.1.32-MariaDB
 -- PHP Version: 7.2.5
 
@@ -64,7 +64,7 @@ CREATE TABLE `ggd_codes` (
 --
 
 INSERT INTO `ggd_codes` (`id`, `userid`, `code`, `created_at`) VALUES
-(2, 'f9be5e76-88e3-48e1-9c87-748a8fe5c569', '8H0PHRH4', '2020-10-15 08:18:54'),
+(2, 'f9be5e76-88e3-48e1-9c87-748a8fe5c569', '8H0PHRH4', '2020-10-21 08:18:54'),
 (3, '6708cd1a-d92d-4ecc-baa6-30f31761b2f1', 'WWDKEPCX', '2020-10-15 08:26:17'),
 (4, '9c94a30f-5f4c-419b-8318-e17364a5fc3b', 'YMYEXDD1', '2020-10-15 08:28:21'),
 (5, '144a809c-db94-49e5-b92e-de6229a6d9e2', 'U5KX4DPY', '2020-10-15 08:28:44'),
@@ -244,7 +244,8 @@ CREATE TABLE `restaurant_codes` (
 --
 
 INSERT INTO `restaurant_codes` (`id`, `restid`, `code`) VALUES
-(1, 122, '164c317d23492918');
+(1, 122, '164c317d23492918'),
+(2, 124, 'cded195aaa2fcfcb');
 
 -- --------------------------------------------------------
 
@@ -279,7 +280,7 @@ CREATE TABLE `users` (
   `id` varchar(64) NOT NULL,
   `infected` tinyint(1) NOT NULL DEFAULT '0',
   `at_risk` tinyint(1) NOT NULL DEFAULT '0',
-  `at_risk_since` datetime DEFAULT NULL,
+  `at_risk_since` datetime DEFAULT CURRENT_TIMESTAMP,
   `notification_token` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -288,9 +289,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `infected`, `at_risk`, `at_risk_since`, `notification_token`) VALUES
-('45ab241b-b687-4577-85c1-af526bc196ce', 0, 0, NULL, NULL),
 ('7a883203-7240-4c0e-8f86-6e83793a1c47', 1, 1, '2020-10-20 15:03:21', NULL),
 ('bd1a9cf7-5bdb-415f-99e4-a65cc98a7cff', 1, 1, '2020-10-20 14:41:21', NULL),
+('f9be5e76-88e3-48e1-9c87-748a8fe5c569', 1, 0, NULL, NULL),
 ('fb2fad91-0e74-47a8-b972-93348684dfd1', 0, 0, NULL, NULL);
 
 --
@@ -355,19 +356,19 @@ ALTER TABLE `ggd_codes`
 -- AUTO_INCREMENT for table `restaurants`
 --
 ALTER TABLE `restaurants`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
 
 --
 -- AUTO_INCREMENT for table `restaurant_codes`
 --
 ALTER TABLE `restaurant_codes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `superusers`
 --
 ALTER TABLE `superusers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
