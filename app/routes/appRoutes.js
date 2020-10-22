@@ -52,6 +52,10 @@ module.exports = function(app){
   app.route('/superusers/visited').post(verify.verifyRestaurantOwner, superusers.checkValidRestid, superusers.visited);
   app.route('/superusers/listinfections').post(verify.verifyRestaurantOwner, superusers.checkValidRestid, superusers.listInfections);
   app.route('/superusers/restaurants').get(verify.verifyRestaurantOwner, superusers.getrestids);
+  //This route gives back the QRcode code that is already in the DB for the restaurant (and if not exists, make one)
+  app.route('/restaurants/getqr/:restaurantId').get(verify.verifyRestaurantOwner, superusers.checkValidRestid,restaurants.get_qrcode);
+  //This route generates a new QRcode code for the restaurant
+  app.route('/restaurants/generateqr/:restaurantId').get(verify.verifyRestaurantOwner, superusers.checkValidRestid,restaurants.generate_qrcode);
   // app.post('/superusers/markinfected', verify.verifySanitaryService, users.mark_user);
   app.post('/superusers/markinfected',verifySanitaryService, users.mark_user);
   app.post('/users/getMarked', verify.verifySanitaryService, users.get_Marked_Users);
