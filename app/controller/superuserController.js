@@ -42,7 +42,13 @@ exports.create_superuser = function(req, res){
 };
 
 exports.checkValidRestid = function(req,res,next) {
-  Superuser.checkValidRestid(req.body.ownerid, req.body.restid, function(err, restid) {
+  var restid = -1;
+  if(req.params.restaurantId) {
+    restid = req.params.restaurantId
+  } else if(req.body.restid) {
+    restid = req.body.restid
+  }
+  Superuser.checkValidRestid(req.body.ownerid, restid, function(err, restid) {
     if (err){
       return res.status(400).send({error: true, message: err});
     } else {
