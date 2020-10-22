@@ -148,9 +148,9 @@ exports.login_superuser = function(req, res){
         // by sending a cookie instead of body, we will be stateless, see more:
         // https://dev.to/mr_cea/remaining-stateless-jwt-cookies-in-node-js-3lle
         if(type == "restaurant_owner"){
-          res.status(200).cookie('tokenro', token, {expires: tokenExpire, httpOnly: true, sameSite: 'Lax'}).send();
+          res.status(200).cookie('tokenro', token, {expires: tokenExpire, httpOnly: true, sameSite: 'None'}).send();
         } else if (type == "sanitary_service"){
-          res.status(200).cookie('tokenss', token, {expires: tokenExpire, httpOnly: true, sameSite: 'Lax'}).send();
+          res.status(200).cookie('tokenss', token, {expires: tokenExpire, httpOnly: true, sameSite: 'None'}).send();
         }
       } else {
         res.status(401).send({message:'Login has failed. Please try again.'});
@@ -167,14 +167,14 @@ exports.logout_ro = function(req,res){
   // so we need to invalidate these tokens at back end
   var tokenro = req.cookies.tokenro || '';
   console.log("cookie ro cleared: " + tokenro);
-  res.status(200).clearCookie('tokenro', {httpOnly: true, sameSite: 'Lax'}).send();
+  res.status(200).clearCookie('tokenro', {httpOnly: true, sameSite: 'None'}).send();
 
 };
 
 exports.logout_ss = function(req,res){
   var tokenss = req.cookies.tokenss || '';
   console.log("cookie ss cleared: " + tokenss);
-  res.status(200).clearCookie('tokenss', {httpOnly: true, sameSite: 'Lax'}).send();
+  res.status(200).clearCookie('tokenss', {httpOnly: true, sameSite: 'None'}).send();
 };
 exports.get_ro_id = function(req,res){
   var tokenro = req.cookies.tokenro || '';

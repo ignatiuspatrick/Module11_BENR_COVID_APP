@@ -188,12 +188,12 @@ insert into checkin (id, restid, userid, checkin_time, checkout_time, at_risk) v
     if (err){
       return result(err, null)
     }
-    const affectedRows = queryresult.affectedRows
-    if (affectedRows){
-      affectedRows.forEach((item, i) => {
+    console.log(`Users at risk to notify: ${JSON.stringify(queryresult)}`)
+    if (queryresult){
+      queryresult.forEach((item, i) => {
         let messages = [];
         messages.push({
-          to: item[0],
+          to: item.notification_token,
           sound: 'default',
           title: 'You have been marked at risk!',
           body: '',
