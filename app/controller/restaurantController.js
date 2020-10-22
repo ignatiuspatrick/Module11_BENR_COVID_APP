@@ -29,6 +29,9 @@ exports.create_restaurant = function(req, res) {
    if(!newRestaurant.name || !newRestaurant.streetname || !newRestaurant.number || !newRestaurant.postalcode || !newRestaurant.city){
      res.status(400).send({ error:true, message: 'Please provide more information.'});
    }
+   else if (newRestaurant.postalcode.name >= 100){
+     res.status(400).send({ error:true, message: 'Please provide a name under 100 characters.'});
+   }
   else if (newRestaurant.postalcode.length >= 100){
     res.status(400).send({ error:true, message: 'Please provide a postal code under 100 characters.'});
   }
