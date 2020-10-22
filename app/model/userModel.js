@@ -9,7 +9,6 @@ let expo = new Expo();
 //User object constructor. This is sufficient for Customers.
 var User = function(user){
   this.id = user.id;
-  this.type = user.type;
   this.notification_token = user.notification_token
 };
 
