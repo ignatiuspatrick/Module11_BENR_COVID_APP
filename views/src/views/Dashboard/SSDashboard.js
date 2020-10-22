@@ -1,6 +1,4 @@
 import React from "react";
-// react plugin for creating charts
-import ChartistGraph from "react-chartist";
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from '@material-ui/core/TextField';
@@ -10,12 +8,9 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import AlarmAdd from '@material-ui/icons/AlarmAdd';
 import WarningIcon from '@material-ui/icons/Warning';
 import DateRange from "@material-ui/icons/DateRange";
-import ArrowUpward from "@material-ui/icons/ArrowUpward";
-import AccessTime from "@material-ui/icons/AccessTime";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import Table from "components/Table/Table.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
@@ -24,10 +19,6 @@ import CardFooter from "components/Card/CardFooter.js";
 
 import back from "../../hosts.js";
 import Typography from '@material-ui/core/Typography';
-
-import {
-  dailySalesChart,
-} from "variables/charts.js";
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 
@@ -63,6 +54,7 @@ export default function SSDashboard() {
     markInfectedUser();
     e.target.reset();
   }
+
   //for the backend
   function markInfectedUser(){
     const request = require('request');
@@ -91,10 +83,9 @@ export default function SSDashboard() {
   }
 
   function getTotMarkedUsers(range) {
-    console.log("range: " + range);
     const request = require('request');
     let options = {
-      uri: back + '/users/getMarked',
+      uri: back + '/superusers/marked',
       withCredentials: true,
       form: {
         days: range
@@ -106,14 +97,34 @@ export default function SSDashboard() {
         return console.log(err);
       }
       if(res.statusCode === 200){
-        console.log(obj.result);
         setTotMarkedUsers(obj.result);
       } 
     });
   }
 
+  function getTotImpactedResto(days) {
+    const request = require('request');
+    let options = {
+      uri: back + '/superusers/infectedrestaurants',
+      withCredentials: true,
+      form: {
+        days: days
+      }
+    };
+    request.post(options,(err,res,body)=>{
+      var obj=JSON.parse(body);
+      if (err) {
+        return console.log(err);
+      }
+      if(res.statusCode === 200){
+        setTotImpactedResto(obj.result);
+      } 
+    });
+
+  }
+
   function getErrorMessage(){
-    if(errorflag!==0){
+    if (errorflag !== 0){
       return errorflag;
     }
   }
@@ -158,9 +169,9 @@ export default function SSDashboard() {
               <div className={classes.stats}>
                 <DateRange />
                 <ButtonGroup color="inherit" aria-label="outlined primary button group" size="small" style={{marginLeft: 10}}>
-                  <Button>Today</Button>
-                  <Button>Week</Button>
-                  <Button>Month</Button>
+                  <Button onClick={()=> getTotImpactedResto(0)}>Today</Button>
+                  <Button onClick={()=> getTotImpactedResto(6)}>Week</Button>
+                  <Button onClick={()=> getTotImpactedResto(30)}>Month</Button>
                 </ButtonGroup>
               </div>
             </CardFooter>
@@ -183,68 +194,6 @@ export default function SSDashboard() {
               </form>
             </CardBody>
           </Card>
-        </GridItem>
-      </GridContainer>
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={10}>
-            <Card>
-                <CardHeader color="danger">
-                  <h4 className={classes.cardTitleWhite}>Statistics of Infected Users</h4>
-                </CardHeader>
-                <CardBody>
-                    <GridContainer>
-                        <GridItem xs={12} sm={12} md={6}>
-                            <Card>
-                                <CardHeader color="danger">
-                                    <h4 className={classes.cardTitleWhite}>Most Infected Cities</h4>
-                                    <p className={classes.cardCategoryWhite}>
-                                        Count of marked COVID-19 cases for each city
-                                    </p>
-                                </CardHeader>
-                                <CardBody>
-                                <Table
-                                    tableHeaderColor="danger"
-                                    tableHead={recentnotiftablehead}
-                                    tableData={recentnotiftabledata}
-                                />
-                                </CardBody>
-                            </Card>
-                          </GridItem>
-                          <GridItem xs={12} sm={12} md={6}>
-                            <Card chart>
-                              <CardHeader color="danger">
-                                <ChartistGraph
-                                    className="ct-chart"
-                                    data={dailySalesChart.data}
-                                    type="Line"
-                                    options={dailySalesChart.options}
-                                    listener={dailySalesChart.animation}
-                                />
-                                <ButtonGroup color="inherit" aria-label="outlined primary button group" size="small" style={{marginLeft: 20}}>
-                                    <Button>Week</Button>
-                                    <Button>Month</Button>
-                                    <Button>Year</Button>
-                                </ButtonGroup>
-                              </CardHeader>
-                              <CardBody>
-                                <h4 className={classes.cardTitle}>Number of restaurants with COVID-19</h4>
-                                  <p className={classes.cardCategory}>
-                                      <span className={classes.successText}>
-                                      <ArrowUpward className={classes.upArrowCardCategory} /> 55%
-                                      </span>{" "}
-                                      increase in number of notified restaurants.
-                                  </p>
-                              </CardBody>
-                              <CardFooter chart>
-                                <div className={classes.stats}>
-                                  <AccessTime /> updated 7 minutes ago
-                                </div>
-                              </CardFooter>
-                            </Card>
-                        </GridItem>
-                    </GridContainer>
-                </CardBody>
-            </Card>
         </GridItem>
       </GridContainer>
     </div>
