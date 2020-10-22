@@ -3,7 +3,8 @@ var sql = require('../../db.js');
 const cryptoRandomString = require('crypto-random-string');
 const bcrypt = require('bcrypt');
 const saltRounds = 12;
-
+const { Expo } = require('expo-server-sdk');
+let expo = new Expo();
 
 //User object constructor. This is sufficient for Customers.
 var User = function(user){
@@ -149,6 +150,8 @@ User.markUser = function(code, result){
     }
   });
 
+
+
 //QUERY:
 // SELECT DISTINCT c2.userid FROM `checkin` c1, `checkin` c2 WHERE c1.userid = 20 AND c1.restid = c2.restid AND
 // ((c2.checkin_time > c1.checkin_time AND c2.checkin_time < c1.checkout_time)
@@ -175,14 +178,55 @@ insert into checkin (id, restid, userid, checkin_time, checkout_time, at_risk) v
 */
 
   let timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
+  const atRisk = `SELECT DISTINCT u.notification_token
+  FROM checkin c1, checkin c2, users u
+  WHERE u.id = c2.userid AND
+   c1.userid = (SELECT userid FROM ggd_codes WHERE code = ? AND created_at > timestampadd(hour, -24, now())) AND c1.restid = c2.restid
+    AND ((c2.checkin_time > c1.checkin_time AND c2.checkin_time < c1.checkout_time)
+      OR (c1.checkin_time > c2.checkin_time AND c1.checkin_time < c2.checkout_time))`
+  // Send notifications to all users at risk
+  sql.query(atRisk, [code], function(err, queryresult){
+    if (err){
+      return result(err, null)
+    }
+    const affectedRows = queryresult.affectedRows
+    affectedRows.forEach((item, i) => {
+      let messages = [];
+      messages.push({
+        to: item[0],
+        sound: 'default',
+        title: 'You have been marked at risk!',
+        body: '',
+        data: { timestamp },
+      })
+      let chunks = expo.chunkPushNotifications(messages);
+      (async () => {
+        // Send the chunks to the Expo push notification service. There are
+        // different strategies you could use. A simple one is to send one chunk at a
+        // time, which nicely spreads the load out over time:
+        for (let chunk of chunks) {
+          try {
+            expo.sendPushNotificationsAsync(chunk);
+            // NOTE: If a ticket contains an error code in ticket.details.error, you
+            // must handle it appropriately. The error codes are listed in the Expo
+            // documentation:
+            // https://docs.expo.io/versions/latest/guides/push-notifications#response-format
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      })();
+    });
+
+    console.log('Successfully sent notifications to all at risk people!')
+  })
   const query = `UPDATE users
     SET at_risk = 1, at_risk_since = ?
-    WHERE id IN (
-      SELECT DISTINCT c2.userid
-      FROM checkin c1, checkin c2
-      WHERE c1.userid = (SELECT userid FROM ggd_codes WHERE code = ? AND created_at > timestampadd(hour, -24, now())) AND c1.restid = c2.restid
-        AND ((c2.checkin_time > c1.checkin_time AND c2.checkin_time < c1.checkout_time)
-          OR (c1.checkin_time > c2.checkin_time AND c1.checkin_time < c2.checkout_time)))`;
+    WHERE id IN (SELECT DISTINCT c2.userid
+    FROM checkin c1, checkin c2
+    WHERE c1.userid = (SELECT userid FROM ggd_codes WHERE code = ? AND created_at > timestampadd(hour, -24, now())) AND c1.restid = c2.restid
+      AND ((c2.checkin_time > c1.checkin_time AND c2.checkin_time < c1.checkout_time)
+        OR (c1.checkin_time > c2.checkin_time AND c1.checkin_time < c2.checkout_time)))`;
   sql.query(query, [timestamp, code], function(err, queryresult){
     if(err){
       return result(err, null);
@@ -193,6 +237,24 @@ insert into checkin (id, restid, userid, checkin_time, checkout_time, at_risk) v
   });
 
 }
+User.getMarkedUsers = function(days,result){
+  var startDay = new Date(new Date().toDateString());
+  var endDay = new Date(startDay);
+  startDay.setHours(startDay.getHours() - 24 * days)
+  endDay.setHours(endDay.getHours() + 24);
+  sql.query("SELECT COUNT(id) as c FROM users WHERE infected = 1 AND at_risk_since >= ? AND at_risk_since < ?",[startDay,endDay], function(err,res){
+    if(err) {
+      console.log("error: ", err);
+      result("SQL error, check logs.", null);
+      return;
+  }
+  else {
+      result(null, res[0].c);
+  }
+  })
 
+
+
+}
 
 module.exports= User;

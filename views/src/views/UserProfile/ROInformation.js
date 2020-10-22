@@ -190,7 +190,6 @@ export default function ROInformation() {
                   <GridItem xs={6} sm={3} md={4}>
                     <TextField
                     id="number"
-                    type="number"
                     label="Number"
                     fullWidth
                     onChange={(e) => updateNumber(e.target.value)}

@@ -11,7 +11,7 @@ module.exports = function(app){
   var restaurants = require('../controller/restaurantController');
   app.route('/restaurants')
   .get(restaurants.get_all_restaurants)
-  .post(verify.verifyRestaurantOwner,restaurants.create_restaurant);
+  .post(restaurants.create_restaurant);
   app.route('/restaurants/:restaurantId')
   .put(verify.verifyRestaurantOwner, restaurants.update_restaurant)
   .delete(verify.verifyRestaurantOwner, restaurants.delete_restaurant);
@@ -58,6 +58,10 @@ module.exports = function(app){
   app.route('/superusers/restaurants').get(verify.verifyRestaurantOwner, superusers.getrestids);
   // app.post('/superusers/markinfected', verify.verifySanitaryService, users.mark_user);
   app.post('/superusers/markinfected',verifySanitaryService, users.mark_user);
+  app.post('/users/getMarked', verify.verifySanitaryService, users.get_Marked_Users);
+  app.route('/superusers/infected').post(verify.verifySanitaryService, superusers.infected);
+  app.route('/superusers/infectedrestaurants').post(verify.verifySanitaryService, superusers.infectedrestaurants);
+  app.route('/superusers/marked').post(verify.verifySanitaryService, superusers.marked);
   app.post('/superusers/logout/ro',verify.verifyRestaurantOwner, superusers.logout_ro);
   app.post('/superusers/logout/ss',verify.verifySanitaryService, superusers.logout_ss);
   app.post('/superusers/checkToken/ro', verify.verifyRestaurantOwner, (req,res) =>{
@@ -68,7 +72,6 @@ module.exports = function(app){
     res.status(200).send();
   });
 
-  //// TODO: Add the front-end pages here?
 
 
 };

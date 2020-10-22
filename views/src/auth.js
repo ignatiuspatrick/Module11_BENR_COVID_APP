@@ -22,7 +22,6 @@ const isAuthenticated = {
       });
     },
     getAuthRo(){
-        console.log(this.isAuthro);
         return this.isAuthro;
     },
     signoutRo(){
@@ -42,7 +41,6 @@ const isAuthenticated = {
       }
       if(res.statusCode === 200){
         this.isAuthss = true;
-        console.log(this.isAuthss);
       }
       else if (res.statusCode === 401){
         this.isAuthss = false;
@@ -50,7 +48,6 @@ const isAuthenticated = {
       });
     },
     getAuthSs(){
-        console.log(this.isAuthss);
         return this.isAuthss;
     },
     signoutSs(){

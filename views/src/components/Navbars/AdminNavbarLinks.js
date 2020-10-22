@@ -24,23 +24,10 @@ const useStyles = makeStyles(styles);
 
 export default function AdminNavbarLinks(props) {
   const classes = useStyles();
-  const [openNotification, setOpenNotification] = React.useState(null);
   const [openProfile, setOpenProfile] = React.useState(null);
   const {dashboardtype} = props;
 
   let history = useHistory();
-
-  const handleClickNotification = event => {
-    if (openNotification && openNotification.contains(event.target)) {
-      setOpenNotification(null);
-    } else {
-      setOpenNotification(event.currentTarget);
-    }
-  };
-  const handleCloseNotification = () => {
-    setOpenNotification(null);
-
-  };
   const handleClickProfile = event => {
     if (openProfile && openProfile.contains(event.target)) {
       setOpenProfile(null);
@@ -48,15 +35,6 @@ export default function AdminNavbarLinks(props) {
       setOpenProfile(event.currentTarget);
     }
   };
-
-  const handleDashboardClick = () => {
-    if (dashboardtype === "ss") {
-      history.push("/ssdash/dashboard");
-    } else if (dashboardtype === "ro") {
-      history.push("/rodash/dashboard");
-    }
-    setOpenNotification(null);
-  }
 
   const handleCloseProfile = () => {
     setOpenProfile(null);

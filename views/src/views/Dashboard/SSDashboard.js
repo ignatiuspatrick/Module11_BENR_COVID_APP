@@ -35,8 +35,8 @@ export default function SSDashboard() {
 
   const [code, setCode] = React.useState('');
   const [errorflag, setErrorflag] = React.useState(0);
-  const [totmarkedusers, setTotMarkedUsers] = React.useState(23); // backend invocation
-  const [totimpactedresto, setTotImpactedResto] = React.useState(32); // backend invocation
+  const [totmarkedusers, setTotMarkedUsers] = React.useState(0); // backend invocation
+  const [totimpactedresto, setTotImpactedResto] = React.useState(0); // backend invocation
   const username = localStorage.getItem('name');
 
   var today = new Date();
@@ -77,7 +77,7 @@ export default function SSDashboard() {
     } 
     if(res.statusCode === 200) {
       console.log(obj.success);
-      setErrorflag("Marked user: " + code +  " . Currently infected: " + obj.success);
+      setErrorflag("Marked user: " + code);
     }else {
       console.log(obj.message);
       setErrorflag("Error! " + obj.message);
@@ -87,6 +87,24 @@ export default function SSDashboard() {
 
   function getTotMarkedUsers(range) {
     console.log("range: " + range);
+    const request = require('request');
+    let options = {
+      uri: back + '/users/getMarked',
+      withCredentials: true,
+      form: {
+        days: range
+      }
+    };
+    request.post(options,(err,res,body)=>{
+      var obj=JSON.parse(body);
+      if (err) {
+        return console.log(err);
+      }
+      if(res.statusCode === 200){
+        console.log(obj.result);
+        setTotMarkedUsers(obj.result);
+      } 
+    });
   }
 
   function getErrorMessage(){
@@ -105,7 +123,7 @@ export default function SSDashboard() {
               <CardIcon color="danger">
                 <AlarmAdd />
               </CardIcon>
-              <p className={classes.cardCategory}>Total Marked User</p>
+              <p className={classes.cardCategory}>Total Marked Users</p>
               <h3 className={classes.cardTitle}>
                 {totmarkedusers}
               </h3>
@@ -116,7 +134,7 @@ export default function SSDashboard() {
                 <ButtonGroup color="inherit" aria-label="outlined primary button group" size="small" style={{marginLeft: 10}}>
                   <Button onClick={() => getTotMarkedUsers(0)}>Today</Button>
                   <Button onClick={() => getTotMarkedUsers(6)}>Week</Button>
-                  <Button onClick={() => getTotMarkedUsers(counter - 1)}>Month</Button>
+                  <Button onClick={() => getTotMarkedUsers(30)}>Month</Button>
                 </ButtonGroup>
               </div>
             </CardFooter>
