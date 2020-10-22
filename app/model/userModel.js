@@ -189,35 +189,38 @@ insert into checkin (id, restid, userid, checkin_time, checkout_time, at_risk) v
       return result(err, null)
     }
     const affectedRows = queryresult.affectedRows
-    affectedRows.forEach((item, i) => {
-      let messages = [];
-      messages.push({
-        to: item[0],
-        sound: 'default',
-        title: 'You have been marked at risk!',
-        body: '',
-        data: { timestamp },
-      })
-      let chunks = expo.chunkPushNotifications(messages);
-      (async () => {
-        // Send the chunks to the Expo push notification service. There are
-        // different strategies you could use. A simple one is to send one chunk at a
-        // time, which nicely spreads the load out over time:
-        for (let chunk of chunks) {
-          try {
-            expo.sendPushNotificationsAsync(chunk);
-            // NOTE: If a ticket contains an error code in ticket.details.error, you
-            // must handle it appropriately. The error codes are listed in the Expo
-            // documentation:
-            // https://docs.expo.io/versions/latest/guides/push-notifications#response-format
-          } catch (error) {
-            console.error(error);
+    if (affectedRows){
+      affectedRows.forEach((item, i) => {
+        let messages = [];
+        messages.push({
+          to: item[0],
+          sound: 'default',
+          title: 'You have been marked at risk!',
+          body: '',
+          data: { timestamp },
+        })
+        let chunks = expo.chunkPushNotifications(messages);
+        (async () => {
+          // Send the chunks to the Expo push notification service. There are
+          // different strategies you could use. A simple one is to send one chunk at a
+          // time, which nicely spreads the load out over time:
+          for (let chunk of chunks) {
+            try {
+              expo.sendPushNotificationsAsync(chunk);
+              // NOTE: If a ticket contains an error code in ticket.details.error, you
+              // must handle it appropriately. The error codes are listed in the Expo
+              // documentation:
+              // https://docs.expo.io/versions/latest/guides/push-notifications#response-format
+            } catch (error) {
+              console.error(error);
+            }
           }
-        }
-      })();
-    });
+        })();
+      });
 
-    console.log('Successfully sent notifications to all at risk people!')
+
+      console.log('Successfully sent notifications to all at risk people!')
+  }
   })
   const query = `UPDATE users
     SET at_risk = 1, at_risk_since = ?
