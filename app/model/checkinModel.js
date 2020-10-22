@@ -41,13 +41,6 @@ Checkin.createCheckin = function (userId, code, result) {
               return result(err, null);
           }
           else{
-            //Delete restaurant code
-            sql.query("DELETE FROM restaurant_codes WHERE code = ?", code, function(err,res) {
-              if(err){
-                console.log("error: " + err);
-                return result(err, null);
-              }
-            });
               console.log(res.insertId); //we return the checkinId
               result(null, res.insertId);
           }

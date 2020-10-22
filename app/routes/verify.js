@@ -69,23 +69,6 @@ module.exports = {
   },
 
 
-  //verify that it is restaurant personnel
-  verifyPersonnel: function (req, res, next){
-    console.log("verifying personnel.");
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-    jwt.verify(token, SECRET_KEY, function (err, payload) {
-      if (!token) return res.status(401).send('Access denied. No token provided.')
-      if (err) {
-        return res.status(403).send(err);
-      }
-      if(payload.type != 'personnel'){
-        return res.status(403).send({error: 'Acces denied. Wrong user type.'})
-      }
-      console.log('JWT is valid and payload is\n', payload);
-      next();
-    });
-  },
 
   //verify that is a customer
    verifyCustomer: function (req, res, next){
@@ -100,10 +83,6 @@ module.exports = {
 
       req.body.userid = payload.id
 
-      //check if it was indeed a customer.
-      if(payload.type != 'customer'){
-        return res.status(403).send({error: 'Access denied. Wrong user type.'})
-      }
 
       console.log('JWT is valid and payload is\n', payload);
       next();
