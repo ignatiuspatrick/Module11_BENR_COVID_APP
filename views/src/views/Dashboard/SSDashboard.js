@@ -20,10 +20,6 @@ import CardFooter from "components/Card/CardFooter.js";
 import back from "../../hosts.js";
 import Typography from '@material-ui/core/Typography';
 
-import {
-  dailySalesChart,
-} from "variables/charts.js";
-
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 
 const useStyles = makeStyles(styles);
@@ -58,6 +54,7 @@ export default function SSDashboard() {
     markInfectedUser();
     e.target.reset();
   }
+
   //for the backend
   function markInfectedUser(){
     const request = require('request');
@@ -108,7 +105,7 @@ export default function SSDashboard() {
   }
 
   function getErrorMessage(){
-    if(errorflag!==0){
+    if (errorflag !== 0){
       return errorflag;
     }
   }
