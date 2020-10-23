@@ -77,7 +77,7 @@ exports.get_timeofstay = function(req, res) {
     if (err){
       return res.send("Something went wrong.");
     }
-    return res.status(400).send({tos: timeofstay});
+    return res.status(200).send({tos: timeofstay});
   });
 };
 
