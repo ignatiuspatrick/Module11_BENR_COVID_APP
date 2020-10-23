@@ -40,8 +40,8 @@ app.use(cookieParser());
 //     res.header('Access-Control-Allow-Credentials',true);
 //     next();
 //   });
-let back = 'http://localhost:5000';
-// let back = 'http://195.201.98.111:5000'
+// let back = 'http://localhost:5000';
+let back = 'http://195.201.98.111:5000'
 var allowedOrigins = ['http://localhost:3000',
                       back];
 app.use(cors({

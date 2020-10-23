@@ -16,9 +16,11 @@ exports.create_checkin = function(req, res) {
   } else {
     Checkin.createCheckin(req.body.userid, req.body.code, function(err, checkinId) {
     if (err){
-      return res.status(404).send({message: checkinId});
+      return res.status(400).send({error: true, message: checkinId});
+    } else if (checkinId < 0){
+      return res.status(200).send({error: false, message: "User is still marked as infected."});
     }
-    res.json({checkinId: checkinId});
+    res.status(200).json({checkinId: checkinId});
   });
 }
 };

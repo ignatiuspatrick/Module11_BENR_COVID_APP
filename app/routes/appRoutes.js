@@ -11,7 +11,7 @@ module.exports = function(app){
   var restaurants = require('../controller/restaurantController');
   app.route('/restaurants')
   .get(restaurants.get_all_restaurants)
-  .post(verify.verifyRestaurantOwner, restaurants.create_restaurant);
+  .post(restaurants.create_restaurant);
   app.route('/restaurants/:restaurantId')
   .put(verify.verifyRestaurantOwner, restaurants.update_restaurant)
   .delete(verify.verifyRestaurantOwner, restaurants.delete_restaurant);
