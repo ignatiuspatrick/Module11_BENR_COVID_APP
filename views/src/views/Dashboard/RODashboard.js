@@ -4,11 +4,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
 // @material-ui/icons
 import Store from "@material-ui/icons/Store";
 import DateRange from "@material-ui/icons/DateRange";
 import GetAppIcon from '@material-ui/icons/GetApp';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -50,6 +52,7 @@ export default function Dashboard() {
   const [ownerid,setId] = React.useState(0);
   const [restid, setRestId] = React.useState(0);
   const [tableData, setTable] = React.useState([]);
+  const [tos, setTos] = React.useState(2); //hours or mins?
 
   //might be useful for later
   React.useEffect(()=>{
@@ -146,7 +149,12 @@ export default function Dashboard() {
   function handleQRFormatChange(qrf) {
     setQRFormat(qrf);
   }
-
+  
+  const handleTOSChange = (event) => {
+    setTos(event.target.value);
+    // post and get request
+  };
+  
   // for the backend
   function generateQRCode() {
     const requestqr = require('request');
@@ -269,6 +277,25 @@ export default function Dashboard() {
                 </ButtonGroup>
               </div>
             </CardFooter>
+          </Card>
+        </GridItem>
+        <GridItem xs={12} sm={6} md={3}>
+          <Card>
+            <CardHeader color="info" stats icon>
+              <CardIcon color="info">
+                <AccessTimeIcon />
+              </CardIcon>
+              <p className={classes.cardCategory}>Time of Stay</p>
+            </CardHeader>
+            <CardBody>
+              <TextField
+                id="outlined-password-input"
+                label="Set Time of Stay"
+                variant="outlined"
+                value={tos}
+                onChange={handleTOSChange}
+              />
+            </CardBody>
           </Card>
         </GridItem>
         <GridItem xs={12} sm={12} md={7}>
