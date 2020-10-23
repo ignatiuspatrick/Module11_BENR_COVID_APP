@@ -279,6 +279,25 @@ export default function Dashboard() {
             </CardFooter>
           </Card>
         </GridItem>
+        <GridItem xs={12} sm={6} md={3}>
+          <Card>
+            <CardHeader color="info" stats icon>
+              <CardIcon color="info">
+                <AccessTimeIcon />
+              </CardIcon>
+              <p className={classes.cardCategory}>Time of Stay</p>
+            </CardHeader>
+            <CardBody>
+              <TextField
+                id="outlined-password-input"
+                label="Set Time of Stay"
+                variant="outlined"
+                value={tos}
+                onChange={handleTOSChange}
+              />
+            </CardBody>
+          </Card>
+        </GridItem>
         <GridItem xs={12} sm={12} md={7}>
           <Card>
             <CardHeader color="info">
@@ -295,25 +314,6 @@ export default function Dashboard() {
                 tableHeaderColor="info"
                 tableHead={tablehead}
                 tableData={tableData}
-              />
-            </CardBody>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={5}>
-          <Card>
-            <CardHeader color="info" stats icon>
-              <CardIcon color="info">
-                <AccessTimeIcon />
-              </CardIcon>
-              <p className={classes.cardCategory}>Time of Stay</p>
-            </CardHeader>
-            <CardBody>
-              <TextField
-                id="outlined-password-input"
-                label="Set Time of Stay"
-                variant="outlined"
-                value={tos}
-                onChange={handleTOSChange}
               />
             </CardBody>
           </Card>
