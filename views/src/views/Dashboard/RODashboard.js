@@ -52,21 +52,21 @@ export default function Dashboard() {
   const [ownerid,setId] = React.useState(0);
   const [restid, setRestId] = React.useState(0);
   const [tableData, setTable] = React.useState([]);
-  const [tos, setTos] = React.useState(2); //hours or mins?
+  const [tos, setTos] = React.useState(0); //hours or mins?
 
   //might be useful for later
-  React.useEffect(()=>{
+  React.useEffect(() => {
     async function getId(){
+      var tempresid;
       const request = require('request');
       let options = {
         uri: back + '/superusers/getid',
         withCredentials: true
       };
-      request.get(options,(err,res,body)=>{
+      request.get(options,(err,res,body) => {
         if (err) {
           return console.log(err);
-        }
-        if(res.statusCode === 200){
+        } else if(res.statusCode === 200) {
           var obj=JSON.parse(body);
           setId(obj.id);
           var owid = obj.id;
@@ -78,46 +78,62 @@ export default function Dashboard() {
             ownerid: obj.id
           }
         }
-        request2.post(options2,(err,res,body)=>{
+        request2.post(options2,(err,res,body) => {
           if (err) {
             return console.log(err);
-          }
-          if(res.statusCode === 200){
+          } else if (res.statusCode === 200) {
             var obj = JSON.parse(body);
             setRestId(obj[0].id);
+            tempresid = obj[0].id; //calling restid returned 0
             const request3 = require('request');
             let options3 = {
               uri: back + '/superusers/listinfections',
               withCredentials: true,
-              form:{
+              form: {
                 ownerid:owid,
                 restid: obj[0].id
               }
             };
-            request3.post(options3,(err,res,body)=>{
+            request3.post(options3,(err,res,body) => {
               if (err) {
                 return console.log(err);
-              }
-              if(res.statusCode === 200){
+              } else if(res.statusCode === 200) {
                 var obj = JSON.parse(body);
                 var tabledata = [];
-                for(var i=0; i<obj.result.length; i++){
+                for (var i=0; i<obj.result.length; i++) {
                   var checkin = obj.result[i].checkin_time.split("T");
                   var checkout = obj.result[i].checkout_time.split("T");
-                  if(checkin[0]===checkout[0]){
+                  if (checkin[0]===checkout[0]) {
                     var item = [];
                     item.push(checkin[0],checkin[1].substring(0,8),checkout[1].substring(0,8));
                     tabledata.push(item);
-                  }else{
+                  } else {
                     console.log("different days of checkin!");
                   }
                 }
                 setTable(tabledata);
+                const requesttos = require('request');
+                let optionsgettos = {
+                  uri: back + '/restaurants/gettos',
+                  withCredentials: true,
+                  form: {
+                    restid: tempresid
+                  }
+                }
+                requesttos.post(optionsgettos, (err, res, body) => {
+                  if (err) {
+                    console.log("here")
+                    return console.log(err);
+                  } else if (res.statusCode === 200) {
+                    var obj = JSON.parse(body);
+                    console.log(obj.tos);
+                    setTos(obj.tos);
+                  }
+                })
               }
             });
           }
         });
-
         }
       });
     }
@@ -152,7 +168,7 @@ export default function Dashboard() {
   
   const handleTOSChange = (event) => {
     setTos(event.target.value);
-    // post and get request
+    // set tos to backend
   };
   
   // for the backend
