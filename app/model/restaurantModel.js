@@ -62,6 +62,30 @@ Restaurant.getAllRestaurants = function (result) {
             });
 };
 
+Restaurant.gettimeofstay = function (restid, result) {
+        sql.query("SELECT ToS as t FROM restaurants WHERE id = ?", restid, function (err, res) {
+                if(err) {
+                    console.log("error: ", err);
+                    result(err, null);
+                }
+                else{
+                  console.log(res)
+                 result(null, res[0].t);
+                }
+            });
+};
+
+Restaurant.settimeofstay = function (restid, tos, result) {
+        sql.query("UPDATE restaurants SET ToS = ? WHERE id = ?", [tos, restid], function (err, res) {
+                if(err) {
+                    console.log("error: ", err);
+                    result(err, null);
+                }
+                else{
+                 result(null, {message:"Success"});
+                }
+            });
+};
 
 Restaurant.getNotSelected = function (result) {
     sql.query("SELECT name FROM restaurants WHERE ownerid = 0", function (err, res) {

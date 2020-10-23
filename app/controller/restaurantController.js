@@ -63,6 +63,23 @@ exports.get_restaurant = function(req, res) {
   });
 };
 
+exports.set_timeofstay = function(req, res) {
+  Restaurant.settimeofstay(req.body.restid, req.body.tos, function(err, restaurant) {
+    if (err){
+      return res.send("Something went wrong.");
+    }
+    res.json(restaurant);
+  });
+};
+
+exports.get_timeofstay = function(req, res) {
+  Restaurant.gettimeofstay(req.body.restid, function(err, timeofstay) {
+    if (err){
+      return res.send("Something went wrong.");
+    }
+    return res.status(400).send({tos: timeofstay});
+  });
+};
 
 exports.update_restaurant = function(req, res) {
   var newRestaurant = new Restaurant(req.body);
