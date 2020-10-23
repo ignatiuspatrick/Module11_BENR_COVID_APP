@@ -1,5 +1,6 @@
 'user strict';
 var Superuser = require('../model/superuserModel');
+var Restaurant = require('../model/restaurantModel');
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = require('../../secret');
 
@@ -30,7 +31,15 @@ exports.create_superuser = function(req, res){
       } else {
         console.log('Created superuser with id ' + superuser);
         if(newSuperuser.type === "restaurant_owner"){
-          res.status(200).send({id:superuser});
+          var newRestaurant = new Restaurant(req.body);
+          newRestaurant.ownerid = superuser;
+          Restaurant.createRestaurant(newRestaurant, function(err){
+            if (err){
+              return res.send(err);
+            }
+          })
+          res.status(200).send({message:"Success!"});
+
         }else{
           res.status(200).send({message:"Success!"});
 

@@ -95,7 +95,6 @@ export default function SignUpSide() {
   function submitRegistration() {
     const request = require('request');
     let options = {};
-    let options2 = {};
     options = {
       url: back + '/superusers/create',
       form: {
@@ -103,7 +102,12 @@ export default function SignUpSide() {
           password: password,
           confirm: passwordConfirm,
           email:email,
-          type: "restaurant_owner"
+          type: "restaurant_owner",
+          name: businessname,
+          streetname: streetname,
+          number: number,
+          postalcode: postalcode,
+          city: city
       }
   };
   
@@ -112,33 +116,7 @@ export default function SignUpSide() {
         return console.log(err);
     }
     if (res.statusCode === 200) {
-      var body1 = JSON.parse(body);
-      var id = body1.id;
-      options2 = {
-        url: back + '/restaurants',
-        form: {
-          name: businessname,
-          streetname: streetname,
-          number: number,
-          postalcode: postalcode,
-          city: city,
-          ownerid: id
-        }
-      }
-      const request1 = require('request');
-      request1.post(options2, (err, res, body) => {
-        if (err) {
-            return console.log(err);
-        }
-        if (res.statusCode === 200) {
-          history.push('/login');
-        } else if (res.statusCode === 400 || res.statusCode === 401) {
-          var obj = JSON.parse(body)
-          console.log(obj.message)
-          setErrorflag(obj.message);
-        }
-      });
-      // history.push('/login');
+      history.push('/login');
     } else if (res.statusCode === 400 || res.statusCode === 401) {
       var obj = JSON.parse(body);
       console.log(obj.message);
