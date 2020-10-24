@@ -52,7 +52,30 @@ export default function Dashboard() {
   const [ownerid,setId] = React.useState(0);
   const [restid, setRestId] = React.useState(0);
   const [tableData, setTable] = React.useState([]);
-  const [tos, setTos] = React.useState(0); //hours or mins?
+  // time of stay
+  const [hours, setHours] = React.useState(0);
+  const [minutes, setMinutes] = React.useState(0);
+  const [tos, setTos] = React.useState(200); // format is xx:xx:xx, 200 is for 2 hours
+  const [issettingtos, setIsSettingTOS] = React.useState(false);
+
+  function invokeTOS(trid) {
+    const requesttos = require('request');
+    let optionsgettos = {
+      uri: back + '/restaurants/gettos',
+      withCredentials: true,
+      form: {
+        restid: trid
+      }
+    }
+    requesttos.post(optionsgettos, (err, res, body) => {
+      if (err) {
+        return console.log(err);
+      } else if (res.statusCode === 200) {
+        var obj = JSON.parse(body);
+        setTos(obj.tos);
+      }
+    })
+  }
 
   //might be useful for later
   React.useEffect(() => {
@@ -112,24 +135,7 @@ export default function Dashboard() {
                   }
                 }
                 setTable(tabledata);
-                const requesttos = require('request');
-                let optionsgettos = {
-                  uri: back + '/restaurants/gettos',
-                  withCredentials: true,
-                  form: {
-                    restid: tempresid
-                  }
-                }
-                requesttos.post(optionsgettos, (err, res, body) => {
-                  if (err) {
-                    console.log("here")
-                    return console.log(err);
-                  } else if (res.statusCode === 200) {
-                    var obj = JSON.parse(body);
-                    console.log(obj.tos);
-                    setTos(obj.tos);
-                  }
-                })
+                invokeTOS(tempresid);
               }
             });
           }
@@ -165,10 +171,43 @@ export default function Dashboard() {
   function handleQRFormatChange(qrf) {
     setQRFormat(qrf);
   }
+
+  const handleHoursChange = (e) => {
+    if (0 <= e.target.value <= 24) {
+      setHours(e.target.value);
+    } else {
+      console.log("hours input is not right");
+    }
+  }
+
+  const handleMinutesChange = (e) => {
+    if (0 <= e.target.value <= 60) {
+      setMinutes(e.target.value);
+    } else {
+      console.log("minutes input is not right");
+    }
+  }
   
-  const handleTOSChange = (event) => {
-    setTos(event.target.value);
-    // set tos to backend
+  function handleTOSChange() {
+    var tosval = String(hours) + String(minutes);
+    console.log(tosval)
+    const requestsettos = require('request');
+      let optionssettos = {
+        uri: back + '/restaurants/settos',
+        withCredentials: true,
+        form: {
+          restid: restid,
+          tos: tosval
+        }
+      }
+      requestsettos.post(optionssettos, (err, res, body) => {
+        if (err) {
+          return console.log(err);
+        } else if (res.statusCode === 200) {
+          invokeTOS(restid); // to display the right format
+          setIsSettingTOS(false);
+        }
+      })
   };
   
   // for the backend
@@ -302,15 +341,47 @@ export default function Dashboard() {
                 <AccessTimeIcon />
               </CardIcon>
               <p className={classes.cardCategory}>Time of Stay</p>
+              <h3 className={classes.cardTitle}>{tos}</h3>
             </CardHeader>
             <CardBody>
-              <TextField
-                id="outlined-password-input"
-                label="Set Time of Stay"
-                variant="outlined"
-                value={tos}
-                onChange={handleTOSChange}
-              />
+              {issettingtos ? 
+              <GridContainer>
+                <GridItem xs={6}>
+                  <TextField
+                  id="outlined-password-input"
+                  label="Hours"
+                  variant="outlined"
+                  type="number"
+                  InputProps={{ inputProps: { max: 24, min: 0 } }}
+                  style= {{width: "auto", paddingRight: "0px"}}
+                  onChange={handleHoursChange}
+                  />
+                </GridItem>
+                <GridItem xs={6}>
+                  <TextField
+                  id="outlined-password-input"
+                  label="Minutes"
+                  variant="outlined"
+                  type="number"
+                  InputProps={{ inputProps: { max: 59, min: 0 } }}
+                  style= {{width: "auto", paddingLeft: "0px"}}
+                  onChange={handleMinutesChange}
+                  />
+                </GridItem>
+                <GridItem xs={12}>
+                  <Button className={classes.downloadQRButton} style={{marginRight: "5px"}} variant="contained" onClick={() => setIsSettingTOS(false)}>
+                    Cancel
+                  </Button>
+                  <Button className={classes.downloadQRButton} variant="contained" onClick={handleTOSChange}>
+                    Save
+                  </Button>
+                </GridItem>
+              </GridContainer>
+              :
+              <Button className={classes.downloadQRButton} variant="contained" onClick={() => setIsSettingTOS(true)}>
+                Edit
+              </Button>
+              }
             </CardBody>
           </Card>
         </GridItem>
