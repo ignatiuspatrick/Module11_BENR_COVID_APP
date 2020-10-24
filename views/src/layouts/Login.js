@@ -15,7 +15,6 @@ import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from "react-router-dom";
-import isAuthenticated from "../auth.js";
 import back from "../hosts.js";
 
 
@@ -104,19 +103,15 @@ export default function SignInSide() {
         }
       };
     }
-    function sleep(delay = 0) {
-      return new Promise((resolve) => {
-        setTimeout(resolve, delay);
-      });
-    }
+    // function sleep(delay = 0) {
+    //   return new Promise((resolve) => {
+    //     setTimeout(resolve, delay);
+    //   });
+    // }
   async function redirect() {
     if (value === 0) {
-      isAuthenticated.authenticateRo();
-      await sleep(2e2);
       history.push('/rodash/dashboard');
       } else if (value === 1) {
-      isAuthenticated.authenticateSs();
-      await sleep(2e2);
       history.push('/ssdash/dashboard');
     }
   }

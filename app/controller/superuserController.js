@@ -153,7 +153,7 @@ exports.login_superuser = function(req, res){
           type: type,
         }, SECRET_KEY, {expiresIn: "1h"});
         console.log(token);
-        var tokenExpire = new Date(Date.now() + 32400000);
+        var tokenExpire = new Date(Date.now() + 3600000);
         // by sending a cookie instead of body, we will be stateless, see more:
         // https://dev.to/mr_cea/remaining-stateless-jwt-cookies-in-node-js-3lle
         if(type == "restaurant_owner"){

@@ -48,7 +48,6 @@ const useStyles = makeStyles(styles);
 
 export default function ROInformation() {
   const classes = useStyles();
-  let history = useHistory();
 
 
   //fetched

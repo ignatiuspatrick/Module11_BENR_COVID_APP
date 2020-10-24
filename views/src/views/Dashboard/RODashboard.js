@@ -81,7 +81,6 @@ export default function Dashboard() {
     })
   }
 
-  //might be useful for later
   React.useEffect(() => {
     async function getId(){
       var tempresid;

@@ -9,37 +9,18 @@ import RegisterRo from "layouts/RegisterAsRo.js";
 import RegisterSs from "layouts/RegisterAsSs.js";
 import RestoOwnerDash from "layouts/RestoOwnerDash.js";
 import SanitServiceDash from "layouts/SanitServiceDash.js";
-import isAuthenticated from "./auth.js"
+import PrivateRouteRo from "./PrivateRouteRo";
+import PrivateRouteSs from "./PrivateRouteSs";
 
 import "assets/css/material-dashboard-react.css?v=1.9.0";
 
 const hist = createBrowserHistory();
-
-
-const PrivateRouteRo = ({ component: Component, ...rest }) => (
-  <Route 
-    {...rest} 
-    render={props => (
-    isAuthenticated.getAuthRo() ? (<Component {...props} /> )
-                              : (<Redirect to={{pathname: "/login"}} />)
-  )} />
-)
-const PrivateRouteSs = ({ component: Component, ...rest }) => (
-  <Route 
-    {...rest} 
-    render={props => (
-    isAuthenticated.getAuthSs() ? (<Component {...props} /> )
-                              : (<Redirect to={{pathname: "/login"}} />)
-  )} />
-)
-
-
 ReactDOM.render(
   <Router history={hist}>
     <Switch>
-      <Route path="/login" component={Login} />
-      <Route path="/registerRo" component={RegisterRo} />
-      <Route path="/registerSs" component={RegisterSs} />
+      <Route exact path="/login" component={Login} />
+      <Route exact path="/registerRo" component={RegisterRo} />
+      <Route exact path="/registerSs" component={RegisterSs} />
       <PrivateRouteRo path="/rodash" component={RestoOwnerDash} />
       <PrivateRouteSs path="/ssdash" component={SanitServiceDash} />
       <Redirect from="/" to="/login" />

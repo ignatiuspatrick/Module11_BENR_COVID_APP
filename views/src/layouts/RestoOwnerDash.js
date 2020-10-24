@@ -54,16 +54,7 @@ export default function RestoOwnerDash({ ...rest }) {
     }
   };
   // initialize and destroy the PerfectScrollbar plugin
-  
-
-
-
-
-
-
   React.useEffect(() => {
-  
-
     if (navigator.platform.indexOf("Win") > -1) {
       ps = new PerfectScrollbar(mainPanel.current, {
         suppressScrollX: true,

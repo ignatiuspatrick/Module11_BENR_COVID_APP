@@ -15,7 +15,6 @@ import Person from "@material-ui/icons/Person";
 // core components
 import Button from "components/CustomButtons/Button.js";
 import { useHistory } from "react-router-dom";
-import isAuthenticated from "../../auth"
 
 import styles from "assets/jss/material-dashboard-react/components/headerLinksStyle.js";
 import back from "../../hosts.js";
@@ -68,8 +67,6 @@ export default function AdminNavbarLinks(props) {
         return console.log(err);
     }
     if(res.statusCode === 200 || res.statusCode === 401 ){
-      isAuthenticated.signoutRo();
-      isAuthenticated.signoutSs();
       history.push('/login');
     }
     });
