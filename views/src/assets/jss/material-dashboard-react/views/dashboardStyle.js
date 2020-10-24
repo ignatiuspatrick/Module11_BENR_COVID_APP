@@ -109,6 +109,10 @@ const dashboardStyle = {
     color: "#999",
     marginLeft: '10px',
     marginTop: '5px'
+  },
+  tosError: {
+    height: "auto",
+    marginLeft: "20px"
   }
 };
 

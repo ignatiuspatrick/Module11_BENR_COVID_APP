@@ -26,6 +26,7 @@ import { jsPDF } from "jspdf";
 import back from "../../hosts.js";
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles(styles);
 
@@ -55,8 +56,11 @@ export default function Dashboard() {
   // time of stay
   const [hours, setHours] = React.useState(0);
   const [minutes, setMinutes] = React.useState(0);
+  const [seconds, setSeconds] = React.useState(0);
   const [tos, setTos] = React.useState(200); // format is xx:xx:xx, 200 is for 2 hours
   const [issettingtos, setIsSettingTOS] = React.useState(false);
+  const [toserrormsg, setTOSErrorMsg] = React.useState('');
+  const [isdisabled, setIsDisabled] = React.useState(false); // save tos button controller
 
   function invokeTOS(trid) {
     const requesttos = require('request');
@@ -174,24 +178,35 @@ export default function Dashboard() {
 
   const handleHoursChange = (e) => {
     if (0 <= e.target.value <= 24) {
+      setTOSErrorMsg('');
       setHours(e.target.value);
     } else {
-      console.log("hours input is not right");
+      setTOSErrorMsg("hours input is not right");
     }
   }
 
   const handleMinutesChange = (e) => {
-    if (0 <= e.target.value <= 60) {
+    if (0 <= e.target.value <= 59) {
+      setTOSErrorMsg('');
       setMinutes(e.target.value);
     } else {
-      console.log("minutes input is not right");
+      setTOSErrorMsg("minutes input is not right");
+    }
+  }
+
+  const handleSecondsChange = (e) => {
+    if (0 <= e.target.value <= 59) {
+      setTOSErrorMsg('');
+      setSeconds(e.target.value);
+    } else {
+      setTOSErrorMsg("seconds input is not right");
     }
   }
   
   function handleTOSChange() {
-    var tosval = String(hours) + String(minutes);
-    console.log(tosval)
-    const requestsettos = require('request');
+    if (toserrormsg.length === 0) {
+      var tosval = String(hours) + String(minutes) + String(seconds);
+      const requestsettos = require('request');
       let optionssettos = {
         uri: back + '/restaurants/settos',
         withCredentials: true,
@@ -208,6 +223,7 @@ export default function Dashboard() {
           setIsSettingTOS(false);
         }
       })
+    }
   };
   
   // for the backend
@@ -346,7 +362,7 @@ export default function Dashboard() {
             <CardBody>
               {issettingtos ? 
               <GridContainer>
-                <GridItem xs={6}>
+                <GridItem xs={4}>
                   <TextField
                   id="outlined-password-input"
                   label="Hours"
@@ -354,10 +370,11 @@ export default function Dashboard() {
                   type="number"
                   InputProps={{ inputProps: { max: 24, min: 0 } }}
                   style= {{width: "auto", paddingRight: "0px"}}
+                  value={hours}
                   onChange={handleHoursChange}
                   />
                 </GridItem>
-                <GridItem xs={6}>
+                <GridItem xs={4}>
                   <TextField
                   id="outlined-password-input"
                   label="Minutes"
@@ -365,14 +382,34 @@ export default function Dashboard() {
                   type="number"
                   InputProps={{ inputProps: { max: 59, min: 0 } }}
                   style= {{width: "auto", paddingLeft: "0px"}}
+                  value={minutes}
                   onChange={handleMinutesChange}
                   />
                 </GridItem>
+                <GridItem xs={4}>
+                  <TextField
+                  id="outlined-password-input"
+                  label="Seconds"
+                  variant="outlined"
+                  type="number"
+                  InputProps={{ inputProps: { max: 59, min: 0 } }}
+                  style= {{width: "auto", paddingLeft: "0px"}}
+                  value={seconds}
+                  onChange={handleSecondsChange}
+                  />
+                </GridItem>
+                {toserrormsg.length > 0 ? 
+                <Typography color='error' className={classes.tosError}>
+                  {toserrormsg}
+                </Typography>
+                :
+                null
+                }
                 <GridItem xs={12}>
                   <Button className={classes.downloadQRButton} style={{marginRight: "5px"}} variant="contained" onClick={() => setIsSettingTOS(false)}>
                     Cancel
                   </Button>
-                  <Button className={classes.downloadQRButton} variant="contained" onClick={handleTOSChange}>
+                  <Button className={classes.downloadQRButton} variant="contained" onClick={handleTOSChange} disabled={isdisabled}>
                     Save
                   </Button>
                 </GridItem>
