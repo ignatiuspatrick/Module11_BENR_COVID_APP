@@ -17,7 +17,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from "react-router-dom";
 import back from "../hosts.js";
 
-
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -206,7 +205,7 @@ export default function SignInSide() {
             <Grid container>
               <Grid item xs={6}>
                 <Link href="/registerRo" variant="body2">
-                  Register as restaurant owner?
+                  Register as Restaurant Owner?
                 </Link>
               </Grid>
               <Grid item xs={6} style={{textAlign: 'right'}}>
