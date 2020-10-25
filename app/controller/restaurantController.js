@@ -7,52 +7,51 @@ const isNull = (value) => typeof value === "object" && !value
 exports.get_all_restaurants = function(req, res) {
   Restaurant.getAllRestaurants(function(err, restaurant) {
     if (err){
-      return res.send(err);
+      return res.status(400).send({message: "Something went wrong."});
     }
-    res.send(restaurant);
+    res.status(200).send(restaurant);
   });
 };
 
 exports.get_not_selected = function(req, res) {
   Restaurant.getNotSelected(function(err, restaurant) {
     if (err){
-      res.send(err);
+      return res.status(400).send({message: "Something went wrong."});
     }
-    res.send(restaurant);
+    res.status(200).send(restaurant);
   });
 };
 
 exports.create_restaurant = function(req, res) {
   var newRestaurant = new Restaurant(req.body);
-
-  //handles null error
-   if(!newRestaurant.name || !newRestaurant.streetname || !newRestaurant.number || !newRestaurant.postalcode || !newRestaurant.city){
-     res.status(400).send({ error:true, message: 'Please provide more information.'});
-   }
-   else if (newRestaurant.postalcode.name >= 100){
-     res.status(400).send({ error:true, message: 'Please provide a name under 100 characters.'});
-   }
-  else if (newRestaurant.postalcode.length >= 100){
-    res.status(400).send({ error:true, message: 'Please provide a postal code under 100 characters.'});
+  Restaurant.createRestaurant(newRestaurant, function(err, restaurant) {
+  if (err){
+    return res.status(400).send({message: "Something went wrong."});
   }
-  else if (newRestaurant.number.length >= 100){
-    res.status(400).send({ error:true, message: 'Please provide a house number under 100 characters.'});
-  }
-  else if (newRestaurant.streetname.length >= 100){
-    res.status(400).send({ error:true, message: 'Please provide a street name under 100 characters.'});
-  }
-  else if (newRestaurant.city.length >= 100){
-    res.status(400).send({ error:true, message: 'Please provide a city under 100 characters.'});
-  }
-   else {
-    Restaurant.createRestaurant(newRestaurant, function(err, restaurant) {
-    if (err){
-      return res.send(err);
-    }
-    res.json(restaurant);
+  res.status(200).send({message:"Success!"});
   });
-}
 };
+
+exports.create_restaurant_check = function(req, res, next) {
+  if (!req.sanser || req.sanser == 0) {
+    if (!req.body.name || !req.body.streetname || !req.body.number || !req.body.postalcode || !req.body.city){
+      return res.status(400).send({ error:true, message: 'Please provide more information.'});
+    } else if (req.body.postalcode.name >= 100){
+      return res.status(400).send({ error:true, message: 'Please provide a name under 100 characters.'});
+    } else if (req.body.postalcode.length >= 100){
+     return res.status(400).send({ error:true, message: 'Please provide a postal code under 100 characters.'});
+   } else if (req.body.number.length >= 100){
+     return res.status(400).send({ error:true, message: 'Please provide a house number under 100 characters.'});
+   } else if (req.body.streetname.length >= 100){
+     return res.status(400).send({ error:true, message: 'Please provide a street name under 100 characters.'});
+   } else if (req.body.city.length >= 100){
+     return res.status(400).send({ error:true, message: 'Please provide a city under 100 characters.'});
+   }
+ }
+ next();
+}
+
+
 
 exports.get_restaurant = function(req, res) {
   Restaurant.getRestaurant(req.body.ownerid, function(err, restaurant) {
@@ -83,31 +82,13 @@ exports.get_timeofstay = function(req, res) {
 
 exports.update_restaurant = function(req, res) {
   var newRestaurant = new Restaurant(req.body);
-
-  if(!newRestaurant.name || !newRestaurant.streetname || !newRestaurant.number || !newRestaurant.postalcode || !newRestaurant.city){
-    res.status(400).send({ error:true, message: 'Please fill in required information.'});
-  }else if (newRestaurant.postalcode.length >= 100){
-    res.status(400).send({ error:true, message: 'Please provide a postal code under 100 characters.'});
-  }
-  else if (newRestaurant.number.length >= 100){
-    res.status(400).send({ error:true, message: 'Please provide a house number under 100 characters.'});
-  }
-  else if (newRestaurant.streetname.length >= 100){
-    res.status(400).send({ error:true, message: 'Please provide a street name under 100 characters.'});
-  }
-  else if (newRestaurant.city.length >= 100){
-    res.status(400).send({ error:true, message: 'Please provide a city under 100 characters.'});
-  }
-  else{
-    Restaurant.updateRestaurant(req.params.restaurantId, newRestaurant, function(err, restaurant) {
-      if (err){
-        return res.status(400).send("Something went wrong.");
-      }
-      res.json(restaurant);
-    });
-  }
-};
-
+  Restaurant.updateRestaurant(req.params.restaurantId, newRestaurant, function(err, restaurant) {
+    if (err){
+      return res.status(400).send("Something went wrong.");
+    }
+    res.json(restaurant);
+  });
+}
 
 exports.delete_restaurant = function(req, res) {
   Restaurant.deleteRestaurant(req.params.restaurantId, function(err, restaurant) {

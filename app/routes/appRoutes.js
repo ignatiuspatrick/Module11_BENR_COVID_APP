@@ -11,7 +11,7 @@ module.exports = function(app){
   var restaurants = require('../controller/restaurantController');
   app.route('/restaurants')
   .get(restaurants.get_all_restaurants)
-  .post(restaurants.create_restaurant);
+  .post(verify.verifyRestaurantOwner, restaurants.create_restaurant_check, restaurants.create_restaurant);
   app.route('/restaurants/:restaurantId')
   .put(verify.verifyRestaurantOwner, restaurants.update_restaurant)
   .delete(verify.verifyRestaurantOwner, restaurants.delete_restaurant);
@@ -30,7 +30,7 @@ module.exports = function(app){
 
   app.route('/users/:userId')
   .get(users.get_user)
-  .put(users.update_user)
+  .put(restaurants.create_restaurant_check, users.update_user)
   .delete(users.delete_user);
 
   app.get('/users/getsscode/:userId', verify.verifyCustomer, users.get_securecode); //Dis for GGD code
@@ -47,7 +47,7 @@ module.exports = function(app){
   //(Sanitary services & Restaurant owners)
 
   var superusers = require('../controller/superuserController');
-  app.route('/superusers/create').post(superusers.create_superuser);
+  app.route('/superusers/create').post(superusers.create_superuser_check, restaurants.create_restaurant_check, superusers.create_superuser);
   app.route('/superusers/login').post(superusers.login_superuser);
   app.route('/superusers/visited').post(verify.verifyRestaurantOwner, superusers.checkValidRestid, superusers.visited);
   app.route('/superusers/listinfections').post(verify.verifyRestaurantOwner, superusers.checkValidRestid, superusers.listInfections);

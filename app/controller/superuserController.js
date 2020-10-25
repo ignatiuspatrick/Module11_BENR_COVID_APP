@@ -8,47 +8,54 @@ const SECRET_KEY = require('../../secret');
 //Register a superuser
 exports.create_superuser = function(req, res){
   var newSuperuser = new Superuser(req.body);
-  var passwordcheck = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-  //handles errors
-  if(!(newSuperuser.type == "sanitary_service" || newSuperuser.type == "restaurant_owner")){
-    res.status(400).send({ error:true, message: 'Please provide type of user.'});
-  } else if (!newSuperuser.password || !newSuperuser.username || !newSuperuser.email){
-    res.status(400).send({ error:true, message: 'Please provide login information of user.'});
-  } else if (newSuperuser.password !== newSuperuser.confirm){
-    res.status(400).send({ error:true, message: 'Passwords do not match.'});
-  }else if (!passwordcheck.test(newSuperuser.password)){
-    res.status(400).send({ error:true, message: 'Please provide at least 8 character long password with at least one uppercase letter, special character and number.'});
-  }else if (newSuperuser.email.length >= 100){
-    res.status(400).send({ error:true, message: 'Please provide an e-mail under 100 characters.'});
-  }else if (newSuperuser.password.length >= 100){
-    res.status(400).send({ error:true, message: 'Please provide a password under 100 characters.'});
-  }else if (newSuperuser.username.length >= 100){
-    res.status(400).send({ error:true, message: 'Please provide a username under 100 characters.'});
-  }else{
-    Superuser.createSuperuser(newSuperuser, function(err, superuser) {
-      if (err){
-        res.send({ error:true, message: err});
-      } else {
-        console.log('Created superuser with id ' + superuser);
-        if(newSuperuser.type === "restaurant_owner"){
-          var newRestaurant = new Restaurant(req.body);
-          newRestaurant.ownerid = superuser;
-          Restaurant.createRestaurant(newRestaurant, function(err){
-            if (err){
-              return res.send(err);
-            }
-          })
-          res.status(200).send({message:"Success!"});
-
-        }else{
-          res.status(200).send({message:"Success!"});
-
-        }
+  Superuser.createSuperuser(newSuperuser, function(err, superuser) {
+    if (err){
+      res.send({ error:true, message: err});
+    } else {
+      console.log('Created superuser with id ' + superuser);
+      if(req.body.sanser == 1) {
+        var newRestaurant = new Restaurant(req.body);
+        newRestaurant.ownerid = superuser;
+        Restaurant.createRestaurant(newRestaurant, function(err){
+          if (err){
+            return res.send(err);
+          }
+        })
+        res.status(200).send({message:"Success!"});
+      }else{
+        res.status(200).send({message:"Success!"});
       }
-    });
+    }
+  });
+};
+
+exports.create_superuser_check = function(req, res, next) {
+  var passwordcheck = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  var sanser = "sanitary_service";
+  req.body.sanser = 0
+
+  if(!(req.body.type == sanser || req.body.type == "restaurant_owner")){
+    return res.status(400).send({ error:true, message: 'Please provide type of user.'});
+  } else if (!req.body.password || !req.body.username || !req.body.email){
+    return res.status(400).send({ error:true, message: 'Please provide login information of user.'});
+  } else if (req.body.password !== req.body.confirm){
+    return res.status(400).send({ error:true, message: 'Passwords do not match.'});
+  }else if (!passwordcheck.test(req.body.password)){
+    return res.status(400).send({ error:true, message: 'Please provide at least 8 character long password with at least one uppercase letter, special character and number.'});
+  }else if (req.body.email.length >= 100){
+    return res.status(400).send({ error:true, message: 'Please provide an e-mail under 100 characters.'});
+  }else if (req.body.password.length >= 100){
+    return res.status(400).send({ error:true, message: 'Please provide a password under 100 characters.'});
+  }else if (req.body.username.length >= 100){
+    return res.status(400).send({ error:true, message: 'Please provide a username under 100 characters.'});
   }
 
-};
+  if(req.body.type == sanser) {
+    req.body.sanser = 1
+  }
+
+  next();
+}
 
 exports.checkValidRestid = function(req,res,next) {
   var restid = -1;
