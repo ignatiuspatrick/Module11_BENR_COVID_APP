@@ -33,10 +33,10 @@ exports.create_restaurant = function(req, res) {
 };
 
 exports.create_restaurant_check = function(req, res, next) {
-  if (!req.sanser || req.sanser == 0) {
+  if (!req.body.sanser || req.body.sanser == 0) {
     if (!req.body.name || !req.body.streetname || !req.body.number || !req.body.postalcode || !req.body.city){
       return res.status(400).send({ error:true, message: 'Please provide more information.'});
-    } else if (req.body.postalcode.name >= 100){
+    } else if (req.body.name.length >= 100){
       return res.status(400).send({ error:true, message: 'Please provide a name under 100 characters.'});
     } else if (req.body.postalcode.length >= 100){
      return res.status(400).send({ error:true, message: 'Please provide a postal code under 100 characters.'});
@@ -63,6 +63,10 @@ exports.get_restaurant = function(req, res) {
 };
 
 exports.set_timeofstay = function(req, res) {
+  var tos = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/;
+  if (!tos.test(req.body.tos)){
+    return res.status(400).send({ error:true, message: 'Please provide a time in the format 00:00:00.'});
+  }
   Restaurant.settimeofstay(req.body.restid, req.body.tos, function(err, restaurant) {
     if (err){
       return res.send("Something went wrong.");

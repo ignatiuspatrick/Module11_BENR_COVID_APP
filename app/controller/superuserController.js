@@ -69,7 +69,6 @@ exports.checkValidRestid = function(req,res,next) {
       return res.status(400).send({error: true, message: err});
     } else {
       if (restid == 0) {
-        console.log(restid)
         return res.status(401).send({message:'Invalid restaurant id.'});
       }
       next();
