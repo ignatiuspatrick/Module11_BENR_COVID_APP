@@ -59,7 +59,6 @@ export default function Dashboard() {
   const [seconds, setSeconds] = React.useState(0);
   const [tos, setTos] = React.useState(200); // format is xx:xx:xx, 200 is for 2 hours
   const [issettingtos, setIsSettingTOS] = React.useState(false);
-  const [toserrormsg, setTOSErrorMsg] = React.useState('');
   const [isdisabled, setIsDisabled] = React.useState(false); // save tos button controller
 
   function invokeTOS(trid) {
@@ -175,54 +174,74 @@ export default function Dashboard() {
     setQRFormat(qrf);
   }
 
-  const handleHoursChange = (e) => {
-    if (0 <= e.target.value <= 24) {
-      setTOSErrorMsg('');
-      setHours(e.target.value);
+  // function enableSaveButton() {
+  //   if ()
+  // }
+
+  function handleHoursChange(e) {
+    var obj = parseInt(e);
+    if (0 <= obj && obj <= 24) {
+      setHours(obj);
     } else {
-      setTOSErrorMsg("hours input is not right");
+      if (e === NaN) {
+        setHours(0);
+      }
+    }
+    // enableSaveButton()
+  }
+
+  function handleMinutesChange(e) {
+    var obj = parseInt(e);
+    if (0 <= obj && obj <= 59) {
+      setMinutes(obj);
+    } else {
+      if (e === NaN) {
+        setMinutes(0);
+      }
     }
   }
 
-  const handleMinutesChange = (e) => {
-    if (0 <= e.target.value <= 59) {
-      setTOSErrorMsg('');
-      setMinutes(e.target.value);
+  function handleSecondsChange(e) {
+    var obj = parseInt(e);
+    if (0 <= obj && obj <= 59) {
+      setSeconds(obj);
     } else {
-      setTOSErrorMsg("minutes input is not right");
-    }
-  }
-
-  const handleSecondsChange = (e) => {
-    if (0 <= e.target.value <= 59) {
-      setTOSErrorMsg('');
-      setSeconds(e.target.value);
-    } else {
-      setTOSErrorMsg("seconds input is not right");
+      if (e === NaN) {
+        setSeconds(0);
+      }
     }
   }
   
   function handleTOSChange() {
-    if (toserrormsg.length === 0) {
-      var tosval = String(hours) + String(minutes) + String(seconds);
-      const requestsettos = require('request');
-      let optionssettos = {
-        uri: back + '/restaurants/settos',
-        withCredentials: true,
-        form: {
-          restid: restid,
-          tos: tosval
-        }
-      }
-      requestsettos.post(optionssettos, (err, res, body) => {
-        if (err) {
-          return console.log(err);
-        } else if (res.statusCode === 200) {
-          invokeTOS(restid); // to display the right format
-          setIsSettingTOS(false);
-        }
-      })
+    var tosval = String(hours);
+    if (String(minutes).length === 1)  {
+      tosval = tosval + '0' + String(minutes);
+    } else {
+      tosval = tosval + String(minutes);
     }
+    if (String(seconds).length === 1)  {
+      tosval = tosval + '0' + String(seconds);
+    } else {
+      tosval = tosval + String(seconds);
+    }
+    console.log(tosval);
+    const requestsettos = require('request');
+    let optionssettos = {
+      uri: back + '/restaurants/settos',
+      withCredentials: true,
+      form: {
+        restid: restid,
+        tos: tosval
+      }
+    }
+    requestsettos.post(optionssettos, (err, res, body) => {
+      if (err) {
+        return console.log(err);
+      } else if (res.statusCode === 200) {
+        invokeTOS(restid); // to display the right format
+        setIsSettingTOS(false);
+      }
+    })
   };
   
   // for the backend
@@ -341,9 +360,9 @@ export default function Dashboard() {
               <div className={classes.stats}>
                 <DateRange />
                 <ButtonGroup color="inherit" aria-label="outlined primary button group" size="small" style={{marginLeft: 10}}>
-                  <Button onClick={()=> getNOVisitors(0)}>Today</Button>
-                  <Button onClick={()=> getNOVisitors(6)}>Week</Button>
-                  <Button onClick={()=> getNOVisitors(counter - 1)}>Month</Button> 
+                  <Button onClick={() => getNOVisitors(0)}>Today</Button>
+                  <Button onClick={() => getNOVisitors(6)}>Week</Button>
+                  <Button onClick={() => getNOVisitors(counter - 1)}>Month</Button> 
                 </ButtonGroup>
               </div>
             </CardFooter>
@@ -370,7 +389,7 @@ export default function Dashboard() {
                   InputProps={{ inputProps: { max: 24, min: 0 } }}
                   style= {{width: "auto", paddingRight: "0px"}}
                   value={hours}
-                  onChange={handleHoursChange}
+                  onChange={(e) => handleHoursChange(e.target.value)}
                   />
                 </GridItem>
                 <GridItem xs={4}>
@@ -382,7 +401,7 @@ export default function Dashboard() {
                   InputProps={{ inputProps: { max: 59, min: 0 } }}
                   style= {{width: "auto", paddingLeft: "0px"}}
                   value={minutes}
-                  onChange={handleMinutesChange}
+                  onChange={(e) => handleMinutesChange(e.target.value)}
                   />
                 </GridItem>
                 <GridItem xs={4}>
@@ -394,16 +413,9 @@ export default function Dashboard() {
                   InputProps={{ inputProps: { max: 59, min: 0 } }}
                   style= {{width: "auto", paddingLeft: "0px"}}
                   value={seconds}
-                  onChange={handleSecondsChange}
+                  onChange={(e) => handleSecondsChange(e.target.value)}
                   />
                 </GridItem>
-                {toserrormsg.length > 0 ? 
-                <Typography color='error' className={classes.tosError}>
-                  {toserrormsg}
-                </Typography>
-                :
-                null
-                }
                 <GridItem xs={12}>
                   <Button className={classes.downloadQRButton} style={{marginRight: "5px"}} variant="contained" onClick={() => setIsSettingTOS(false)}>
                     Cancel
