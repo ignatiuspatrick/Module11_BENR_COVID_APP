@@ -92,7 +92,7 @@ export default function SignInSide() {
             type: 'restaurant_owner'
         }
       };
-    } else if(value === 1){
+    } else if (value === 1) {
       options = {
         uri: back + '/superusers/login',
         withCredentials: true,
@@ -204,12 +204,12 @@ export default function SignInSide() {
               Sign In
             </Button>
             <Grid container>
-              <Grid item xs={10}>
+              <Grid item xs={6}>
                 <Link href="/registerRo" variant="body2">
                   Register as restaurant owner?
                 </Link>
               </Grid>
-              <Grid item xs={2}>
+              <Grid item xs={6} style={{textAlign: 'right'}}>
                 <Link href="/registerSs" variant="body2">
                   Register as GGD?
                 </Link>

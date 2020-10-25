@@ -88,7 +88,7 @@ const dashboardStyle = {
     marginTop: '10px'
   },
   notifyUserButton: {
-    marginLeft: "15px",
+    // marginLeft: "15px",
     height: "auto",
     backgroundColor: "#e53935",
     color:"white"

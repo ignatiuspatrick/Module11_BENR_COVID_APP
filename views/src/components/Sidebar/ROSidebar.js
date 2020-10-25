@@ -104,7 +104,7 @@ export default function ROSidebar(props) {
         >
           {brand}
           <div className={classes.sidebarWrapper}>
-            <AdminNavbarLinks />
+            <AdminNavbarLinks dashboardtype="ro"/>
             {links}
           </div>
           {image !== undefined ? (

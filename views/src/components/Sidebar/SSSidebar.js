@@ -104,7 +104,7 @@ export default function SSSidebar(props) {
         >
           {brand}
           <div className={classes.sidebarWrapper}>
-            <AdminNavbarLinks />
+            <AdminNavbarLinks dashboardtype="ss"/>
             {links}
           </div>
           {image !== undefined ? (

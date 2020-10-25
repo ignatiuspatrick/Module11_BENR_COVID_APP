@@ -47,7 +47,9 @@ export default function AdminNavbarLinks(props) {
     }
     setOpenProfile(null);
   };
+
   const handleLogOut = () => {
+    console.log('handling log out, dashboard type = ' + dashboardtype)
     const request = require('request');
     var options = {};
     if (dashboardtype === "ss") {
@@ -70,8 +72,6 @@ export default function AdminNavbarLinks(props) {
       history.push('/login');
     }
     });
-
-    
   }
   return (
     <div>

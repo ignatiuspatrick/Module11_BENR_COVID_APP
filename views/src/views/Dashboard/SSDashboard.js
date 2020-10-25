@@ -186,11 +186,17 @@ export default function SSDashboard() {
             </CardHeader>
             <CardBody>
               <form className={classes.form} onSubmit={onFormSubmit}>
-              <TextField id="outlined-basic" label="Enter GGD Code" variant="outlined" helperText="8 Digits" onChange={(e) => setCode(e.target.value)}/>
-              <Button type="submit" variant="contained" className={classes.notifyUserButton}>
-                  Notify
-              </Button>
-              <Typography color='error'>{getErrorMessage()}</Typography>
+                <GridContainer>
+                  <GridItem xs={6}>
+                    <TextField id="outlined-basic" label="Enter GGD Code" variant="outlined" helperText="8 Digits" onChange={(e) => setCode(e.target.value)}/>
+                  </GridItem>
+                  <GridItem xs={6}>
+                    <Button type="submit" variant="contained" className={classes.notifyUserButton}>
+                      Notify
+                    </Button>
+                  </GridItem>
+                </GridContainer>
+                <Typography color='error'>{getErrorMessage()}</Typography>
               </form>
             </CardBody>
           </Card>

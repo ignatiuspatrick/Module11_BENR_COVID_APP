@@ -26,7 +26,6 @@ import { jsPDF } from "jspdf";
 import back from "../../hosts.js";
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
-import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles(styles);
 
@@ -109,7 +108,7 @@ export default function Dashboard() {
           } else if (res.statusCode === 200) {
             var obj = JSON.parse(body);
             setRestId(obj[0].id);
-            tempresid = obj[0].id; //calling restid returned 0
+            tempresid = obj[0].id;
             const request3 = require('request');
             let options3 = {
               uri: back + '/superusers/listinfections',
@@ -149,7 +148,6 @@ export default function Dashboard() {
   },[]);
 
   function getNOVisitors(type) {
-    console.log(type)
     const request3 = require('request');
     let options3 = {
       uri: back + '/superusers/visited',
@@ -180,7 +178,7 @@ export default function Dashboard() {
     if (0 <= obj && obj <= 24) {
       setHours(obj);
     } else {
-      if (e === NaN) {
+      if (isNaN(e)) {
         setHours(0);
       }
     }
@@ -191,7 +189,7 @@ export default function Dashboard() {
     if (0 <= obj && obj <= 59) {
       setMinutes(obj);
     } else {
-      if (e === NaN) {
+      if (isNaN(e)) {
         setMinutes(0);
       }
     }
@@ -202,7 +200,7 @@ export default function Dashboard() {
     if (0 <= obj && obj <= 59) {
       setSeconds(obj);
     } else {
-      if (e === NaN) {
+      if (isNaN(e)) {
         setSeconds(0);
       }
     }
@@ -220,7 +218,6 @@ export default function Dashboard() {
     } else {
       tosval = tosval + String(seconds);
     }
-    console.log(tosval);
     const requestsettos = require('request');
     let optionssettos = {
       uri: back + '/restaurants/settos',
