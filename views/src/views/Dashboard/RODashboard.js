@@ -174,9 +174,6 @@ export default function Dashboard() {
     setQRFormat(qrf);
   }
 
-  // function enableSaveButton() {
-  //   if ()
-  // }
 
   function handleHoursChange(e) {
     var obj = parseInt(e);
@@ -187,7 +184,6 @@ export default function Dashboard() {
         setHours(0);
       }
     }
-    // enableSaveButton()
   }
 
   function handleMinutesChange(e) {
