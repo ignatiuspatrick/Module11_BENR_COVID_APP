@@ -58,7 +58,7 @@ exports.get_restaurant = function(req, res) {
     if (err){
       return res.send("Something went wrong.");
     }
-    res.json(restaurant);
+    res.status(200).json(restaurant);
   });
 };
 
@@ -71,7 +71,7 @@ exports.set_timeofstay = function(req, res) {
     if (err){
       return res.send("Something went wrong.");
     }
-    res.json(restaurant);
+    res.status(200).json(restaurant);
   });
 };
 
@@ -90,7 +90,7 @@ exports.update_restaurant = function(req, res) {
     if (err){
       return res.status(400).send("Something went wrong.");
     }
-    res.json(restaurant);
+    res.status(200).json(restaurant);
   });
 }
 
@@ -99,7 +99,7 @@ exports.delete_restaurant = function(req, res) {
     if (err){
       return res.send(err);
     }
-    res.json({ message: 'Restaurant successfully deleted' });
+    res.status(200).json({ message: 'Restaurant successfully deleted' });
   });
 };
 
