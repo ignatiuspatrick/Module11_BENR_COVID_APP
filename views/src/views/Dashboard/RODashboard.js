@@ -201,7 +201,7 @@ export default function Dashboard() {
     } else {
       tosval = tosval + ':' + String(minutes);
     }
-    tosval = tosval + ':00'; // hardcoded
+    console.log(tosval)
     const requestsettos = require('request');
     let optionssettos = {
       uri: back + '/restaurants/settos',
