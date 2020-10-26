@@ -32,9 +32,9 @@ exports.get_user = function(req,res){
   }
   User.getUser(req.params.userId, function(err,user){
     if(err){
-      res.send({error: true, message: err});
+      res.status(400).send({error: true, message: err});
     }else{
-      res.json(user);
+      res.status(200).json(user);
     }
   });
 };
@@ -44,9 +44,9 @@ exports.update_user = function(req,res){
   }
   User.updateUser(req.params.userId, new User(req.body), function(err,user){
     if(err){
-      res.send({error: true, message: err});
+      res.status(400).send({error: true, message: err});
     }else{
-      res.json(user);
+      res.status(200).json(user);
     }
   });
 };
@@ -56,9 +56,9 @@ exports.delete_user = function(req,res){
   }
   User.deleteUser(req.params.userId, function(err,user){
     if(err){
-      res.send({error: true, message: err});
+      res.status(400).send({error: true, message: err});
     }else{
-      res.json({ message: 'User successfully removed' });
+      res.status(200).json({ message: 'User successfully removed' });
     }
   });
 };
@@ -69,7 +69,7 @@ exports.get_securecode = function(req,res){
   }
   User.generateCode(req.params.userId, function(err,code){
     if(err){
-      res.send({error: true, message: err});
+      res.status(400).send({error: true, message: err});
     } else {
       res.status(200).json({code: code});
     }
