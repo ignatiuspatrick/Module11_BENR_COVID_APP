@@ -63,9 +63,9 @@ exports.get_restaurant = function(req, res) {
 };
 
 exports.set_timeofstay = function(req, res) {
-  var tos = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/;
+  var tos = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
   if (!tos.test(req.body.tos)){
-    return res.status(400).send({ error:true, message: 'Please provide a time in the format 00:00:00.'});
+    return res.status(400).send({ error:true, message: 'Please provide a time in the format 00:00.'});
   }
   Restaurant.settimeofstay(req.body.restid, req.body.tos, function(err, restaurant) {
     if (err){
