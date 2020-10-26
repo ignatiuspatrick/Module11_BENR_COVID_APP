@@ -55,7 +55,6 @@ export default function Dashboard() {
   // time of stay
   const [hours, setHours] = React.useState(0);
   const [minutes, setMinutes] = React.useState(0);
-  const [seconds, setSeconds] = React.useState(0);
   const [tos, setTos] = React.useState(200); // format is xx:xx:xx, 200 is for 2 hours
   const [issettingtos, setIsSettingTOS] = React.useState(false);
   const [isdisabled, setIsDisabled] = React.useState(false); // save tos button controller
@@ -194,30 +193,15 @@ export default function Dashboard() {
       }
     }
   }
-
-  function handleSecondsChange(e) {
-    var obj = parseInt(e);
-    if (0 <= obj && obj <= 59) {
-      setSeconds(obj);
-    } else {
-      if (isNaN(e)) {
-        setSeconds(0);
-      }
-    }
-  }
   
   function handleTOSChange() {
     var tosval = String(hours);
     if (String(minutes).length === 1)  {
-      tosval = tosval + '0' + String(minutes);
+      tosval = tosval + '0' + ':' + String(minutes);
     } else {
-      tosval = tosval + String(minutes);
+      tosval = tosval + ':' + String(minutes);
     }
-    if (String(seconds).length === 1)  {
-      tosval = tosval + '0' + String(seconds);
-    } else {
-      tosval = tosval + String(seconds);
-    }
+    tosval = tosval + ':00'; // hardcoded
     const requestsettos = require('request');
     let optionssettos = {
       uri: back + '/restaurants/settos',
@@ -373,40 +357,30 @@ export default function Dashboard() {
             <CardBody>
               {issettingtos ? 
               <GridContainer>
-                <GridItem xs={4}>
+                <GridItem xs={6}>
                   <TextField
                   id="outlined-password-input"
                   label="Hours"
                   variant="outlined"
                   type="number"
                   InputProps={{ inputProps: { max: 24, min: 0 } }}
-                  style= {{width: "auto", paddingRight: "0px"}}
+                  fullWidth
+                  style= {{paddingRight: "0px"}}
                   value={hours}
                   onChange={(e) => handleHoursChange(e.target.value)}
                   />
                 </GridItem>
-                <GridItem xs={4}>
+                <GridItem xs={6}>
                   <TextField
                   id="outlined-password-input"
                   label="Minutes"
                   variant="outlined"
                   type="number"
                   InputProps={{ inputProps: { max: 59, min: 0 } }}
-                  style= {{width: "auto", paddingLeft: "0px"}}
+                  fullWidth
+                  style= {{paddingLeft: "0px"}}
                   value={minutes}
                   onChange={(e) => handleMinutesChange(e.target.value)}
-                  />
-                </GridItem>
-                <GridItem xs={4}>
-                  <TextField
-                  id="outlined-password-input"
-                  label="Seconds"
-                  variant="outlined"
-                  type="number"
-                  InputProps={{ inputProps: { max: 59, min: 0 } }}
-                  style= {{width: "auto", paddingLeft: "0px"}}
-                  value={seconds}
-                  onChange={(e) => handleSecondsChange(e.target.value)}
                   />
                 </GridItem>
                 <GridItem xs={12}>
