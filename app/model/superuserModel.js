@@ -26,16 +26,21 @@ Superuser.createSuperuser = function (newSuperuser, result) {
   //Asynchronous approach so that it is faster.
   bcrypt.hash(newSuperuser.password, saltRounds).then(function(hash){
     newSuperuser.password = hash; //replace with hash before storing
-    sql.query("INSERT INTO superusers SET username = ?, password=?, email=?,type=?", [newSuperuser.username, newSuperuser.password, newSuperuser.email, newSuperuser.type], function (err, res) {
-      if(err) {
-          console.log("error: ", err);
-          result("SQL error, check logs.", null);
-          return;
-      }
-      else{
-          result(null, res.insertId);
-      }
-    });
+      sql.query("INSERT INTO superusers SET username = ?, password=?, email=?,type=?", [newSuperuser.username, newSuperuser.password, newSuperuser.email, newSuperuser.type], function (err, res) {
+        if(err) {
+            console.log("error: ", err);
+            if(err.errno === 1062){
+              result("Username "+ newSuperuser.username + " already taken!", null);
+            }
+            else{
+              result("SQL error, check logs.", null);
+            }
+        }
+        else{
+            result(null, res.insertId);
+        }
+      });
+    
   });
 
 };

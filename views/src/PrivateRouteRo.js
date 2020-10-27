@@ -3,7 +3,7 @@ import React, { useEffect, useState} from 'react';
 import { Route, Redirect } from 'react-router-dom'
 
 const PrivateRouteRo = ({ component: Component, ...rest }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(null)  
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
   useEffect(() => {
     const request = require('request');
     let options = {};
@@ -22,7 +22,6 @@ const PrivateRouteRo = ({ component: Component, ...rest }) => {
         setIsAuthenticated(false);
     }
     });
-    // eslint-disable-next-line
   }, [])
 
   if(isAuthenticated === null){
