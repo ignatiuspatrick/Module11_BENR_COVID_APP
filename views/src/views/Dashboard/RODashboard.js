@@ -196,10 +196,15 @@ export default function Dashboard() {
   
   function handleTOSChange() {
     var tosval = String(hours);
-    if (String(minutes).length === 1)  {
-      tosval = tosval + '0' + ':' + String(minutes);
+    if (String(hours).length === 1)  {
+      tosval = '0'+ tosval + ':';
     } else {
-      tosval = tosval + ':' + String(minutes);
+      tosval = tosval + ':';
+    }
+    if (String(minutes).length === 1)  {
+      tosval = tosval + '0' + String(minutes);
+    } else {
+      tosval = tosval + String(minutes);
     }
     console.log(tosval)
     const requestsettos = require('request');
