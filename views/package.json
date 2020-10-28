@@ -18,7 +18,6 @@
     "react": "16.13.1",
     "react-chartist": "0.14.3",
     "react-dom": "16.13.1",
-    "react-google-maps": "9.4.5",
     "react-router-dom": "5.2.0",
     "react-scripts": "^3.4.4",
     "react-swipeable-views": "0.13.9",
@@ -36,7 +35,6 @@
     "build-package": "npm run build-package-css && babel src --out-dir dist"
   },
   "optionalDependencies": {
-    "@types/googlemaps": "3.39.6",
     "@types/markerclustererplus": "2.1.33",
     "ajv": "6.12.2",
     "typescript": "3.9.3"

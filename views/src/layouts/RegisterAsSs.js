@@ -3,8 +3,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
@@ -66,23 +64,10 @@ export default function SignUpSide() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [passwordConfirm, confirmPassword] = React.useState('');
-  const [tnc, setTnc] = React.useState(0)
   const [errorflag, setErrorflag] = React.useState(0);
   const onFormSubmit = e => {
     e.preventDefault();
-    if(tnc === 1){
-        submitRegistration();
-    }else{
-        setErrorflag("Please agree to our terms and conditions!");
-    }
-  }
-
-  const onTncChange = e => {
-    if (e.target.checked) {
-      setTnc(1);
-    } else {
-      setTnc(-1);
-    }
+    submitRegistration();
   }
 
   function submitRegistration() {
@@ -111,9 +96,8 @@ export default function SignUpSide() {
       setErrorflag(obj.message);
     }
   });
- 
+
   }
-  console.log(tnc);
   function getErrorMessage(){
     if(errorflag!==0){
       return errorflag;
@@ -189,13 +173,6 @@ export default function SignUpSide() {
                         helperText="Enter the same password again."
                         onChange={(e) => confirmPassword(e.target.value)}
                     />
-                </Grid>
-                <Grid item xs={12}>
-                    <FormControlLabel
-                        control={<Checkbox value="tnc" color="primary" onChange={onTncChange}/>}
-                        label="I agree to the terms and conditions."
-                    />
-                    {tnc === -1 ? <Typography color='error'>Please read our terms and conditions before proceeding with the registration.</Typography> : ""}
                 </Grid>
             </Grid>
             <Button
