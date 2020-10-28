@@ -59,7 +59,6 @@ export default function SSDashboard() {
   function markInfectedUser(){
     const request = require('request');
     let options = {};
-    console.log(code);
     options = {
       uri: back + '/superusers/markinfected',
       withCredentials: true,
@@ -73,10 +72,8 @@ export default function SSDashboard() {
         return console.log(err);
     } 
     if(res.statusCode === 200) {
-      console.log(obj.success);
       setErrorflag("Marked user: " + code);
     }else {
-      console.log(obj.message);
       setErrorflag("Error! " + obj.message);
     }
     });

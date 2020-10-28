@@ -130,8 +130,6 @@ export default function Dashboard() {
                     var item = [];
                     item.push(checkin[0],checkin[1].substring(0,8),checkout[1].substring(0,8));
                     tabledata.push(item);
-                  } else {
-                    console.log("different days of checkin!");
                   }
                 }
                 setTable(tabledata);
@@ -206,7 +204,6 @@ export default function Dashboard() {
     } else {
       tosval = tosval + String(minutes);
     }
-    console.log(tosval)
     const requestsettos = require('request');
     let optionssettos = {
       uri: back + '/restaurants/settos',
@@ -316,7 +313,7 @@ export default function Dashboard() {
                 <Grid item xs={12}>
                   {qrformat !== '' && isshownqr ? 
                   <Button className={classes.downloadQRButton} variant="contained" onClick={downloadQRCode}>
-                    Download {qrformat}
+                    Download as {qrformat}
                   </Button>
                   :
                   null

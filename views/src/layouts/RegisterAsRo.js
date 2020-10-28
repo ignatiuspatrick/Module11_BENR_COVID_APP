@@ -104,7 +104,6 @@ export default function SignUpSide() {
       history.push('/login');
     } else if (res.statusCode === 400 || res.statusCode === 401) {
       var obj = JSON.parse(body);
-      console.log(obj.message);
       setErrorflag(obj.message);
     }
   });

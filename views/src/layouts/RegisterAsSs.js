@@ -91,8 +91,7 @@ export default function SignUpSide() {
     if (res.statusCode === 200) {
         history.push('/login');
     }else if(res.statusCode === 400 || res.statusCode === 401){
-      var obj=JSON.parse(body)
-      console.log(obj.message)
+      var obj=JSON.parse(body);
       setErrorflag(obj.message);
     }
   });

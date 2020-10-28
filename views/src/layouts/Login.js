@@ -80,7 +80,6 @@ export default function SignInSide() {
   function validityCheck() {
     const request = require('request');
     let options = {};
-    console.log(value);
     if(value === 0){
       options = {
         uri: back + '/superusers/login',
@@ -102,12 +101,7 @@ export default function SignInSide() {
         }
       };
     }
-    // function sleep(delay = 0) {
-    //   return new Promise((resolve) => {
-    //     setTimeout(resolve, delay);
-    //   });
-    // }
-  async function redirect() {
+  function redirect() {
     if (value === 0) {
       history.push('/rodash/dashboard');
       } else if (value === 1) {
