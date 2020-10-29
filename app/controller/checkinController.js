@@ -9,6 +9,16 @@ const Checkin = require('../model/checkinModel');
 
 const isNull = (value) => typeof value === "object" && !value
 
+/**
+ *  Post /users/checkin
+ *  Checks a customer in to a restaurant.
+ *
+ *  protected:
+ *  Customer
+ *
+ *  Body:
+ *  code - QR code of restaurant.
+ */
 exports.create_checkin = function(req, res) {
   //handles null error
    if(!(req.body.code)){
@@ -25,6 +35,7 @@ exports.create_checkin = function(req, res) {
 }
 };
 
+/*
 exports.checkout_checkin = function(req, res) {
   if (!req.params.checkinId){
     res.status(400).send({error:true, message: "No checkinId provided to server. Cannot checkout."});
@@ -39,5 +50,4 @@ exports.checkout_checkin = function(req, res) {
   }
 
 }
-
-//TODO rest
+*/

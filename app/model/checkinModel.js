@@ -9,8 +9,8 @@ var Checkin = function(checkin){
 };
 
 
-//SQL Queries for checkin in
-//Restaurant is gathered from the unique
+//Creates a new checkin for the restaurant linked to the QR code
+//Refuse if customer attempting to check in is infected.
 Checkin.createCheckin = function (userId, code, result) {
   //Select restaurant id from restaurant_codes using code
   sql.query("SELECT restid FROM restaurant_codes WHERE code = ?", [code], function (err, id) {
@@ -21,6 +21,7 @@ Checkin.createCheckin = function (userId, code, result) {
       console.log(err);
       return result(1, "No associated restaurant id");
     }else{
+      //Select time of stay of selected restaurant
       sql.query("SELECT ToS FROM restaurants WHERE id = ?", [id[0].restid], function (err, tos) {
         if(err) {
           console.log(err);
@@ -29,20 +30,20 @@ Checkin.createCheckin = function (userId, code, result) {
           return result("No ToS found.", null);
         } else {
 
-          //check if someone is infected before checking someone in
+          //check if custoemer is infected before checking someone in
           sql.query("SELECT infected FROM users WHERE id = ?", userId, function(err, infected){
             console.log(infected);
             if(infected[0].infected){ //also for at risk?
               return result(null, -1); //infected, should not get access
             }
           });
+
           //Create user checkin
           var cot = new Date()
           var addedtime = tos[0].ToS.split(":")
           cot.setSeconds(cot.getSeconds() + parseInt(addedtime[2]));
           cot.setMinutes(cot.getMinutes() + parseInt(addedtime[1]));
           cot.setHours(cot.getHours() + parseInt(addedtime[0]));
-          //// TODO: Is at_risk = 0 a good idea here?? Probably not.
           sql.query("INSERT INTO checkin SET userid = ?, restid = ?, checkin_time = ?, checkout_time = ?, at_risk = 0", [userId, id[0].restid, new Date(), cot], function (err, res) {
             if(err) {
                 console.log(err);
@@ -60,6 +61,7 @@ Checkin.createCheckin = function (userId, code, result) {
 }
 
 //Checking out through checkinId
+/*
 Checkin.checkout = function (checkinId, result){
   console.log("brrrrrr post");
   var time = new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -74,5 +76,6 @@ Checkin.checkout = function (checkinId, result){
     }
   });
 }
+*/
 
 module.exports = Checkin;

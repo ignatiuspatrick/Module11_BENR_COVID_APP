@@ -5,7 +5,25 @@ const jwt = require('jsonwebtoken');
 const SECRET_KEY = require('../../secret');
 
 
-//Register a superuser
+/**
+ *  Post /superusers/create
+ *  Create a new superuser and a restaurant if restaurant owner.
+ *
+ *  Body:
+ *  type - type of superuser (restaurant_owner/sanitary_service).
+ *  password - password of the superupser.
+ *  confirm - a repeat of the password.
+ *  email - email of the superuser.
+ *  username - username of the superuser.
+ *
+ *  name - Name of restaurant.
+ *  streetname - Name of the street name of the restaurant.
+ *  number - phone number of the restaurant.
+ *  postalcode - postalcode of the restaurant.
+ *  city - city name of the restaurant
+ *
+ *  None of the bodies arguments may be above 100 characters.
+ */
 exports.create_superuser = function(req, res){
   var newSuperuser = new Superuser(req.body);
   Superuser.createSuperuser(newSuperuser, function(err, superuser) {
@@ -29,6 +47,7 @@ exports.create_superuser = function(req, res){
   });
 };
 
+//Performs the body check for creating or updatin a superuser.
 exports.create_superuser_check = function(req, res, next) {
   var passwordcheck = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
   var sanser = "sanitary_service";
@@ -57,6 +76,7 @@ exports.create_superuser_check = function(req, res, next) {
   next();
 }
 
+//Checks if a restaurant is owned by the owner.
 exports.checkValidRestid = function(req,res,next) {
   var restid = -1;
   if(req.params.restaurantId) {
@@ -76,6 +96,18 @@ exports.checkValidRestid = function(req,res,next) {
   });
 }
 
+/**
+ *  POST /superusers/visited
+ *  Returns the amount of visitors a restaurant has had in the last x amount of days.
+ *
+ *  Protected:
+ *  Restaurants owned by restaurant owner.
+ *
+ *  Body:
+ *  days - amount of days.
+ *  restid - the id of the restaurant.
+ *
+ */
 exports.visited = function(req,res) {
     Superuser.visited(req.body.restid, req.body.days, function(err, success) {
       if (err){
@@ -86,6 +118,17 @@ exports.visited = function(req,res) {
     });
 }
 
+/**
+ *  POST /superusers/infected
+ *  Returns the amount of infected customers last x amount of days.
+ *
+ *  Protected:
+ *  Sanitary Services
+ *
+ *  Body:
+ *  days - amount of days.
+ *
+ */
 exports.infected = function(req,res) {
     Superuser.infected(req.body.days, function(err, success) {
       if (err){
@@ -96,6 +139,17 @@ exports.infected = function(req,res) {
     });
 }
 
+/**
+ *  POST /superusers/marked
+ *  Returns the amount of marked customers last x amount of days.
+ *
+ *  Protected:
+ *  Sanitary Services
+ *
+ *  Body:
+ *  days - amount of days.
+ *
+ */
 exports.marked = function(req,res) {
     Superuser.marked(req.body.days, function(err, success) {
       if (err){
@@ -106,6 +160,17 @@ exports.marked = function(req,res) {
     });
 }
 
+/**
+ *  POST /superusers/marked
+ *  Returns the amount of restaurants that have had an infected customer in the last x amount of days.
+ *
+ *  Protected:
+ *  Sanitary Services
+ *
+ *  Body:
+ *  days - amount of days.
+ *
+ */
 exports.infectedrestaurants = function(req,res) {
     Superuser.infectedrestaurants(req.body.days, function(err, success) {
       if (err){
@@ -116,6 +181,17 @@ exports.infectedrestaurants = function(req,res) {
     });
 }
 
+/**
+ *  POST /superusers/listinfections
+ *  Returns the amount of restaurants that have had an infected customer in the last x amount of days.
+ *
+ *  Protected:
+ *  Restaurants owned by restaurant owner.
+ *
+ *  Body:
+ *  restid - the id of the restaurant.
+ *
+ */
 exports.listInfections = function(req,res) {
     Superuser.listInfections(req.body.restid, function(err, success) {
       if (err){
@@ -126,6 +202,14 @@ exports.listInfections = function(req,res) {
     });
 }
 
+/**
+ *  POST /superusers/restaurants
+ *  Returns a list of the id and name of all the restaurants owned by a restaurant owner.
+ *
+ *  Protected:
+ *  Restaurant owner.
+ *
+ */
 exports.getrestids = function(req,res) {
     Superuser.getrestids(req.body.ownerid, function(err, success) {
       if (err){
@@ -136,6 +220,16 @@ exports.getrestids = function(req,res) {
     });
 }
 
+/**
+ *  POST /superusers/login
+ *  Returns a log in cookie.
+ *
+ * Body:
+ *  type - type of superuser (restaurant_owner/sanitary_service).
+ *  password - password of the superupser.
+ *  username - username of the superuser.
+ *
+ */
 exports.login_superuser = function(req, res){
   var username = req.body.username;
   var password = req.body.password;
@@ -174,23 +268,43 @@ exports.login_superuser = function(req, res){
   }
 };
 
+/**
+ *  POST /superusers/logout/ro
+ *  Returns a command to clear the restaurant owner cookie.
+ *
+ *  Protected:
+ *  Restaurant owner
+ *
+ */
 exports.logout_ro = function(req,res){
-
-  // can do some checks with req.cookies.token
-  // now only remove cookie from client side.
-  // even if this cookie is deleted at client side, it is still possible to steal session
-  // so we need to invalidate these tokens at back end
   var tokenro = req.cookies.tokenro || '';
   console.log("cookie ro cleared: " + tokenro);
   res.status(200).clearCookie('tokenro', {httpOnly: true}).send();
 
 };
 
+/**
+ *  POST /superusers/logout/ss
+ *  Returns a command to clear the sanitary service cookie.
+ *
+ *  Protected:
+ *  Sanitary service
+ *
+ */
 exports.logout_ss = function(req,res){
   var tokenss = req.cookies.tokenss || '';
   console.log("cookie ss cleared: " + tokenss);
   res.status(200).clearCookie('tokenss', {httpOnly: true}).send();
 };
+
+/**
+ *  POST /superusers/getid
+ *  Returns the id of the restaurant owner.
+ *
+ *  Protected:
+ *  Restaurant owner
+ *
+ */
 exports.get_ro_id = function(req,res){
   var tokenro = req.cookies.tokenro || '';
   var decoded = jwt.decode(tokenro , {complete: true});
