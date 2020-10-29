@@ -31,7 +31,6 @@ const useStyles = makeStyles(styles);
 
 export default function Dashboard() {
   const classes = useStyles();
-  // const [code, setCode] = React.useState('');
   const username = localStorage.getItem('name');
   const [qrvalue, setQRValue] = React.useState('123456'); // get from the backend later
   const [qrformat, setQRFormat] = React.useState('');
@@ -59,7 +58,11 @@ export default function Dashboard() {
   const [issettingtos, setIsSettingTOS] = React.useState(false);
   const [isdisabled, setIsDisabled] = React.useState(false); // save tos button controller
 
+  // the function is used to set the maximum time of stay for a restaurant instance.
+  // @ param: trid: (integer) restaurant id.
   function invokeTOS(trid) {
+    // create request to get restaurant owner's id, parameters includes the uri and credentials for security.
+    // parameters passed includes the uri, credentials (for security), and restaurant id inside the body (form).
     const requesttos = require('request');
     let optionsgettos = {
       uri: back + '/restaurants/gettos',
@@ -73,77 +76,90 @@ export default function Dashboard() {
         return console.log(err);
       } else if (res.statusCode === 200) {
         var obj = JSON.parse(body);
-        setTos(obj.tos);
+        setTos(obj.tos); // setting the returned value (time of stay) on the client (frontend) side
       }
     })
   }
 
+  // invoked at the beginning of page rendering.
   React.useEffect(() => {
     async function getId(){
-      var tempresid;
+      var tempresid; 
+      // create request to get restaurant owner's id, parameters includes the uri and credentials for security.
+      // parameters passed includes the uri and credentials (for security).
       const request = require('request');
       let options = {
         uri: back + '/superusers/getid',
         withCredentials: true
       };
+      // sending request to the backend to get restaurant owner's id.
       request.get(options,(err,res,body) => {
         if (err) {
-          return console.log(err);
-        } else if(res.statusCode === 200) {
-          var obj=JSON.parse(body);
+          return console.log(err); // returns the error if the request failed.
+        } else if(res.statusCode === 200) { // successful request.
+          var obj = JSON.parse(body);
           setId(obj.id);
-          var owid = obj.id;
+          var owid = obj.id; // setting the owner id on the client (frontend) side.
+          // create request to get restaurant id as one restaurant unique identifier.
+          // parameters passed includes the uri, credentials (for security), and owner id in the form to identify linked restaurant owner.
           const request2 = require('request');
           let options2 = {
-          uri: back + '/restaurants/getrest',
-          withCredentials: true,
-          form: {
-            ownerid: obj.id
+            uri: back + '/restaurants/getrest',
+            withCredentials: true,
+            form: {
+              ownerid: obj.id
+            }
           }
-        }
-        request2.post(options2,(err,res,body) => {
-          if (err) {
-            return console.log(err);
-          } else if (res.statusCode === 200) {
-            var obj = JSON.parse(body);
-            setRestId(obj[0].id);
-            tempresid = obj[0].id;
-            const request3 = require('request');
-            let options3 = {
-              uri: back + '/superusers/listinfections',
-              withCredentials: true,
-              form: {
-                ownerid:owid,
-                restid: obj[0].id
-              }
-            };
-            request3.post(options3,(err,res,body) => {
-              if (err) {
-                return console.log(err);
-              } else if(res.statusCode === 200) {
-                var obj = JSON.parse(body);
-                var tabledata = [];
-                for (var i=0; i<obj.result.length; i++) {
-                  var checkin = obj.result[i].checkin_time.split("T");
-                  var checkout = obj.result[i].checkout_time.split("T");
-                  if (checkin[0]===checkout[0]) {
-                    var item = [];
-                    item.push(checkin[0],checkin[1].substring(0,8),checkout[1].substring(0,8));
-                    tabledata.push(item);
-                  }
+          // sending request to the backend to get restaurant unique's id
+          request2.post(options2, (err,res,body) => {
+            if (err) {
+              return console.log(err);
+            } else if (res.statusCode === 200) { // successful request
+              var obj = JSON.parse(body);
+              setRestId(obj[0].id); // setting the restaurant id on the client (frontend) side
+              tempresid = obj[0].id;
+              const request3 = require('request');
+              // create request to get number of infection for statistics of restaurant dashboard, will be displayed on the table later on.
+              // parameters passed includes the uri, credentials (for security), owner id and restaurant id in the body (form).
+              let options3 = {
+                uri: back + '/superusers/listinfections',
+                withCredentials: true,
+                form: {
+                  ownerid:owid,
+                  restid: obj[0].id
                 }
-                setTable(tabledata);
-                invokeTOS(tempresid);
-              }
-            });
-          }
-        });
+              };
+              // sending request to the backend to get list of infections.
+              request3.post(options3,(err,res,body) => {
+                if (err) {
+                  return console.log(err);
+                } else if (res.statusCode === 200) { // rendering results of infection to the table.
+                  var obj = JSON.parse(body);
+                  var tabledata = [];
+                  for (var i = 0; i < obj.result.length; i++) {
+                    var checkin = obj.result[i].checkin_time.split("T");
+                    var checkout = obj.result[i].checkout_time.split("T");
+                    if (checkin[0] === checkout[0]) {
+                      var item = [];
+                      item.push(checkin[0],checkin[1].substring(0,8),checkout[1].substring(0,8));
+                      tabledata.push(item);
+                    }
+                  }
+                  setTable(tabledata); // setting the result (list of infections) of the client side.
+                  invokeTOS(tempresid);
+                }
+              });
+            }
+          });
         }
       });
     }
     getId();
   },[]);
 
+
+  // the function is used to get total number of visitors
+  // @ param: type = (integer) range of day to count the number of visitors in a restaurant, e.g. 0 for today, 1 for today and yesterday, etc.
   function getNOVisitors(type) {
     const request3 = require('request');
     let options3 = {
@@ -165,11 +181,13 @@ export default function Dashboard() {
     })
   }
 
+  // setting the qr code format 
+  // @ param: qrf = (string) qr code format to be downloaded ("PDF" or "PNG")
   function handleQRFormatChange(qrf) {
     setQRFormat(qrf);
   }
 
-
+  // the function to set maximum hours from time of, where 0 is the min value and 24 is the max value.
   function handleHoursChange(e) {
     var obj = parseInt(e);
     if (0 <= obj && obj <= 24) {
@@ -181,6 +199,7 @@ export default function Dashboard() {
     }
   }
 
+  // the function to set maximum minutes from time of stay, where 0 is the min value and 59 is the max value.
   function handleMinutesChange(e) {
     var obj = parseInt(e);
     if (0 <= obj && obj <= 59) {
@@ -192,8 +211,9 @@ export default function Dashboard() {
     }
   }
   
+  // the function sets the tos change to the backend and updates the value to the client (frontend) side.
   function handleTOSChange() {
-    var tosval = String(hours);
+    var tosval = String(hours); // backend recognizes the format hh:mm.
     if (String(hours).length === 1)  {
       tosval = '0'+ tosval + ':';
     } else {
@@ -217,14 +237,16 @@ export default function Dashboard() {
       if (err) {
         return console.log(err);
       } else if (res.statusCode === 200) {
-        invokeTOS(restid); // to display the right format
-        setIsSettingTOS(false);
+        invokeTOS(restid); // get the value from the backend and updates it in the frontend.
+        setIsSettingTOS(false); // hide setting tos display.
       }
     })
   };
   
-  // for the backend
+  // getting the unique qr code numerical value from the backend.
   function generateQRCode() {
+    // create request to get qr numerical value to be generated by npm qr module.
+    // parameters passed includes the uri appended by restaurant id and credentials (for security), 
     const requestqr = require('request');
     let optionsqr = {
       uri: back + '/restaurants/getqr/' + restid,
@@ -235,16 +257,18 @@ export default function Dashboard() {
         return console.log(err);
       } else if (res.statusCode === 200) {
         var obj = JSON.parse(body);
-        setQRValue(obj.code);
+        setQRValue(obj.code); // set the numerical value of qr code.
       }
     })
-    setIsShownQR(true);
+    setIsShownQR(true); // show the qr code.
   }
 
+  // the function to hide qr code.
   function hideQRCode() {
     setIsShownQR(false);
   }
 
+  // the function to perform download the qr code.
   function downloadQRCode() {
     const canvas = document.getElementById("qrimg");
     var url;
@@ -265,6 +289,7 @@ export default function Dashboard() {
     }
   }
   
+  // rendered html
   return (
     <div>
       <h3>Welcome, {username}!</h3>

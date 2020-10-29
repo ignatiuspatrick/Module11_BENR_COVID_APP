@@ -54,8 +54,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-
-
 export default function SignUpSide() {
   const classes = useStyles();
   let history = useHistory();
@@ -70,13 +68,14 @@ export default function SignUpSide() {
   const [password, setPassword] = React.useState('');
   const [passwordConfirm, confirmPassword] = React.useState('');
   const [errorflag, setErrorflag] = React.useState(0);
-  
 
+  // invoked when register button is clicked (since the button type is submit)
   const onFormSubmit = e => {
     e.preventDefault();
     submitRegistration();
   }
 
+  // the function sends the registering user's information to the backend and generates a new restaurant owner account.
   function submitRegistration() {
     const request = require('request');
     let options = {};
@@ -86,7 +85,7 @@ export default function SignUpSide() {
           username: username,
           password: password,
           confirm: passwordConfirm,
-          email:email,
+          email: email,
           type: "restaurant_owner",
           name: businessname,
           streetname: streetname,
@@ -94,22 +93,21 @@ export default function SignUpSide() {
           postalcode: postalcode,
           city: city
       }
-  };
-  
-  request.post(options, (err, res, body) => {
-    if (err) {
-        return console.log(err);
-    }
-    if (res.statusCode === 200) {
-      history.push('/login');
-    } else if (res.statusCode === 400 || res.statusCode === 401) {
-      var obj = JSON.parse(body);
-      setErrorflag(obj.message);
-    }
-  });
- 
+    };
+    request.post(options, (err, res, body) => {
+      if (err) {
+          return console.log(err);
+      }
+      if (res.statusCode === 200) {
+        history.push('/login');
+      } else if (res.statusCode === 400 || res.statusCode === 401) {
+        var obj = JSON.parse(body);
+        setErrorflag(obj.message);
+      }
+    });
   }
 
+  // the function returns error message, e.g. invalid input
   function getErrorMessage() {
     if (errorflag!==0) {
       return errorflag;

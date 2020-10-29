@@ -66,14 +66,17 @@ export default function ROInformation() {
   const [newPostalcode, updatePostalCode] = React.useState(''); //get thru api
   const [errorflag, setErrorflag] = React.useState(0);
 
-
+  // invoked when update button is clicked (since the button type is submit)
   const onFormSubmit = e => {
     e.preventDefault();
     updateInfo();
   }
   
-  React.useEffect(()=>{
+  // invoked at the beginning of page rendering.
+  React.useEffect(() => {
     async function getId(){
+      // create request to get restaurant owner's id, parameters includes the uri and credentials for security.
+      // parameters passed includes the uri and credentials (for security).
       const request = require('request');
       let options = {
         uri: back + '/superusers/getid',
@@ -83,33 +86,35 @@ export default function ROInformation() {
         if (err) {
           return console.log(err);
         }
-        if(res.statusCode === 200){
-          var obj=JSON.parse(body);
+        if (res.statusCode === 200) {
+          var obj = JSON.parse(body);
           setId(obj.id);
+          // create request to get restaurant id as one restaurant unique identifier.
+          // parameters passed includes the uri, credentials (for security), and owner id in the form to identify linked restaurant owner.
           const request2 = require('request');
           let options2 = {
-          uri: back + '/restaurants/getrest',
-          withCredentials: true,
-          form: {
-            ownerid: obj.id
+            uri: back + '/restaurants/getrest',
+            withCredentials: true,
+            form: {
+              ownerid: obj.id
+            }
           }
-        }
-        request2.post(options2,(err,res,body)=>{
-          if (err) {
-            return console.log(err);
-          }
-          if(res.statusCode === 200){
-            var obj = JSON.parse(body);
-            setRestId(obj[0].id);
-            setRestName(obj[0].name);
-            setStreetName(obj[0].streetname);
-            setNumber(obj[0].number);
-            setPostalCode(obj[0].postalcode);
-            setCity(obj[0].city);
-            setErrorflag(0);
-          }
-        });
-
+          request2.post(options2,(err,res,body)=>{
+            if (err) {
+              return console.log(err);
+            }
+            if (res.statusCode === 200) {
+              var obj = JSON.parse(body);
+              // updates the new value for display
+              setRestId(obj[0].id);
+              setRestName(obj[0].name);
+              setStreetName(obj[0].streetname);
+              setNumber(obj[0].number);
+              setPostalCode(obj[0].postalcode);
+              setCity(obj[0].city);
+              setErrorflag(0);
+            }
+          });
         }
       });
     }
@@ -119,6 +124,8 @@ export default function ROInformation() {
   // for the backend
   function updateInfo() {
     const request = require('request');
+    // create request to set new business information.
+    // parameters passed includes the uri, credentials (for security), and updated business (restaurant) information in the body.
     let options = {
       uri: back + '/restaurants/' + restid,
       withCredentials:true,
@@ -134,21 +141,21 @@ export default function ROInformation() {
     request.put(options, (err,res,body)=>{
       if (err) {
         return console.log(err);
-    }
-    if (res.statusCode === 200) {
-      setRestName(businessname);
-      setStreetName(newStreetname);
-      setNumber(newNumber);
-      setPostalCode(newPostalcode);
-      setCity(newCity);
-
-    } else if(res.statusCode === 400 || res.statusCode === 401){
-      var obj=JSON.parse(body);
-      setErrorflag(obj.message);
-    }
+      }
+      if (res.statusCode === 200) {
+        setRestName(businessname);
+        setStreetName(newStreetname);
+        setNumber(newNumber);
+        setPostalCode(newPostalcode);
+        setCity(newCity);
+      } else if (res.statusCode === 400 || res.statusCode === 401) {
+        var obj = JSON.parse(body);
+        setErrorflag(obj.message);
+      }
     });
   }
 
+  // the function render the message after the user finished inputting new informations about their business.
   function getErrorMessage(){
     if (errorflag !== 0){
       return errorflag;

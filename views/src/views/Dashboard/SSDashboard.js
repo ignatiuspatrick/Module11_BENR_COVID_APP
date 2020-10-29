@@ -24,8 +24,6 @@ import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js"
 
 const useStyles = makeStyles(styles);
 
-// backend work
-
 export default function SSDashboard() {
   const classes = useStyles();
 
@@ -40,14 +38,8 @@ export default function SSDashboard() {
   var mm = today.toLocaleString('default', { month: 'long' });
   var yyyy = today.getFullYear();
 
-  // for stats
+  // current time display
   var counter = new Date(today.getFullYear, today.getMonth, 0).getDate();
-
-  var recentnotiftablehead = ["City", "Marked Users"];
-  var recentnotiftabledata = [
-    ["Enschede", "100"],
-    ["Utrecht", "99"]
-    ];
 
   const onFormSubmit = e => {
     e.preventDefault();
@@ -55,31 +47,38 @@ export default function SSDashboard() {
     e.target.reset();
   }
 
-  //for the backend
+  // the function marks a user in case he or she gets infected
   function markInfectedUser(){
+    // create request to set infected user using their GGD code, parameters includes the uri and credentials for security.
+    // parameters passed includes the uri, credentials (for security), and the GGD code inside the body (form).
     const request = require('request');
     let options = {};
     options = {
       uri: back + '/superusers/markinfected',
       withCredentials: true,
       form: {
-          code:code
+          code: code
       }
     };
     request.post(options,(err,res,body) => {
-      var obj=JSON.parse(body);
+      var obj = JSON.parse(body);
       if (err) {
         return console.log(err);
     } 
-    if(res.statusCode === 200) {
-      setErrorflag("Marked user: " + code);
-    }else {
-      setErrorflag("Error! " + obj.message);
+    // set message to display after marking the user
+    if (res.statusCode === 200) {
+      setErrorflag("Marked user: " + code); // indicates successful operation.
+    } else {
+      setErrorflag("Error! " + obj.message); // indicates failed operation and the error, e.g. invalid code.
     }
     });
   }
 
+  // the function gets the total number whose ggd code is marked as infected.
+  // @ param: range = (int) range of days for number of marked user, e.g. 0 for today, 1 for today and yesterday, 6 for the past week, etc.
   function getTotMarkedUsers(range) {
+    // create request to get the total number infected user where parameters include the uri, credentials for security, and in the body the day range.
+    // parameters passed includes the uri, credentials (for security), and the range of days inside the body (form).
     const request = require('request');
     let options = {
       uri: back + '/superusers/marked',
@@ -88,18 +87,22 @@ export default function SSDashboard() {
         days: range
       }
     };
-    request.post(options,(err,res,body)=>{
-      var obj=JSON.parse(body);
+    request.post(options,(err,res,body) => {
+      var obj = JSON.parse(body);
       if (err) {
         return console.log(err);
       }
-      if(res.statusCode === 200){
-        setTotMarkedUsers(obj.result);
+      if (res.statusCode === 200) {
+        setTotMarkedUsers(obj.result); // display the result in the rendered html.
       } 
     });
   }
 
+  // the function gets the total number of restaurants with visitor(s) whose ggd code is marked as infected.
+  // @ param: days = (int) range of days for number of infected restaurants, e.g. 0 for today, 1 for today and yesterday, 6 for the past week, etc.
   function getTotImpactedResto(days) {
+    // create request to get the total number of restaurants where parameters include the uri, credentials for security, and in the body the day range.
+    // parameters passed includes the uri, credentials (for security), and the range of days inside the body (form).
     const request = require('request');
     let options = {
       uri: back + '/superusers/infectedrestaurants',
@@ -108,7 +111,7 @@ export default function SSDashboard() {
         days: days
       }
     };
-    request.post(options,(err,res,body)=>{
+    request.post(options,(err,res,body) => {
       var obj=JSON.parse(body);
       if (err) {
         return console.log(err);
@@ -117,9 +120,9 @@ export default function SSDashboard() {
         setTotImpactedResto(obj.result);
       } 
     });
-
   }
 
+  // the function render the message after marking users by their ggd code
   function getErrorMessage(){
     if (errorflag !== 0){
       return errorflag;

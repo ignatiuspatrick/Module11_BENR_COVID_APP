@@ -17,6 +17,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from "react-router-dom";
 import back from "../hosts.js";
 
+// render the copyright component inside page footer.
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -30,6 +31,7 @@ function Copyright() {
   );
 }
 
+// the function applies css to the rendered html page.
 const useStyles = makeStyles((theme) => ({
   root: {
     height: '100vh',
@@ -63,11 +65,12 @@ export default function SignInSide() {
   const classes = useStyles();
   let history = useHistory();
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorflag, setErrorflag] = useState(0);
-  const [value, setValue] = useState(0);
+  const [username, setUsername] = useState(''); // username input 
+  const [password, setPassword] = useState(''); // password input
+  const [errorflag, setErrorflag] = useState(0); // indicates the type of error 
+  const [value, setValue] = useState(0); // indicates the login type, where 0 stands for restaurant owner, and 1 stands for sanitary service.
 
+  // handle value (login type) change
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -76,7 +79,7 @@ export default function SignInSide() {
     validityCheck();
   }
 
-  
+  // the function creates request to verify the credentials and redirect to the respective dashboard.
   function validityCheck() {
     const request = require('request');
     let options = {};
@@ -101,31 +104,31 @@ export default function SignInSide() {
         }
       };
     }
-  function redirect() {
-    if (value === 0) {
-      history.push('/rodash/dashboard');
-      } else if (value === 1) {
-      history.push('/ssdash/dashboard');
+    
+    // redirect to the dashboard link
+    function redirect() {
+      if (value === 0) {
+        history.push('/rodash/dashboard');
+        } else if (value === 1) {
+        history.push('/ssdash/dashboard');
+      }
     }
-  }
-  request.post(options, (err, res) => {
-    if (err) {
-        return console.log(err);
-    }
-    if (res.statusCode === 200) {
-      localStorage.setItem('name',username);
-      setErrorflag(0);
-      redirect();
-    }
-    else if (username === '' || password === '') {
-      setErrorflag(1);
-    }else if (res.statusCode === 401){
-      setErrorflag(2);
-    }
-    else {
-      setErrorflag(3);
-    }
-  });
+    request.post(options, (err, res) => {
+      if (err) {
+          return console.log(err);
+      }
+      if (res.statusCode === 200) {
+        localStorage.setItem('name', username);
+        setErrorflag(0);
+        redirect();
+      } else if (username === '' || password === '') {
+        setErrorflag(1); // error flag 1 stands for empty username nor password
+      } else if (res.statusCode === 401){
+        setErrorflag(2); // error flag 2 stands for wrong credentials or non existing users
+      } else {
+        setErrorflag(3); // error flag 3 stands for other type / unknown error, mostly related to backend error.
+      }
+    });
   }
   
   function getErrorMessage(){
