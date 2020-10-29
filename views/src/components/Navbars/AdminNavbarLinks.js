@@ -21,10 +21,11 @@ import back from "../../hosts.js";
 
 const useStyles = makeStyles(styles);
 
+// the component is used by both restaurant owner and sanitary service dashboard to render navbar links and function calls.
 export default function AdminNavbarLinks(props) {
   const classes = useStyles();
   const [openProfile, setOpenProfile] = React.useState(null);
-  const {dashboardtype} = props;
+  const {dashboardtype} = props; // define the type of dashboard
 
   let history = useHistory();
   const handleClickProfile = event => {
@@ -35,19 +36,20 @@ export default function AdminNavbarLinks(props) {
     }
   };
 
+  // controller for displaying profile on the sidebar toggler
   const handleCloseProfile = () => {
     setOpenProfile(null);
   }
 
+  // the function is called by restaurant owner dashboard to display restaurant owner information component.
   const handleGoToProfile = () => {
-    if (dashboardtype === "ss") {
-      history.push("/ssdash/user");
-    } else if (dashboardtype === "ro") {
+    if (dashboardtype === "ro") {
       history.push("/rodash/restoinfo");
     }
     setOpenProfile(null);
   };
 
+  // the function redirects the dashboard view back to the login page.
   const handleLogOut = () => {
     console.log('handling log out, dashboard type = ' + dashboardtype)
     const request = require('request');
