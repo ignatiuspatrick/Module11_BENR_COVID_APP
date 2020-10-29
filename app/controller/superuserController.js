@@ -13,8 +13,9 @@ exports.create_superuser = function(req, res){
       res.status(400).send({ error:true, message: err});
     } else {
       console.log('Created superuser with id ' + superuser);
-      if(req.body.sanser == 1) {
+      if(req.body.type === "restaurant_owner") {
         var newRestaurant = new Restaurant(req.body);
+        console.log()
         newRestaurant.ownerid = superuser;
         Restaurant.createRestaurant(newRestaurant, function(err){
           if (err){
