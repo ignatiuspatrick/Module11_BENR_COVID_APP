@@ -15,7 +15,7 @@ module.exports = function(app){
   app.route('/restaurants/:restaurantId')
   .put(verify.verifyRestaurantOwner, restaurants.update_restaurant)
   .delete(verify.verifyRestaurantOwner, restaurants.delete_restaurant);
-  app.post('/restaurants/getrest',restaurants.get_restaurant);
+  app.post('/restaurants/getrest',verify.verifyRestaurantOwner, restaurants.get_restaurant);
 
   //USERS
   //(Customer/Restaurant personnel)
