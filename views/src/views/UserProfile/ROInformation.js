@@ -126,33 +126,38 @@ export default function ROInformation() {
     const request = require('request');
     // create request to set new business information.
     // parameters passed includes the uri, credentials (for security), and updated business (restaurant) information in the body.
-    let options = {
-      uri: back + '/restaurants/' + restid,
-      withCredentials:true,
-      form: {
-        name: businessname,
-        streetname: newStreetname,
-        number: newNumber,
-        postalcode: newPostalcode,
-        city: newCity,
-        ownerid: ownerid
+    if(!businessname || !newStreetname || !newNumber || !newPostalcode || !newCity){
+      setErrorflag("Please enter all details!");
+    }else{
+      let options = {
+        uri: back + '/restaurants/' + restid,
+        withCredentials:true,
+        form: {
+          name: businessname,
+          streetname: newStreetname,
+          number: newNumber,
+          postalcode: newPostalcode,
+          city: newCity,
+          ownerid: ownerid
+        }
       }
+      request.put(options, (err,res,body)=>{
+        if (err) {
+          return console.log(err);
+        }
+        if (res.statusCode === 200) {
+          setRestName(businessname);
+          setStreetName(newStreetname);
+          setNumber(newNumber);
+          setPostalCode(newPostalcode);
+          setCity(newCity);
+        } else if (res.statusCode === 400 || res.statusCode === 401) {
+          var obj = JSON.parse(body);
+          setErrorflag(obj.message);
+        }
+      });
     }
-    request.put(options, (err,res,body)=>{
-      if (err) {
-        return console.log(err);
-      }
-      if (res.statusCode === 200) {
-        setRestName(businessname);
-        setStreetName(newStreetname);
-        setNumber(newNumber);
-        setPostalCode(newPostalcode);
-        setCity(newCity);
-      } else if (res.statusCode === 400 || res.statusCode === 401) {
-        var obj = JSON.parse(body);
-        setErrorflag(obj.message);
-      }
-    });
+    
   }
 
   // the function render the message after the user finished inputting new informations about their business.
