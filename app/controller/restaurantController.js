@@ -67,7 +67,7 @@ exports.create_restaurant_check = function(req, res, next) {
 }
 
 /**
- *  POST /restaurants/getid
+ *  POST /restaurants/getrest
  *  Returns the information of first owned restaurant.
  *
  *  Protected:
