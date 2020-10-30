@@ -6,7 +6,7 @@ const saltRounds = 12;
 const { Expo } = require('expo-server-sdk');
 let expo = new Expo();
 
-//User object constructor. This is sufficient for Customers.
+//Customer object constructor.
 var User = function(user){
   this.id = user.id;
   this.notification_token = user.notification_token
@@ -65,6 +65,7 @@ User.signInPersonnel = function(email, password, result){
   });
 };
 
+/*
 User.getUser = function (userId, result) {
     sql.query("SELECT id,token,type FROM users WHERE id = ?", userId, function (err, res) {
             if(err) {
@@ -102,7 +103,10 @@ User.deleteUser = function (userId, result) {
             }
         });
 };
+*/
 
+
+//Generate a code for the sanitary service
 User.generateCode = function(userId, result){
 
   //First check if a code is available (that is still valid, e.g. less than a day old).
@@ -137,6 +141,9 @@ User.generateCode = function(userId, result){
 
 }
 
+//Mark a customer as infected.
+//Mark all customers with overlapping check-ins as at_risk.
+//Send all at risk customers a notification.
 User.markUser = function(code, result){
   //   -Mark as infected in db (new column, default 0) (update query)
   var curdate = new Date()
@@ -238,25 +245,6 @@ insert into checkin (id, restid, userid, checkin_time, checkout_time, at_risk) v
       return result(err, queryresult.affectedRows); //send back how many people are at risk
     }
   });
-
-}
-User.getMarkedUsers = function(days,result){
-  var startDay = new Date(new Date().toDateString());
-  var endDay = new Date(startDay);
-  startDay.setHours(startDay.getHours() - 24 * days)
-  endDay.setHours(endDay.getHours() + 24);
-  sql.query("SELECT COUNT(id) as c FROM users WHERE infected = 1 AND at_risk_since >= ? AND at_risk_since < ?",[startDay,endDay], function(err,res){
-    if(err) {
-      console.log("error: ", err);
-      result("SQL error, check logs.", null);
-      return;
-  }
-  else {
-      result(null, res[0].c);
-  }
-  })
-
-
 
 }
 

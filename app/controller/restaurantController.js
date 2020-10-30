@@ -3,7 +3,7 @@ const { request } = require('express');
 var Restaurant = require('../model/restaurantModel');
 const isNull = (value) => typeof value === "object" && !value
 
-
+/*
 exports.get_all_restaurants = function(req, res) {
   Restaurant.getAllRestaurants(function(err, restaurant) {
     if (err){
@@ -21,7 +21,21 @@ exports.get_not_selected = function(req, res) {
     res.status(200).send(restaurant);
   });
 };
+*/
 
+/**
+ *  Post /restaurants
+ *  Create a new restaurant.
+ *
+ *  Body:
+ *  name - Name of restaurant.
+ *  streetname - Name of the street name of the restaurant.
+ *  number - phone number of the restaurant.
+ *  postalcode - postalcode of the restaurant.
+ *  city - city name of the restaurant
+ *
+ *  None of the bodies arguments may be above 100 characters.
+ */
 exports.create_restaurant = function(req, res) {
   var newRestaurant = new Restaurant(req.body);
   Restaurant.createRestaurant(newRestaurant, function(err, restaurant) {
@@ -32,6 +46,7 @@ exports.create_restaurant = function(req, res) {
   });
 };
 
+//Performs the body check for creating or updating a restaurant.
 exports.create_restaurant_check = function(req, res, next) {
   if (!req.body.sanser || req.body.sanser == 0) {
     if (!req.body.name || !req.body.streetname || !req.body.number || !req.body.postalcode || !req.body.city){
@@ -51,8 +66,14 @@ exports.create_restaurant_check = function(req, res, next) {
  next();
 }
 
-
-
+/**
+ *  POST /restaurants/getrest
+ *  Returns the information of first owned restaurant.
+ *
+ *  Protected:
+ *  Restaurant owner
+ *
+ */
 exports.get_restaurant = function(req, res) {
   Restaurant.getRestaurant(req.body.ownerid, function(err, restaurant) {
     if (err){
@@ -62,6 +83,17 @@ exports.get_restaurant = function(req, res) {
   });
 };
 
+/**
+ *  POST /restaurants/settos
+ *  Sets the time of stay of a restaurant.
+ *
+ *  Protected:
+ *  Restaurants owned by restaurant owner.
+ *
+ *  body:
+ *  restid -
+ *
+ */
 exports.set_timeofstay = function(req, res) {
   var tos = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
   if (!tos.test(req.body.tos)){
@@ -75,6 +107,17 @@ exports.set_timeofstay = function(req, res) {
   });
 };
 
+/**
+ *  POST /restaurants/gettos
+ *  Returns the time of stay of a restaurant.
+ *
+ *  Protected:
+ *  Restaurants owned by restaurant owner.
+ *
+ *  body:
+ *  restid -
+ *
+ */
 exports.get_timeofstay = function(req, res) {
   Restaurant.gettimeofstay(req.body.restid, function(err, timeofstay) {
     if (err){
@@ -84,6 +127,22 @@ exports.get_timeofstay = function(req, res) {
   });
 };
 
+/**
+ *  UPDATE /restaurants/
+ *  Update an existing restaurant.
+ *
+ *  Protected:
+ *  Restaurants owned by restaurant owner.
+ *
+ *  Body:
+ *  name - Name of restaurant.
+ *  streetname - Name of the street name of the restaurant.
+ *  number - phone number of the restaurant.
+ *  postalcode - postalcode of the restaurant.
+ *  city - city name of the restaurant
+ *
+ *  None of the bodies arguments may be above 100 characters.
+ */
 exports.update_restaurant = function(req, res) {
   var newRestaurant = new Restaurant(req.body);
   Restaurant.updateRestaurant(req.params.restaurantId, newRestaurant, function(err, restaurant) {
@@ -94,6 +153,7 @@ exports.update_restaurant = function(req, res) {
   });
 }
 
+/*
 exports.delete_restaurant = function(req, res) {
   Restaurant.deleteRestaurant(req.params.restaurantId, function(err, restaurant) {
     if (err){
@@ -102,11 +162,20 @@ exports.delete_restaurant = function(req, res) {
     res.status(200).json({ message: 'Restaurant successfully deleted' });
   });
 };
+*/
 
-
+/**
+ *  restaurants/generateqr/:restaurantId
+ *  Generates a new QR code for a restaurant and returns it.
+ *
+ *  Protected:
+ *  Restaurants owned by restaurant owner.
+ *
+ *  Param:
+ *  restaurantId - id of the restaurant.
+ *
+ */
 exports.generate_qrcode = function(req, res){
-  //generate code
-  //return to thingy
   if(!req.params.restaurantId){
     return res.send({error: true, message: 'Please supply a restaurantId.'});
   }
@@ -119,6 +188,17 @@ exports.generate_qrcode = function(req, res){
   });
 };
 
+/**
+ *  restaurants/generateqr/:restaurantId
+ *  Finds QR code for a restaurant and returns it.
+ *
+ *  Protected:
+ *  Restaurants owned by restaurant owner.
+ *
+ *  Param:
+ *  restaurantId - id of the restaurant.
+ *
+ */
 exports.get_qrcode = function(req, res){
   if(!req.params.restaurantId){
     return res.status(400).send({error: true, message: err});

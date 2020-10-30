@@ -3,7 +3,7 @@ var sql = require('../../db.js');
 var mysql = require('mysql');
 const cryptoRandomString = require('crypto-random-string');
 
-//Restaurant object constructor, probably needs more fields (name etc)
+//Restaurant object constructor
 var Restaurant = function(restaurant){
     this.name = restaurant.name;
     this.streetname = restaurant.streetname;
@@ -14,8 +14,8 @@ var Restaurant = function(restaurant){
 };
 
 //Restaurant SQL queries
-//// TODO: THESE QUERIES ARE NOT UP-TO-DATE YET. MAKE SURE THEY ALIGN WITH THE DATABASE.
 
+//create a new restaurant.
 Restaurant.createRestaurant = function (newRestaurant, result) {
         sql.query("INSERT INTO restaurants set ?", newRestaurant, function (err, res) {
 
@@ -30,6 +30,7 @@ Restaurant.createRestaurant = function (newRestaurant, result) {
             });
 };
 
+//selects the first restaurant linked to a restaurant owner.
 Restaurant.getRestaurant = function (ownerid, result) {
         sql.query("SELECT id,name,streetname,number,postalcode,city FROM restaurants WHERE ownerid = ?",ownerid, (err, res) => {
                 if(err) {
@@ -48,7 +49,7 @@ Restaurant.getRestaurant = function (ownerid, result) {
 
 
 
-
+/*
 Restaurant.getAllRestaurants = function (result) {
         sql.query("SELECT * FROM restaurants", function (err, res) {
                 if(err) {
@@ -61,7 +62,9 @@ Restaurant.getAllRestaurants = function (result) {
                 }
             });
 };
+*/
 
+//Returns the time of stay of a restaurant.
 Restaurant.gettimeofstay = function (restid, result) {
         sql.query("SELECT ToS as t FROM restaurants WHERE id = ?", restid, function (err, res) {
                 if(err) {
@@ -75,6 +78,7 @@ Restaurant.gettimeofstay = function (restid, result) {
             });
 };
 
+//Sets the time of stay of a restaurant.
 Restaurant.settimeofstay = function (restid, tos, result) {
         sql.query("UPDATE restaurants SET ToS = ? WHERE id = ?", [tos, restid], function (err, res) {
                 if(err) {
@@ -87,6 +91,8 @@ Restaurant.settimeofstay = function (restid, tos, result) {
             });
 };
 
+
+/*
 Restaurant.getNotSelected = function (result) {
     sql.query("SELECT name FROM restaurants WHERE ownerid = 0", function (err, res) {
             if(err) {
@@ -99,7 +105,9 @@ Restaurant.getNotSelected = function (result) {
             }
         });
 };
+*/
 
+//Updates a restaurant with new information.
 Restaurant.updateRestaurant = function(restaurantId, newRestaurant, result){
     let update = "UPDATE restaurants SET name = ?,streetname = ?,number = ?,postalcode = ?, city = ?, ownerid = ? WHERE id = ?";
     let query = mysql.format(update,[newRestaurant.name,newRestaurant.streetname,newRestaurant.number,newRestaurant.postalcode,newRestaurant.city,newRestaurant.ownerid,restaurantId]);
@@ -112,6 +120,8 @@ Restaurant.updateRestaurant = function(restaurantId, newRestaurant, result){
         }
     })
 };
+
+/*
 Restaurant.deleteRestaurant = function(restaurantId, result){
      sql.query("DELETE FROM restaurants WHERE id = ?", [restaurantId], function (err, res) {
                 if(err) {
@@ -123,9 +133,10 @@ Restaurant.deleteRestaurant = function(restaurantId, result){
                 }
             });
 };
+*/
 
+//Generates a unique QR code for a restaurant.
 //Will generate a 16 letter cryptographically secure linkes to a restaurant to facilitate checking in with
-//unique QR codes.
 Restaurant.generateQR = function(restaurantId, result){
   var code = cryptoRandomString({length: 16});
   sql.query("DELETE FROM restaurant_codes WHERE restid = ?", restaurantId, function(err, res){
@@ -143,7 +154,7 @@ Restaurant.generateQR = function(restaurantId, result){
   });
 }
 
-//get QRcode if exists, otherwise we make a new one.
+//get QRcode if exists, otherwise make a new one.
 Restaurant.getQR = function(restaurantId, result){
   sql.query("SELECT code FROM restaurant_codes WHERE restid = ?", restaurantId, function(err, queryresult){
     if(err){

@@ -4,8 +4,13 @@ var jwt = require('jsonwebtoken');
 const SECRET_KEY = require('../../secret');
 const uuid = require('uuid');
 
-var passwordcheck = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
+/**
+ *  POST /users
+ *  Create a new customer.
+ *
+ *  Body:
+ *  notification_token - token to use for recieving notifications
+ */
 exports.create_user = function(req, res){
   //handles null error
   req.body.id = uuid.v4();
@@ -13,19 +18,18 @@ exports.create_user = function(req, res){
   User.createCustomer(newUser, function(err, user) {
   if (err){
     res.send({error: true, message: err});
-  } else {
-    //Send TOKEN
-    var token = jwt.sign({
-      id: newUser.id,
-    }, SECRET_KEY, {expiresIn: "2y"});
-    console.log(token);
-    res.status(200).json({token: token});
-  }
-
-});
-
+    } else {
+      //Send TOKEN
+      var token = jwt.sign({
+        id: newUser.id,
+      }, SECRET_KEY, {expiresIn: "2y"});
+      console.log(token);
+      res.status(200).json({token: token});
+    }
+  });
 };
 
+/*
 exports.get_user = function(req,res){
   if(!req.params.userId){
     return res.send({error: true, message: 'No id provided.'});
@@ -62,10 +66,24 @@ exports.delete_user = function(req,res){
     }
   });
 };
+*/
 
+/**
+ *  POST /users/getsscode/:userId
+ *  Create a new customer.
+ *
+ *  Protected:
+ *  Customer
+ *
+ *  Param:
+ *  userId - id of the customer
+ *
+ */
 exports.get_securecode = function(req,res){
   if(!req.params.userId){
-    return res.send({error: true, message: 'No id provided.'});
+    return res.status(400).send({error: true, message: 'No id provided.'});
+  } else if(req.params.userId != req.body.userid) {
+    return res.status(400).send({error: true, message: 'Access denied. Wrong id provided.'});
   }
   User.generateCode(req.params.userId, function(err,code){
     if(err){
@@ -94,13 +112,3 @@ exports.mark_user = function(req, res){
     }
   });
 };
-
-exports.get_Marked_Users = function(req,res) {
-  User.getMarkedUsers(req.body.days, function(err,success){
-    if (err){
-      res.status(400).send({error: true, message: err});
-    } else {
-      return res.status(200).send({result: success});
-    }
-  })
-}
