@@ -12,7 +12,7 @@ exports.get_all_restaurants = function(req, res) {
     res.status(200).send(restaurant);
   });
 };
-*/
+
 exports.get_not_selected = function(req, res) {
   Restaurant.getNotSelected(function(err, restaurant) {
     if (err){
@@ -21,6 +21,7 @@ exports.get_not_selected = function(req, res) {
     res.status(200).send(restaurant);
   });
 };
+*/
 
 /**
  *  Post /restaurants
