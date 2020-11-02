@@ -20,7 +20,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-
+import { useHistory } from "react-router-dom";
 import { jsPDF } from "jspdf";
 
 import back from "../../hosts.js";
@@ -30,6 +30,7 @@ import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js"
 const useStyles = makeStyles(styles);
 
 export default function Dashboard() {
+  let history = useHistory();
   const classes = useStyles();
   const username = localStorage.getItem('name');
   const [qrvalue, setQRValue] = React.useState('123456'); // get from the backend later
@@ -149,6 +150,8 @@ export default function Dashboard() {
               });
             }
           });
+        }else if (res.statusCode === 401){
+          history.push('/login');
         }
       });
     }
@@ -175,6 +178,8 @@ export default function Dashboard() {
       } else if (res.statusCode === 200) {
         var obj = JSON.parse(body);
         setNovisitors(obj.result);
+      }else if (res.statusCode === 401){
+        history.push('/login');
       }
     })
   }
@@ -237,6 +242,8 @@ export default function Dashboard() {
       } else if (res.statusCode === 200) {
         invokeTOS(restid); // get the value from the backend and updates it in the frontend.
         setIsSettingTOS(false); // hide setting tos display.
+      }else if (res.statusCode === 401){
+        history.push('/login');
       }
     })
   };
@@ -256,6 +263,8 @@ export default function Dashboard() {
       } else if (res.statusCode === 200) {
         var obj = JSON.parse(body);
         setQRValue(obj.code); // set the numerical value of qr code.
+      }else if (res.statusCode === 401){
+        history.push('/login');
       }
     })
     setIsShownQR(true); // show the qr code.

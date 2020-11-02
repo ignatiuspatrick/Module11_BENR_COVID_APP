@@ -16,7 +16,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-
+import { useHistory } from "react-router-dom";
 import back from "../../hosts.js";
 import Typography from '@material-ui/core/Typography';
 
@@ -26,7 +26,7 @@ const useStyles = makeStyles(styles);
 
 export default function SSDashboard() {
   const classes = useStyles();
-
+  let history = useHistory();
   const [code, setCode] = React.useState('');
   const [errorflag, setErrorflag] = React.useState(0);
   const [totmarkedusers, setTotMarkedUsers] = React.useState(0); // backend invocation
@@ -68,7 +68,9 @@ export default function SSDashboard() {
     // set message to display after marking the user
     if (res.statusCode === 200) {
       setErrorflag("Marked user: " + code); // indicates successful operation.
-    } else {
+    } else if (res.statusCode === 401){
+      history.push('/login');
+    }else {
       setErrorflag("Error! " + obj.message); // indicates failed operation and the error, e.g. invalid code.
     }
     });
@@ -94,7 +96,9 @@ export default function SSDashboard() {
       }
       if (res.statusCode === 200) {
         setTotMarkedUsers(obj.result); // display the result in the rendered html.
-      } 
+      } else if (res.statusCode === 401){
+        history.push('/login');
+      }
     });
   }
 
@@ -118,7 +122,9 @@ export default function SSDashboard() {
       }
       if(res.statusCode === 200){
         setTotImpactedResto(obj.result);
-      } 
+      }else if (res.statusCode === 401){
+        history.push('/login');
+      }
     });
   }
 

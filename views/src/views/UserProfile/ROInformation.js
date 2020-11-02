@@ -15,6 +15,7 @@ import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import back from "../../hosts.js";
+import { useHistory } from "react-router-dom";
 
 const styles = {
   cardCategoryWhite: {
@@ -46,7 +47,7 @@ const useStyles = makeStyles(styles);
 
 export default function ROInformation() {
   const classes = useStyles();
-
+  let history = useHistory();
 
   //fetched
   const [ownerid,setId] = React.useState(0);
@@ -151,9 +152,11 @@ export default function ROInformation() {
           setNumber(newNumber);
           setPostalCode(newPostalcode);
           setCity(newCity);
-        } else if (res.statusCode === 400 || res.statusCode === 401) {
+        } else if (res.statusCode === 400) {
           var obj = JSON.parse(body);
           setErrorflag(obj.message);
+        }else if (res.statusCode === 401){
+          history.push('/login');
         }
       });
     }
