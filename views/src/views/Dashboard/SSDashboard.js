@@ -188,7 +188,7 @@ export default function SSDashboard() {
               <form className={classes.form} onSubmit={onFormSubmit}>
                 <GridContainer>
                   <GridItem xs={6}>
-                    <TextField id="outlined-basic" label="Enter GGD Code" variant="outlined" helperText="8 Digits" onChange={(e) => setCode(e.target.value)}/>
+                    <TextField id="outlined-basic" label="Enter GGD Code" variant="outlined" helperText="Length 8" onChange={(e) => setCode(e.target.value)}/>
                   </GridItem>
                   <GridItem xs={6}>
                     <Button type="submit" variant="contained" className={classes.notifyUserButton}>

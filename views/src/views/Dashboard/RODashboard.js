@@ -433,7 +433,7 @@ export default function Dashboard() {
               <CardIcon color="info">
                 <RestaurantIcon />
               </CardIcon>
-              <h4 className={classes.cardTitleWhite}>Recent COVID-19 Cases Log</h4>
+              <h4 className={classes.cardTitleWhite}>Recent Infected Visits</h4>
               <p className={classes.cardCategoryWhite}>
                 History
               </p>
