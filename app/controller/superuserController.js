@@ -184,7 +184,7 @@ exports.infectedrestaurants = function(req,res) {
 
 /**
  *  POST /superusers/listinfections
- *  Returns the amount of restaurants that have had an infected customer in the last x amount of days.
+ *  Returns a list of check-in times of infected customers.
  *
  *  Protected:
  *  Restaurants owned by restaurant owner.
