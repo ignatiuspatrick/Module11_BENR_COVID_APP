@@ -146,6 +146,7 @@ export default function Dashboard() {
                   }
                   setTable(tabledata); // setting the result (list of infections) of the client side.
                   invokeTOS(tempresid);
+                  getNOVisitors(0);
                 }
               });
             }

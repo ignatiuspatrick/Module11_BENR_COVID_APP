@@ -38,8 +38,13 @@ export default function SSDashboard() {
   var mm = today.toLocaleString('default', { month: 'long' });
   var yyyy = today.getFullYear();
 
-  // current time display
-  var counter = new Date(today.getFullYear, today.getMonth, 0).getDate();
+  React.useEffect(() => {
+    async function getStats(){
+      getTotMarkedUsers(0);
+      getTotImpactedResto(0);
+    }
+    getStats();
+  },[]);
 
   const onFormSubmit = e => {
     e.preventDefault();
