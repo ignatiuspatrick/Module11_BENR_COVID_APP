@@ -35,7 +35,7 @@ app.use(cookieParser());
 
 // let back = 'http://localhost:5000';
 let back = 'http://195.201.98.111:5000'
-var allowedOrigins = ['http://195.201.98.111',
+var allowedOrigins = ['http://195.201.98.111:3000',
                       back];
 app.use(cors({
   origin: function(origin, callback){
