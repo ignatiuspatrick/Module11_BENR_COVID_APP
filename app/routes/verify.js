@@ -13,7 +13,9 @@ module.exports = {
       if (err) {
         return res.status(403).send(err);
       }
-
+      if (payload.id != req.params.checkinId) {
+        return res.status(401).send({error: 'Access denied. Wrong user id'})
+      }
       console.log('JWT is valid and payload is\n', payload);
       next();
     });

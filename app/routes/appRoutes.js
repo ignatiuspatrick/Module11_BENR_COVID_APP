@@ -6,47 +6,30 @@ const verify = require('./verify');
 
 module.exports = function(app){
 
-  //old
-  //RESTAURANTS
   var restaurants = require('../controller/restaurantController');
+  var checkins = require('../controller/checkinController');
+  var users = require('../controller/userController');
+  var superusers = require('../controller/superuserController');
+
   app.route('/restaurants')
-  .get(restaurants.get_all_restaurants)
+  //.get(restaurants.get_all_restaurants)
   .post(verify.verifyRestaurantOwner, restaurants.create_restaurant_check, restaurants.create_restaurant);
   app.route('/restaurants/:restaurantId')
-  .put(verify.verifyRestaurantOwner, restaurants.update_restaurant)
-  .delete(verify.verifyRestaurantOwner, restaurants.delete_restaurant);
+  .put(verify.verifyRestaurantOwner, restaurants.update_restaurant);
   app.post('/restaurants/getrest',verify.verifyRestaurantOwner, restaurants.get_restaurant);
 
-  //USERS
-  //(Customer/Restaurant personnel)
-  var users = require('../controller/userController');
 
-    /*
-    To create customer: provide just a type customer.
-    To create personnel: Provide type personnel, email and password.
-    */
   app.route('/users')
   .post(users.create_user);
 
-  app.route('/users/:userId')
-  .get(users.get_user)
-  .put(restaurants.create_restaurant_check, users.update_user)
-  .delete(users.delete_user);
+  //app.route('/users/:userId')
+  //.get(users.get_user);
+  //.put(, users.update_user)
+  //.delete(users.delete_user);
 
   app.get('/users/getsscode/:userId', verify.verifyCustomer, users.get_securecode); //Dis for GGD code
-  // CHECK-INS, now needs general verification
-  var checkins = require('../controller/checkinController');
   app.post('/users/checkin', verify.verifyCustomer, checkins.create_checkin);
-  //checkout
-  //to test, send post request as such: localhost:5000/checkout/1/
-  app.post('/users/checkout/:checkinId', verify.verifyCustomer, checkins.checkout_checkin);
 
-
-
-  //SUPER USER
-  //(Sanitary services & Restaurant owners)
-
-  var superusers = require('../controller/superuserController');
   app.route('/superusers/create').post(superusers.create_superuser_check, restaurants.create_restaurant_check, superusers.create_superuser);
   app.route('/superusers/login').post(superusers.login_superuser);
   app.route('/superusers/visited').post(verify.verifyRestaurantOwner, superusers.checkValidRestid, superusers.visited);
@@ -60,7 +43,6 @@ module.exports = function(app){
   app.route('/restaurants/generateqr/:restaurantId').get(verify.verifyRestaurantOwner, superusers.checkValidRestid,restaurants.generate_qrcode);
   // app.post('/superusers/markinfected', verify.verifySanitaryService, users.mark_user);
   app.post('/superusers/markinfected',verifySanitaryService, users.mark_user);
-  app.post('/users/getMarked', verify.verifySanitaryService, users.get_Marked_Users);
   app.route('/superusers/infected').post(verify.verifySanitaryService, superusers.infected);
   app.route('/superusers/infectedrestaurants').post(verify.verifySanitaryService, superusers.infectedrestaurants);
   app.route('/superusers/marked').post(verify.verifySanitaryService, superusers.marked);

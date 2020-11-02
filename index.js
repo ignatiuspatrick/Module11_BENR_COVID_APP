@@ -26,25 +26,16 @@ const tasks = require('./app/tasks/tasks');
 //MYSQL
 const mysql = require('mysql');
 const config = require('./db.js');
-// var connection = mysql.createConnection(
-//   config
-// );
-// connection.connect();
+
 
 //ROUTES & BODYPARSER FOR MIDDLEWARE
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
-// // enable CORS without external module
-// app.use(function (req, res, next) {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, ");
-//     res.header('Access-Control-Allow-Credentials',true);
-//     next();
-//   });
+
 // let back = 'http://localhost:5000';
 let back = 'http://195.201.98.111:5000'
-var allowedOrigins = ['http://localhost:3000',
+var allowedOrigins = ['http://195.201.98.111:3000',
                       back];
 app.use(cors({
   origin: function(origin, callback){

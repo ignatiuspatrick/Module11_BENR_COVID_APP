@@ -101,7 +101,7 @@ export default function SSDashboard() {
   // the function gets the total number of restaurants with visitor(s) whose ggd code is marked as infected.
   // @ param: days = (int) range of days for number of infected restaurants, e.g. 0 for today, 1 for today and yesterday, 6 for the past week, etc.
   function getTotImpactedResto(days) {
-    // create request to get the total number of restaurants where parameters include the uri, credentials for security, and in the body the day range.
+    // create request to get the total number of restaurants where parameters include the uri, credentials for cookie, and in the body the day range.
     // parameters passed includes the uri, credentials (for security), and the range of days inside the body (form).
     const request = require('request');
     let options = {

@@ -40,7 +40,7 @@ Superuser.createSuperuser = function (newSuperuser, result) {
             result(null, res.insertId);
         }
       });
-    
+
   });
 
 };
