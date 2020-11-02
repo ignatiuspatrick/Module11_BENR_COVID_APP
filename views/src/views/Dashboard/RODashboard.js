@@ -193,7 +193,7 @@ export default function Dashboard() {
   // the function to set maximum hours from time of, where 0 is the min value and 24 is the max value.
   function handleHoursChange(e) {
     var obj = parseInt(e);
-    if (0 <= obj && obj <= 24) {
+    if (0 <= obj && obj <= 23) {
       setHours(obj);
     } else {
       if (isNaN(e)) {
@@ -397,7 +397,7 @@ export default function Dashboard() {
                   label="Hours"
                   variant="outlined"
                   type="number"
-                  InputProps={{ inputProps: { max: 24, min: 0 } }}
+                  InputProps={{ inputProps: { max: 23, min: 0 } }}
                   fullWidth
                   style= {{paddingRight: "0px"}}
                   value={hours}
