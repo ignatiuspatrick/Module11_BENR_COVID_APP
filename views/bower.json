@@ -1,21 +1,19 @@
 {
   "name": "material-dashboard-react",
-  "homepage": "https://github.com/creativetimofficial/material-dashboard-react",
+  "homepage": "https://git.snt.utwente.nl/s2004607/dp-back-end",
   "authors": [
-    "creative-tim"
+    "Group-2"
   ],
-  "description": "A Badass Material-UI Kit based on Material Design",
+  "description": "A Material-UI Kit based on Material Design",
   "main": "public/index.html",
   "keywords": [
     "material",
     "design",
     "material-ui",
     "material",
-    "design",
-    "google",
-    "twitter"
+    "design"
   ],
-  "license": "Creative TIM License",
+  "license": "No License Yet",
   "ignore": [
     "**/.*",
     "node_modules",
