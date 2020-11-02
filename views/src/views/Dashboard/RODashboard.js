@@ -139,11 +139,9 @@ export default function Dashboard() {
                   for (var i = 0; i < obj.result.length; i++) {
                     var checkin = obj.result[i].checkin_time.split("T");
                     var checkout = obj.result[i].checkout_time.split("T");
-                    if (checkin[0] === checkout[0]) {
-                      var item = [];
-                      item.push(checkin[0],checkin[1].substring(0,8),checkout[1].substring(0,8));
-                      tabledata.push(item);
-                    }
+                    var item = [];
+                    item.push(checkin[0],checkin[1].substring(0,8),checkout[1].substring(0,8));
+                    tabledata.push(item);
                   }
                   setTable(tabledata); // setting the result (list of infections) of the client side.
                   invokeTOS(tempresid);
