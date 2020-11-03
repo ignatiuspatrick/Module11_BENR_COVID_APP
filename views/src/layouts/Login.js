@@ -160,7 +160,7 @@ export default function SignInSide() {
               textColor="primary"
               aria-label="icon label tabs example"
             >
-              <Tab icon={<RestaurantIcon />} label="Restaurant Owner" />
+              <Tab icon={<RestaurantIcon />} label="Business Owner" />
               <Tab icon={<LocalHospitalIcon />} label="Sanitary Service" />
             </Tabs>
           </Paper>
@@ -202,7 +202,7 @@ export default function SignInSide() {
             <Grid container>
               <Grid item xs={6}>
                 <Link href="/registerRo" variant="body2">
-                  Register as Restaurant Owner?
+                  Register as Business Owner?
                 </Link>
               </Grid>
               <Grid item xs={6} style={{textAlign: 'right'}}>

@@ -185,7 +185,7 @@ export default function ROInformation() {
                   <GridItem xs={6} sm={3} md={4}>
                     <TextField 
                     id="name" 
-                    label="Restaurant Name"
+                    label="Business Name"
                     fullWidth
                     onChange={(e) => updateRestName(e.target.value)}
                     />
