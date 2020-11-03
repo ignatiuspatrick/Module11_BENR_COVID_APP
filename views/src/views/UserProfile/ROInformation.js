@@ -178,14 +178,14 @@ export default function ROInformation() {
             <Card>
               <CardHeader color="info">
                 <h4 className={classes.cardTitleWhite}>Edit Information</h4>
-                <p className={classes.cardCategoryWhite}>Information about your restaurant</p>
+                <p className={classes.cardCategoryWhite}>Information about your business</p>
               </CardHeader>
               <CardBody>
                 <GridContainer>
                   <GridItem xs={6} sm={3} md={4}>
                     <TextField 
                     id="name" 
-                    label="Restaurant Name"
+                    label="Business Name"
                     fullWidth
                     onChange={(e) => updateRestName(e.target.value)}
                     />
@@ -253,7 +253,7 @@ export default function ROInformation() {
                     <TextField
                       disabled
                       id="outlined-disabled"
-                      label="Restaurant Name"
+                      label="Business Name"
                       fullWidth
                       value={restname}
                       variant="outlined"

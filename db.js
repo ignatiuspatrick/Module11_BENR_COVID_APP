@@ -7,13 +7,12 @@ var pool = mysql.createPool({
     host     : 'localhost',
     user     : 'root',
     password : 'mindhash',
-    database : 'appdb',
+    database : 'appdb'
 });
 
-pool.on('connection',connection => {
-    connection.query("SET time_zone='+01:00';", err=>{
-        if (err) throw err;
-    });
+pool.getConnection((err,connection) => {
+    if (err) throw err;
 });
+
 
 module.exports = pool;

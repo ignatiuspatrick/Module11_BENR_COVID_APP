@@ -146,7 +146,7 @@ export default function Dashboard() {
                   }
                   setTable(tabledata); // setting the result (list of infections) of the client side.
                   invokeTOS(tempresid);
-                  getNOVisitors(0);
+                  getNOVisitors(owid,tempresid,0);
                 }
               });
             }
@@ -162,14 +162,14 @@ export default function Dashboard() {
 
   // the function is used to get total number of visitors
   // @ param: type = (integer) range of day to count the number of visitors in a restaurant, e.g. 0 for today, 1 for today and yesterday, etc.
-  function getNOVisitors(type) {
+  function getNOVisitors(owner,rest,type) {
     const request3 = require('request');
     let options3 = {
       uri: back + '/superusers/visited',
       withCredentials: true,
       form: {
-        ownerid: ownerid,
-        restid: restid,
+        ownerid: owner,
+        restid: rest,
         days: type
       }
     }
@@ -372,9 +372,9 @@ export default function Dashboard() {
               <div className={classes.stats}>
                 <DateRange />
                 <ButtonGroup color="inherit" aria-label="outlined primary button group" size="small" style={{marginLeft: 10}}>
-                  <Button onClick={() => getNOVisitors(0)}>Today</Button>
-                  <Button onClick={() => getNOVisitors(6)}>Week</Button>
-                  <Button onClick={() => getNOVisitors(counter - 1)}>Month</Button> 
+                  <Button onClick={() => getNOVisitors(ownerid, restid, 0)}>Today</Button>
+                  <Button onClick={() => getNOVisitors(ownerid, restid, 6)}>Week</Button>
+                  <Button onClick={() => getNOVisitors(ownerid, restid, counter - 1)}>Month</Button> 
                 </ButtonGroup>
               </div>
             </CardFooter>

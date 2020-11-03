@@ -173,7 +173,7 @@ export default function SSDashboard() {
               <CardIcon color="danger">
                 <WarningIcon />
               </CardIcon>
-              <p className={classes.cardCategory}>Impacted Restaurants</p>
+              <p className={classes.cardCategory}>Impacted Catering Facilities</p>
               <h3 className={classes.cardTitle}>{totimpactedresto}</h3>
             </CardHeader>
             <CardFooter stats>
