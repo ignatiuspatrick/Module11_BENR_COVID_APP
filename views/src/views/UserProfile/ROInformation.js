@@ -253,7 +253,7 @@ export default function ROInformation() {
                     <TextField
                       disabled
                       id="outlined-disabled"
-                      label="Restaurant Name"
+                      label="Business Name"
                       fullWidth
                       value={restname}
                       variant="outlined"
