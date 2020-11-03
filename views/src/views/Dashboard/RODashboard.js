@@ -179,7 +179,7 @@ export default function Dashboard() {
       } else if (res.statusCode === 200) {
         var obj = JSON.parse(body);
         setNovisitors(obj.result);
-      }else if (res.statusCode === 401){
+      } else if (res.statusCode === 401){
         history.push('/login');
       }
     })
