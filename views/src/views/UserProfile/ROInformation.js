@@ -178,7 +178,7 @@ export default function ROInformation() {
             <Card>
               <CardHeader color="info">
                 <h4 className={classes.cardTitleWhite}>Edit Information</h4>
-                <p className={classes.cardCategoryWhite}>Information about your restaurant</p>
+                <p className={classes.cardCategoryWhite}>Information about your business</p>
               </CardHeader>
               <CardBody>
                 <GridContainer>
