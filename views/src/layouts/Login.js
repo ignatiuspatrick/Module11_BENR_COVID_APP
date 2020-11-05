@@ -207,7 +207,7 @@ export default function SignInSide() {
               </Grid>
               <Grid item xs={6} style={{textAlign: 'right'}}>
                 <Link href="/registerSs" variant="body2">
-                  Register as GGD?
+                  Register as Sanitary Service?
                 </Link>
               </Grid>
             </Grid>

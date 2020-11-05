@@ -374,7 +374,7 @@ export default function Dashboard() {
                 <ButtonGroup color="inherit" aria-label="outlined primary button group" size="small" style={{marginLeft: 10}}>
                   <Button onClick={() => getNOVisitors(ownerid, restid, 0)}>Today</Button>
                   <Button onClick={() => getNOVisitors(ownerid, restid, 6)}>Week</Button>
-                  <Button onClick={() => getNOVisitors(ownerid, restid, counter - 1)}>Month</Button> 
+                  <Button onClick={() => getNOVisitors(ownerid, restid, counter - 1)}>Month</Button>
                 </ButtonGroup>
               </div>
             </CardFooter>
